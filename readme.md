@@ -3,7 +3,6 @@ of email providers.
 
 Sample of usage:
 
-
  <blockquote>
  
     require "./handler.rb"
@@ -20,6 +19,26 @@ Sample of usage:
     receive_handler.find_email(:by_subject => "email subject", :by_recipient => {:to => "igor@example.com"}, :archive => true)
     receive_handler.search.emails.each { |email| puts email }
             
+ </blockquote>
+ 
+ Sample of using receive handler with email alerts setup
+ 
+ <blockquote>
+  
+     require "./handler.rb"
+  
+     path = "/FolderToCheck"
+ 
+     receive_handler = EmailHandling::Handler.receiver(:folder, [:console]) do |checker|
+ 
+         checker.inbox_folder = path
+         checker.archive_folder = path + '/checked'
+ 
+     end
+     
+     receive_handler.find_email(:by_subject => "email subject", :by_recipient => {:to => "igor@example.com"}, :archive => true)
+     receive_handler.search.emails.each { |email| puts email }
+             
  </blockquote>
 
  <blockquote>
