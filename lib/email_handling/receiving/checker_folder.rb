@@ -56,7 +56,7 @@ module EmailHandling
 
       def search_pattern
 
-        @inbox_folder + "/*.*"
+        @inbox_folder + '/*.*'
 
       end
 

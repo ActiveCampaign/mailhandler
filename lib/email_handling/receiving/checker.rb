@@ -26,9 +26,12 @@ module EmailHandling
 
   module Receiving
 
-    # email receiving checker interface
-    # all email checking types need to implement it
-    # it is used for checking whether email is in your inbox
+    #
+    # Email receiving checker interface. All email checking types need to implement it.
+    # @see EmailHandling::Receiving::FolderChecker for example for one of implemented checkers.
+    #
+    # Checker interface is used for doing a single check whether email is in your inbox.
+    #
     class Checker
 
       attr_accessor :search_options,
@@ -47,7 +50,7 @@ module EmailHandling
 
       def initialize
 
-        # default number of email results to return
+        # Default number of email results to return, and whether to archive emails.
         @search_options = {:count => 10, :archive => false}
 
       end

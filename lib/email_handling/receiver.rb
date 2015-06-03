@@ -1,9 +1,12 @@
 require_relative 'receiving/checker_folder'
 require_relative 'receiving/checker_imap'
+require_relative 'observer'
 
 module EmailHandling
 
   class Receiver
+
+    include Receiving::Observer
 
     attr_accessor :checker,
                   :search
@@ -27,6 +30,9 @@ module EmailHandling
 
       @checker = checker
 
+      @search = Search.new
+      @search.max_duration = DEFAULTS::MAX_SEARCH_DURATION
+
     end
 
     def find_email(options)
@@ -35,7 +41,10 @@ module EmailHandling
 
       while 1
 
-        break if checker.find(options) || search_time_expired?
+        received = checker.find(options) || search_time_expired?
+        notify_observers
+
+        break if received
         sleep 1
 
       end
@@ -55,9 +64,11 @@ module EmailHandling
 
     def init_search
 
+      max_duration = @search.max_duration
+
       @search = Search.new
-      @search.max_duration = DEFAULTS::MAX_SEARCH_DURATION
       @search.started_at = Time.now
+      @search.max_duration = max_duration
 
     end
 
@@ -68,7 +79,6 @@ module EmailHandling
       search.result = checker.search_result
       search.emails = checker.found_emails
       search.email = search.emails.first
-
 
     end
 
