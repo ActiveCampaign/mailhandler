@@ -1,20 +1,14 @@
-module EmailHandling
+module MailHandler
 
   module Receiving
 
-    module Alert
+    module Notification
 
       class Console
 
-        def initialize(context)
+        def notify(search)
 
-          @context = context
-
-        end
-
-        def notify
-
-          output_delay Time.now - @context.search.started_at
+          output_delay Time.now - search.started_at
 
         end
 
@@ -37,7 +31,7 @@ module EmailHandling
         # print to screen delay length
         def output(delay)
 
-          puts "  delay: #{'%03d' % delay} seconds"
+          puts "  email delay: #{'%03d' % delay} seconds"
 
         end
 

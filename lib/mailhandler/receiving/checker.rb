@@ -1,34 +1,10 @@
-class Clock
-
-  module SECONDS
-
-    DAY = 86400
-    HOUR = 3600
-
-  end
-
-  def self.time_days_ago(days)
-
-    Time.now - days*SECONDS::DAY
-
-  end
-
-  def self.time_hours_ago(hours)
-
-    Time.now - hours*SECONDS::HOUR
-
-  end
-
-end
-
-
-module EmailHandling
+module MailHandler
 
   module Receiving
 
     #
     # Email receiving checker interface. All email checking types need to implement it.
-    # @see EmailHandling::Receiving::FolderChecker for example for one of implemented checkers.
+    # @see MailHandler::Receiving::FolderChecker for example for one of implemented checkers.
     #
     # Checker interface is used for doing a single check whether email is in your inbox.
     #
@@ -56,6 +32,12 @@ module EmailHandling
       end
 
       def find(options)
+
+        raise StandardError, 'Method not implemented'
+
+      end
+
+      def verify_and_set_search_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
           raise StandardError, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"

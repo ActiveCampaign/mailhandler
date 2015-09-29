@@ -1,4 +1,4 @@
-module EmailHandling
+module MailHandler
 
   module Receiving
 
@@ -23,9 +23,9 @@ module EmailHandling
 
       end
 
-      def notify_observers
+      def notify_observers(search)
 
-        @observers.each { |observer| observer.notify } if @observers
+        @observers.each { |observer| observer.notify(search) } if @observers
 
       end
 

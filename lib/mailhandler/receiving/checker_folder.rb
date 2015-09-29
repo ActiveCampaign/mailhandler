@@ -3,7 +3,7 @@ require_relative 'filter'
 require 'fileutils'
 require 'mail'
 
-module EmailHandling
+module MailHandler
 
   module Receiving
 
@@ -25,7 +25,7 @@ module EmailHandling
       # check whether email is received by checking for an email in folder
       def find(options)
 
-        super(options)
+        verify_and_set_search_options(options)
         email_files = find_files(search_options)
 
         if email_files.empty?

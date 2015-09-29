@@ -2,7 +2,7 @@ require 'mail'
 require_relative 'checker.rb'
 # encoding: utf-8
 
-module EmailHandling
+module MailHandler
 
   module Receiving
 
@@ -38,34 +38,42 @@ module EmailHandling
 
       def find(options)
 
-        super(options)
+        verify_and_set_search_options(options)
         validate_options(options)
+        emails = find_emails(search_options)
 
-        if options[:archive]
-
-          emails = Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
-
-        else
-
-          emails = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
-
-        end
-
-        found = false
         @found_emails = []
 
-        emails.each do |email|
+        unless emails.empty?
 
-          found = email.subject.include? search_options[:by_subject]
-          @found_emails << email if found
+          emails.each do |email|
+
+            found = email.subject.include? search_options[:by_subject]
+            @found_emails << email if found
+
+          end
 
         end
 
-        found
+        !@found_emails.empty?
 
       end
 
       private
+
+      def find_emails(options)
+
+        if options[:archive]
+
+          Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
+
+        else
+
+          Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
+
+        end
+
+      end
 
       def validate_options(options)
 
