@@ -65,7 +65,7 @@ If you would like email to be archived after its read, use `:archive => true` op
 
 ## Search results
 
-Once email searching is finished, you can check search result by looking at: `email_receiver.sending` object
+Once email searching is finished, you can check search result by looking at: `email_receiver.search` object
 
 * `:options` - search options which were used (described above)
 * `:started_at` - time when search was initiated
@@ -75,6 +75,23 @@ Once email searching is finished, you can check search result by looking at: `em
 * `:result - result of search - `true/false`
 * `:email` - email found in search 
 * `:emails` - array of emails found in search
+
+# Email search notifications
+
+While searching for an email, there is a possibility to get notification if emails sending is taking too long. 
+You can get an notification in console, by email or both.
+
+To add notifications to email searching all you need to do is:
+
+``` ruby
+email_receiver.add_observer(MailHandler::Receiving::Notification::Email.new(email_sender, contacts))
+email_receiver.add_observer(MailHandler::Receiving::Notification::Console.new)
+``` 
+
+the parameters you need are:
+
+* `email_sender` - email sender you will use for sending an email (it should be one of senders described below)
+* `contacts` - list of contacts to receive the notification (for example: `john@example.com, igor@example.com`
  
 # Email sending 
 
@@ -82,112 +99,50 @@ There are three ways you can send email.
  
 ## Send by postmark
 
+To send email you can use SMTP protocol or Postmark.
+
 ### Send by Postmark API 
 
- <blockquote>
+To send email with Postmark, you need to choose type of sending, host, api token, and ssl options.
+ 
+``` ruby
+email_sender = MailHandler::Handler.sender(type) do |dispatcher|
+    dispatcher.host = host
+    dispatcher.api_token = api_token
+    dispatcher.use_ssl = use_ssl
+end
+```
 
-    sending_handler = MailHandler::Handler.sender(:postmark_api) do |dispatcher|
-
-        dispatcher.host = 'api.postmarkapp.com'
-        dispatcher.api_token = 'YOUR_TOKEN'
-
-    end
-
-    mail = Mail.new do
-        
-        from 'igor@example.com'
-        to 'igor@example.com'
-        body 'test'
-    
-    end
-
-    sending_handler.send_email(mail)
-    
- </blockquote>
- 
-### Send by Postmark Batch API
- 
-  <blockquote>
- 
-    sending_handler = MailHandler::Handler.sender(:postmark_batch_api) do |dispatcher|
- 
-        dispatcher.host = 'api.postmarkapp.com'
-        dispatcher.api_token = 'YOUR_TOKEN'
- 
-    end
- 
-    mail = Mail.new do
-         
-        from 'igor@example.com'
-        to 'igor@example.com'
-        body 'test'
-     
-    end
- 
-    sending_handler.send_email([mail, mail])
-     
-  </blockquote>
-  
+* `:type` - type can be `:postmark_api` or `postmark_batch_api`
+* `:host` - host is `api.postmarkapp.com`
+* `:api_token` - api token of one of your Postmark sending servers 
+* `:use_ssl` - can be true/false
   
 ### Sending email by SMTP
 
- <blockquote>
-     
-    sending_handler = MailHandler::Handler.sender(:smtp) do |dispatcher|
-  
-       dispatcher.address = 'smtp.gmail.com'
-       dispatcher.port = 587
-       dispatcher.domain = 'smtp.gmail.com'
-       dispatcher.username = 'example@gmail.com'
-       dispatcher.password = 'password'
-   
-    end
-   
-    sending_handler.send_email(mail)
-       
- </blockquote>
- 
- 
-# Email alert examples
- 
- Setup email alert sender
- 
- <blockquote>
-  
-     sending_handler = MailHandler::Handler.sender(:smtp) do |dispatcher|
-   
-        dispatcher.address = 'smtp.gmail.com'
-        dispatcher.port = 587
-        dispatcher.domain = 'smtp.gmail.com'
-        dispatcher.username = 'example@gmail.com'
-        dispatcher.password = 'password'
-        dispatcher.use_ssl = true
-    
-     end
-     
- </blockquote> 
+To send email with SMTP you need to configure standard SMTP settings.
 
- Setup email receiving handler with alerts:
+``` ruby
+email_sender = MailHandler::Handler.sender(:smtp) do |dispatcher|
+    dispatcher.address = address
+    dispatcher.port = port
+    dispatcher.domain = domain
+    dispatcher.username = username
+    dispatcher.password = password
+    dispatcher.use_ssl = use_ssl
+end
+``` 
+
+## Sending results
  
- <blockquote>
+Once email sending is finished, you can check sending result by looking at: `email_receiver.sending` object 
+
+* `:started_at` - time when sending was initiated
+* `:finished_at` - time when sending was finished
+* `:duration` - time how long the sending took 
+* `:response` - response from sending
+* `:email` - email sent
  
-    require "./handler.rb"
- 
-    path = "/FolderToCheck"
-
-    receive_handler = MailHandler::Handler.receiver(:folder) do |checker|
-
-        checker.inbox_folder = path
-        checker.archive_folder = path + '/checked'
-
-    end
-            
-    receive_handler.add_observer(MailHandler::Receiving::Alert::Email.new(sending_handler,'igor@example.com'))
-    receive_handler.find_email(:by_subject => "igor", :archive => false)
-    
-            
- </blockquote> 
-
 
 
 
