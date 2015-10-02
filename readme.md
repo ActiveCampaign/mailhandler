@@ -1,46 +1,84 @@
-Simple library to check emails in your inbox, whether its a local folder, or a real inbox you have with one
-of email providers.
+# MailHandler Gem
 
-# Email receiving examples
+This gem represents a simple library which allows you to send email and check email delivery. 
+The library supports sending SMTP, Postmark API or Postmark Batch API, checking email delivery by IMAP, or by folder, 
+if you have a local mailbox. 
 
-## Email receiving using folder checker
+# Install the gem
 
- <blockquote>
- 
-    require "./handler.rb"
- 
-    path = "/FolderToCheck"
+With Bundler:
 
-    receive_handler = MailHandler::Handler.receiver(:folder) do |checker|
+``` ruby
+gem 'mailhandler'
+``` 
 
-        checker.inbox_folder = path
-        checker.archive_folder = path + '/checked'
+Without Bundler:
 
-    end
-    
-    receive_handler.find_email(:by_subject => "email subject", :by_recipient => {:to => "igor@example.com"}, :archive => true)
-    receive_handler.search.emails.each { |email| puts email }
-            
- </blockquote>
+``` bash
+gem install mailhandler
+``` 
 
-## Email receiving using imap
+# Email arrival testing 
+
+## Configure local mailbox email to check
+
+``` ruby
+email_receiver = MailHandler::Handler.receiver(:folder) do |checker|
+    checker.inbox_folder = folder_of_your_inbox
+    checker.archive_folder = folder_of_your_inbox_archive_folder
+end
+```  
+
+## Configure imap mailbox email to check
  
- <blockquote>
+``` ruby
+email_receiver = MailHandler::Handler.receiver(:imap) do |checker|
+    checker.imap_details(
+        address,
+        port,
+        username,
+        password,
+        use_ssl
+    )
+end
+``` 
+Email receiving handler will be referenced below as `email_receiver`
+
+## Searching for email
+
+Once you have setup mailbox checking type, you can search for email like this:
+
+``` ruby
+email_receiver.find_email(:by_subject => email.subject, :archive => true)
+``` 
+
+You can search imap mailbox by following options:
+
+* `:by_subject` - subject of the email
+
+You can search local mailbox by following options:
+
+* `:by_subject` - subject of the email   
+* `:by_recipient` - by email recipient
+
+If you would like email to be archived after its read, use `:archive => true` option (recommended)
+
+## Search results
+
+Once email searching is finished, you can check search result by looking at: `email_receiver.sending` object
+
+* `:options` - search options which were used (described above)
+* `:started_at` - time when search was initiated
+* `:finished_at` - time when search was stopped
+* `:duration` - time how long the search took 
+* `:max_duration` - maximum amount of time search can take in seconds (default is 240)
+* `:result - result of search - `true/false`
+* `:email` - email found in search 
+* `:emails` - array of emails found in search
  
-     require "./handler.rb"
- 
-     receive_handler = MailHandler::Handler.receiver(:imap) do |checker|
- 
-         checker.imap_details('imap.googlemail.com',993,'username','password', true)
- 
-     end
- 
-     receive_handler.find_email(:by_subject => "igor", :archive => false)
-     receive_handler.search.emails.each { |email| puts email }
- 
- </blockquote>
- 
-# Email sending examples
+# Email sending 
+
+There are three ways you can send email. 
  
 ## Send by postmark
 
