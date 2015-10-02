@@ -20,8 +20,9 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split($/)
   s.homepage    = 'https://github.com/ibalosh'
   s.require_paths = ["lib"]
+  s.required_rubygems_version = ">= 1.8.7"
 
   s.add_dependency "mail"
-  s.add_dependency "postmark"
+  s.add_dependency "postmark", '~> 1.7.0','>= 1.7.0'
 
 end
