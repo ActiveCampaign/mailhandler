@@ -14,7 +14,7 @@ module MailHandler
 
     module DEFAULTS
 
-      MAX_SEARCH_DURATION = 60 # maximum time for search to last in [seconds]
+      MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
 
     end
 
@@ -42,7 +42,7 @@ module MailHandler
       while 1
 
         received = checker.find(options) || search_time_expired?
-        update_search_details(checker) if received
+        update_search_details
         notify_observers(search)
 
         break if received
@@ -65,7 +65,7 @@ module MailHandler
 
     end
 
-    def update_search_details(checker)
+    def update_search_details
 
       search.finished_at = Time.now
       search.duration = search.finished_at - search.started_at

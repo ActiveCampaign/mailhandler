@@ -14,7 +14,7 @@ module MailHandler
                       :min_time_to_notify,
                       :max_time_to_notify
 
-        def initialize(sender, contacts, min_time_to_notify = 10)
+        def initialize(sender, contacts, min_time_to_notify = 60)
 
           @min_time_to_notify = min_time_to_notify
 
