@@ -18,8 +18,17 @@ Gem::Specification.new do |s|
 
 
   s.files       = `git ls-files`.split($/)
+  s.test_files  = `git ls-files -- {spec}/*`.split("\n")
   s.homepage    = 'https://github.com/ibalosh'
   s.require_paths = ["lib"]
+
+  s.post_install_message = %q{
+    ==================
+    Thanks for installing the mailhandler gem.
+    Review the README.md for implementation details and examples.
+    ==================
+  }
+
   s.required_rubygems_version = ">= 1.8.7"
 
   s.add_dependency "mail"
