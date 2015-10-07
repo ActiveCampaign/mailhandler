@@ -41,15 +41,21 @@ describe MailHandler do
 
     end
 
-    let(:sender_postmark) {
+    it 'create sender - postmark api' do
 
-      handler.sender(:postmark_api)
+      expect(handler.sender(:postmark_api)).to match MailHandler::Sender
 
-    }
+    end
 
-    it 'create sender' do
+    it 'create sender - postmark batch api' do
 
-      expect(sender_postmark).to match MailHandler::Sender
+      expect(handler.sender(:postmark_batch_api)).to match MailHandler::Sender
+
+    end
+
+    it 'create sender - smtp' do
+
+      expect(handler.sender(:smtp)).to match MailHandler::Sender
 
     end
 
