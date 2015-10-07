@@ -1,5 +1,7 @@
 # MailHandler Gem
 
+[![Build Status](https://travis-ci.org/ibalosh/MailHandler.svg?branch=master)](https://travis-ci.org/ibalosh/MailHandler)
+
 This gem represents a simple library which allows you to send email and check email delivery. 
 The library supports sending SMTP, Postmark API or Postmark Batch API, checking email delivery by IMAP, or by folder, 
 if you have a local mailbox. 
