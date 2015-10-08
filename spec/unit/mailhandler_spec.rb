@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe MailHandler do
+describe MailHandler::Handler do
 
-  subject(:handler) { MailHandler::Handler }
+  subject { MailHandler::Handler }
 
   context 'receiver' do
 
     let(:receiver_folder) {
 
-      handler.receiver(:folder)
+      subject.receiver(:folder)
 
     }
 
     it 'invalid type' do
 
-      expect{handler.receiver(:test)}.
+      expect{subject.receiver(:test)}.
           to raise_error(StandardError, 'Unknown type - test, possible options: [:folder, :imap]')
 
     end
@@ -36,26 +36,26 @@ describe MailHandler do
 
     it 'invalid type' do
 
-      expect{handler.sender(:test)}.
+      expect{subject.sender(:test)}.
           to raise_error(StandardError, 'Unknown type - test, possible options: [:postmark_api, :postmark_batch_api, :smtp]')
 
     end
 
     it 'create sender - postmark api' do
 
-      expect(handler.sender(:postmark_api)).to match MailHandler::Sender
+      expect(subject.sender(:postmark_api)).to match MailHandler::Sender
 
     end
 
     it 'create sender - postmark batch api' do
 
-      expect(handler.sender(:postmark_batch_api)).to match MailHandler::Sender
+      expect(subject.sender(:postmark_batch_api)).to match MailHandler::Sender
 
     end
 
     it 'create sender - smtp' do
 
-      expect(handler.sender(:smtp)).to match MailHandler::Sender
+      expect(subject.sender(:smtp)).to match MailHandler::Sender
 
     end
 
