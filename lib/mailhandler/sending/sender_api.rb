@@ -12,12 +12,12 @@ module MailHandler
                     :api_token,
                     :use_ssl
 
-      def initialize(host = nil, api_token = nil, use_ssl = false)
+      def initialize(api_token = nil)
 
         @type = :postmark_api
-        @host = host
+        @host = DEFAULT_HOST
         @api_token = api_token
-        @use_ssl = use_ssl
+        @use_ssl = false
 
       end
 
@@ -29,6 +29,8 @@ module MailHandler
       end
 
       protected
+
+      DEFAULT_HOST = 'api.postmarkapp.com'
 
       def setup_sending_client
 
