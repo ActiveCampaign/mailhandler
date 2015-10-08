@@ -23,6 +23,8 @@ module MailHandler
 
       def send(email)
 
+        verify_email(email)
+
         client = setup_sending_client
         client.deliver_message(email)
 
@@ -31,6 +33,12 @@ module MailHandler
       protected
 
       DEFAULT_HOST = 'api.postmarkapp.com'
+
+      def verify_email(email)
+
+        raise StandardError, "Invalid type error, only #{Mail.new.class} object type for sending allowed" unless email.is_a? Mail.new.class
+
+      end
 
       def setup_sending_client
 

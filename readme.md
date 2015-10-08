@@ -57,7 +57,7 @@ Email receiving handler will be referenced below as `email_receiver`
 Once you have setup mailbox checking type, you can search for email like this:
 
 ``` ruby
-email_receiver.find_email(:by_subject => email.subject, :archive => true)
+email_receiver.find_email(:by_subject => subject, :archive => true)
 ``` 
 
 You can search imap mailbox by following options:
