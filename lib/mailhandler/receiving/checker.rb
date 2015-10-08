@@ -27,7 +27,7 @@ module MailHandler
       def initialize
 
         # Default number of email results to return, and whether to archive emails.
-        @search_options = {:count => 10, :archive => false}
+        @search_options = {:count => 50, :archive => false}
 
       end
 

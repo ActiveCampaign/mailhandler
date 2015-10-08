@@ -2,9 +2,10 @@
 
 [![Build Status](https://travis-ci.org/ibalosh/MailHandler.svg?branch=master)](https://travis-ci.org/ibalosh/MailHandler)
 
-This gem represents a simple library which allows you to send email and check email delivery. 
-The library supports sending SMTP, Postmark API or Postmark Batch API, checking email delivery by IMAP, or by folder, 
-if you have a local mailbox. 
+MailHandler is a simple wrapper for [mail](https://github.com/mikel/mail) and [postmark](https://github.com/wildbit/postmark-gem) libraries which allows you to send and retrieve emails, 
+and get more details about email sending and delivery. Main purpose of the gem is easier email sending/delivery testing. 
+
+The library supports sending by SMTP, Postmark API and checking email delivery by IMAP protocol, or by folder, if you have a local mailbox. 
 
 # Install the gem
 
@@ -24,6 +25,9 @@ gem install mailhandler
 
 ## Configure local mailbox email to check
 
+Checking emails locally option can be used when you have emails stored in certain local path. In order to search for email, all you need to do is setup inbox and archive folder.
+They can be the same if you don't plan to archive checked files.
+
 ``` ruby
 email_receiver = MailHandler::Handler.receiver(:folder) do |checker|
     checker.inbox_folder = folder_of_your_inbox
@@ -32,6 +36,8 @@ end
 ```  
 
 ## Configure imap mailbox email to check
+
+If you plan to check for an email in your inbox which support IMAP, you can use mailhandler with provided IMAP settings. 
  
 ``` ruby
 email_receiver = MailHandler::Handler.receiver(:imap) do |checker|
@@ -81,7 +87,7 @@ Once email searching is finished, you can check search result by looking at: `em
 # Email search notifications
 
 While searching for an email, there is a possibility to get notification if emails sending is taking too long. 
-You can get an notification in console, by email or both.
+You can get an notification in console, by email or both. Console output is good if you are testing email delivery, and want to see how long its taking for email to arrive in console.
 
 To add notifications to email searching all you need to do is:
 
@@ -90,7 +96,7 @@ email_receiver.add_observer(MailHandler::Receiving::Notification::Email.new(emai
 email_receiver.add_observer(MailHandler::Receiving::Notification::Console.new)
 ``` 
 
-the parameters you need are:
+For email notifications, the parameters you need are:
 
 * `email_sender` - email sender you will use for sending an email (it should be one of senders described below)
 * `contacts` - list of contacts to receive the notification (for example: `john@example.com, igor@example.com`
@@ -105,20 +111,16 @@ To send email you can use SMTP protocol or Postmark.
 
 ### Send by Postmark API 
 
-To send email with Postmark, you need to choose type of sending, host, api token, and ssl options.
+To send email with Postmark, you need to choose type of sending, api token options.
  
 ``` ruby
 email_sender = MailHandler::Handler.sender(type) do |dispatcher|
-    dispatcher.host = host
     dispatcher.api_token = api_token
-    dispatcher.use_ssl = use_ssl
 end
 ```
 
 * `:type` - type can be `:postmark_api` or `postmark_batch_api`
-* `:host` - host is `api.postmarkapp.com`
 * `:api_token` - api token of one of your Postmark sending servers 
-* `:use_ssl` - can be true/false
   
 ### Sending email by SMTP
 
@@ -133,7 +135,17 @@ email_sender = MailHandler::Handler.sender(:smtp) do |dispatcher|
     dispatcher.password = password
     dispatcher.use_ssl = use_ssl
 end
-``` 
+```
+ 
+### Sending email
+ 
+Once you have setup your email sender, all you need to do is to send an email:
+
+``` ruby
+email_sender.send_email(email)
+```
+
+email has to be an email created with Mail gem. In order to send emails by Postmark batch, you will need to provide an Array of emails.
 
 ## Sending results
  
