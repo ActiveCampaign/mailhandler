@@ -8,8 +8,6 @@ module MailHandler
 
     class IMAPChecker < Checker
 
-      attr_reader :type
-
       AVAILABLE_SEARCH_OPTIONS = [
 
           :by_subject,
@@ -21,17 +19,23 @@ module MailHandler
       def initialize
 
         super
-        @type = :imap
 
       end
 
       # delegate retrieval details to Mail library
-      def details(settings)
+      def details(address, port, username, password, use_ssl, authentication = nil)
 
-        # make ssl naming Mail library compatible
-        settings[:enable_ssl] = settings[:use_ssl]
-        checker_type = type
-        Mail.defaults { retriever_method checker_type, settings }
+        Mail.defaults do
+
+          retriever_method :imap,
+                           :address => address,
+                           :port => port,
+                           :user_name => username,
+                           :password => password,
+                           :authentication => authentication,
+                           :enable_ssl => use_ssl
+
+        end
 
       end
 
