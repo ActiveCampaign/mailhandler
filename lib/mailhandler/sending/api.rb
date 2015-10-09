@@ -1,6 +1,6 @@
 require 'mail'
 require 'postmark'
-require_relative 'sender.rb'
+require_relative 'base.rb'
 
 module MailHandler
 

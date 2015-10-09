@@ -1,4 +1,4 @@
-require_relative 'sender_api.rb'
+require_relative 'api.rb'
 
 module MailHandler
 

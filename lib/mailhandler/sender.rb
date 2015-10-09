@@ -1,6 +1,6 @@
-require_relative 'sending/sender_smtp'
-require_relative 'sending/sender_api'
-require_relative 'sending/sender_api_batch'
+require_relative 'sending/smtp'
+require_relative 'sending/api'
+require_relative 'sending/api_batch'
 
 module MailHandler
 

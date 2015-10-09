@@ -1,6 +1,6 @@
 # encoding: utf-8
 require 'net/imap'
-require_relative 'sender'
+require_relative 'base'
 
 module MailHandler
 

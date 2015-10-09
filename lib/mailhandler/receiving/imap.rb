@@ -1,5 +1,5 @@
 require 'mail'
-require_relative 'checker.rb'
+require_relative 'base.rb'
 # encoding: utf-8
 
 module MailHandler
@@ -7,6 +7,8 @@ module MailHandler
   module Receiving
 
     class IMAPChecker < Checker
+
+      attr_reader :type
 
       AVAILABLE_SEARCH_OPTIONS = [
 
@@ -19,20 +21,17 @@ module MailHandler
       def initialize
 
         super
+        @type = :imap
 
       end
 
-      # set email account from which we will read email
-      def imap_details(address, port, username, password, use_ssl)
+      # delegate retrieval details to Mail library
+      def details(settings)
 
-        Mail.defaults do
-          retriever_method :imap,
-                           :address    => address,
-                           :port       => port,
-                           :user_name  => username,
-                           :password   => password,
-                           :enable_ssl => use_ssl
-        end
+        # make ssl naming Mail library compatible
+        settings[:enable_ssl] = settings[:use_ssl]
+        checker_type = type
+        Mail.defaults { retriever_method checker_type, settings }
 
       end
 

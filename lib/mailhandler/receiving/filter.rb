@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module Filter
 
   class Base

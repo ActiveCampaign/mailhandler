@@ -1,5 +1,5 @@
-require_relative 'receiving/checker_folder'
-require_relative 'receiving/checker_imap'
+require_relative 'receiving/folder'
+require_relative 'receiving/imap'
 require_relative 'receiving/observer'
 
 module MailHandler

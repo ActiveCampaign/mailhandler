@@ -1,6 +1,5 @@
-require_relative 'checker.rb'
+require_relative 'base.rb'
 require_relative 'filter'
-require 'fileutils'
 require 'mail'
 
 module MailHandler
