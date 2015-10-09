@@ -6,56 +6,51 @@ describe MailHandler::Handler do
 
   context 'receiver' do
 
-    let(:receiver_folder) {
+    it 'create - invalid type' do
 
-      subject.receiver(:folder)
-
-    }
-
-    it 'invalid type' do
-
-      expect{subject.receiver(:test)}.
+      expect { subject.receiver(:test) }.
           to raise_error(StandardError, 'Unknown type - test, possible options: [:folder, :imap]')
 
     end
 
-    context 'folder check' do
+    it 'create - folder' do
 
-      it 'object type' do
-
-        expect(receiver_folder).to match MailHandler::Receiver
-
-      end
+      expect(subject.receiver(:folder)).to be_kind_of MailHandler::Receiver
 
     end
 
+    it 'create - imap' do
+
+      expect(subject.receiver(:imap)).to be_kind_of MailHandler::Receiver
+
+    end
 
   end
 
   context 'sender' do
 
-    it 'invalid type' do
+    it 'create - invalid type' do
 
-      expect{subject.sender(:test)}.
+      expect { subject.sender(:test) }.
           to raise_error(StandardError, 'Unknown type - test, possible options: [:postmark_api, :postmark_batch_api, :smtp]')
 
     end
 
-    it 'create sender - postmark api' do
+    it 'create - postmark api' do
 
-      expect(subject.sender(:postmark_api)).to match MailHandler::Sender
-
-    end
-
-    it 'create sender - postmark batch api' do
-
-      expect(subject.sender(:postmark_batch_api)).to match MailHandler::Sender
+      expect(subject.sender(:postmark_api)).to be_kind_of MailHandler::Sender
 
     end
 
-    it 'create sender - smtp' do
+    it 'create - postmark batch api' do
 
-      expect(subject.sender(:smtp)).to match MailHandler::Sender
+      expect(subject.sender(:postmark_batch_api)).to be_kind_of MailHandler::Sender
+
+    end
+
+    it 'create - smtp' do
+
+      expect(subject.sender(:smtp)).to be_kind_of MailHandler::Sender
 
     end
 
