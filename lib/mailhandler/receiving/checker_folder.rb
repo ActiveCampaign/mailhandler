@@ -28,18 +28,14 @@ module MailHandler
         verify_and_set_search_options(options)
         email_files = find_files(search_options)
 
-        if email_files.empty?
-
-          @found_emails = []
-
-        else
+        unless email_files.empty?
 
           @found_emails = read_found_emails(email_files, search_options[:count])
           move_files(email_files) if search_options[:archive]
 
         end
 
-        !@found_emails.empty?
+        search_result
 
       end
 

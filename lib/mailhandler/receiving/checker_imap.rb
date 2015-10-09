@@ -42,20 +42,17 @@ module MailHandler
         validate_options(options)
         emails = find_emails(search_options)
 
-        @found_emails = []
-
         unless emails.empty?
 
           emails.each do |email|
 
-            found = email.subject.include? search_options[:by_subject]
-            @found_emails << email if found
+            @found_emails << email if email.subject.include? search_options[:by_subject]
 
           end
 
         end
 
-        !@found_emails.empty?
+        search_result
 
       end
 
