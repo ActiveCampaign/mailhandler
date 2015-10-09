@@ -2,16 +2,6 @@ require 'spec_helper'
 
 describe MailHandler::Receiver do
 
-  context 'invalid receiver' do
-
-    it 'create' do
-
-      binding.pry
-
-    end
-
-  end
-
   context 'valid receiver' do
 
     let(:default_search_option) { {:by_subject => 'test'} }
