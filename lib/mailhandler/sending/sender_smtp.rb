@@ -30,6 +30,7 @@ module MailHandler
 
       def send(email)
 
+        verify_email(email)
         email = configure_sending(email)
 
         response = nil

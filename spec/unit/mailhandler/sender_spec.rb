@@ -23,15 +23,15 @@ describe MailHandler::Sender do
 
   }
 
-  it '.sending' do
+  let(:sender) { subject.new(dispatcher) }
 
-    expect(subject.new(dispatcher)).not_to be nil
+  it 'create' do
+
+    expect(sender).not_to be nil
 
   end
 
-  it '.sending init' do
-
-    sender = subject.new(dispatcher)
+  it 'init details' do
 
     aggregate_failures "sending details" do
       expect(sender.sending.started_at).to be nil
@@ -45,7 +45,6 @@ describe MailHandler::Sender do
 
   it '.send_email' do
 
-    sender = subject.new(dispatcher)
     sender.send_email(mail)
 
     aggregate_failures "sending details" do

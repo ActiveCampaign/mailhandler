@@ -34,12 +34,6 @@ module MailHandler
 
       DEFAULT_HOST = 'api.postmarkapp.com'
 
-      def verify_email(email)
-
-        raise StandardError, "Invalid type error, only #{Mail.new.class} object type for sending allowed" unless email.is_a? Mail.new.class
-
-      end
-
       def setup_sending_client
 
         # clearing cache so valid host is accepted, and not the cached one
