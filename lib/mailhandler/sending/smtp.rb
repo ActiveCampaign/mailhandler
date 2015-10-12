@@ -9,9 +9,6 @@ module MailHandler
     # class which describes methods to send and receive emails
     class SMTPSender < Sender
 
-      # address - for smtp for example smtp.gmail.com
-      # port which would be used for sending
-      # domain for example for smtp.gmail.com it would be gmail.com
       attr_accessor :address,
                     :port,
                     :domain,

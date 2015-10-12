@@ -3,10 +3,8 @@ module MailHandler
   module Receiving
 
     #
-    # Email receiving checker interface. All email checking types need to implement it.
+    # Email receiving checker main class.
     # @see MailHandler::Receiving::FolderChecker for example for one of implemented checkers.
-    #
-    # Checker interface is used for doing a single check whether email is in your inbox.
     #
     class Checker
 

@@ -6,35 +6,62 @@ require_relative 'mailhandler/receiving/notification/console'
 
 module MailHandler
 
+  extend self
+
+  # sending accessor
+  def sender(type = :postmark_api)
+
+    handler = Handler.new
+    handler.init_sender(type)
+    yield(handler.sender.dispatcher) if block_given?
+
+    handler.sender
+
+  end
+
+  # receiving accessor
+  def receiver(type = :folder, notifications = [])
+
+    handler = Handler.new
+    handler.init_receiver(type, notifications)
+    yield(handler.receiver.checker) if block_given?
+
+    handler.receiver
+
+  end
+
+  # handling accessor
+  def handler(receiver, sender)
+
+    handler = Handler.new
+    handler.handler(receiver, sender)
+
+  end
+
+  # main handler class for creating sender, receiver handlers
   class Handler
 
     attr_accessor :sender,
                   :receiver
 
-    def self.sender(type = :postmark_api)
+    def init_sender(type = :postmark_api)
 
       verify_type(type, SENDER_TYPES)
-      sender = MailHandler::Sender.new(SENDER_TYPES[type].new)
-      yield(sender.dispatcher) if block_given?
-
-      sender
+      @sender = MailHandler::Sender.new(SENDER_TYPES[type].new)
 
     end
 
 
-    def self.receiver(type = :folder, notifications = [])
+    def init_receiver(type = :folder, notifications = [])
 
       verify_type(type, CHECKER_TYPES)
-      receiver = MailHandler::Receiver.new(CHECKER_TYPES[type].new)
-      add_receiving_notifications(receiver, notifications)
-
-      yield(receiver.checker) if block_given?
-
-      receiver
+      @receiver = MailHandler::Receiver.new(CHECKER_TYPES[type].new)
+      add_receiving_notifications(@receiver, notifications)
+      @receiver
 
     end
 
-    def self.handler(sender, receiver)
+    def handler(sender, receiver)
 
       handler = new
       handler.sender = sender
@@ -45,7 +72,7 @@ module MailHandler
 
     private
 
-    def self.add_receiving_notifications(receiver, notifications)
+    def add_receiving_notifications(receiver, notifications)
 
       if (notifications - NOTIFICATION_TYPES.keys).empty?
 
@@ -55,7 +82,7 @@ module MailHandler
 
     end
 
-    def self.verify_type(type, types)
+    def verify_type(type, types)
 
       raise StandardError, "Unknown type - #{type}, possible options: #{types.keys}" unless types.keys.include? type
 
