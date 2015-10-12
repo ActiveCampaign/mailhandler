@@ -41,13 +41,11 @@ If you plan to check for an email in your inbox which support IMAP, you can use 
  
 ``` ruby
 email_receiver = MailHandler.receiver(:imap) do |checker|
-    checker.details(
-        address,
-        port,
-        username,
-        password,
-        use_ssl
-    )
+  checker.address = 'imap.googlemail.com'
+  checker.port = 993
+  checker.username = 'username'
+  checker.password = 'password'
+  checker.use_ssl  =  true
 end
 ``` 
 Email receiving handler will be referenced below as `email_receiver`
