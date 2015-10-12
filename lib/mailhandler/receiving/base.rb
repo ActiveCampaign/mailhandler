@@ -36,6 +36,14 @@ module MailHandler
 
       end
 
+      def search_result
+
+        !found_emails.empty?
+
+      end
+
+      protected
+
       def verify_and_set_search_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
@@ -43,12 +51,6 @@ module MailHandler
         end
 
         @search_options = search_options.merge options
-
-      end
-
-      def search_result
-
-        !found_emails.empty?
 
       end
 
