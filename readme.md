@@ -29,7 +29,7 @@ Checking emails locally option can be used when you have emails stored in certai
 They can be the same if you don't plan to archive checked files.
 
 ``` ruby
-email_receiver = MailHandler::Handler.receiver(:folder) do |checker|
+email_receiver = MailHandler.receiver(:folder) do |checker|
     checker.inbox_folder = folder_of_your_inbox
     checker.archive_folder = folder_of_your_inbox_archive_folder
 end
@@ -40,7 +40,7 @@ end
 If you plan to check for an email in your inbox which support IMAP, you can use mailhandler with provided IMAP settings. 
  
 ``` ruby
-email_receiver = MailHandler::Handler.receiver(:imap) do |checker|
+email_receiver = MailHandler.receiver(:imap) do |checker|
     checker.details(
         address,
         port,
@@ -114,7 +114,7 @@ To send email you can use SMTP protocol or Postmark.
 To send email with Postmark, you need to choose type of sending, api token options.
  
 ``` ruby
-email_sender = MailHandler::Handler.sender(type) do |dispatcher|
+email_sender = MailHandler.sender(type) do |dispatcher|
     dispatcher.api_token = api_token
 end
 ```
@@ -127,7 +127,7 @@ end
 To send email with SMTP you need to configure standard SMTP settings.
 
 ``` ruby
-email_sender = MailHandler::Handler.sender(:smtp) do |dispatcher|
+email_sender = MailHandler.sender(:smtp) do |dispatcher|
     dispatcher.address = address
     dispatcher.port = port
     dispatcher.domain = domain
