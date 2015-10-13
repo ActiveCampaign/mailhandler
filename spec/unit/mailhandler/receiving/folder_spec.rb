@@ -129,7 +129,7 @@ describe MailHandler::Receiving::FolderChecker do
 
             mail = Mail.read_from_string(File.read "#{data_folder}/email2.txt")
             mail.subject = 'test 872878278'
-            File.write("#{data_folder}/email3.txt", mail)
+            File.open("#{data_folder}/email3.txt",  "w") { |file| file.write(mail) }
             mail
 
           }
