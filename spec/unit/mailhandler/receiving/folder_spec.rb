@@ -41,10 +41,17 @@ describe MailHandler::Receiving::FolderChecker do
 
         end
 
-        it 'found emails' do
+        it 'found emails - single' do
 
           checker.find({:by_subject => 'test 12345'})
           expect(checker.found_emails.size).to be 1
+
+        end
+
+        it 'found emails - multiple' do
+
+          checker.find({:by_subject => 'test'})
+          expect(checker.found_emails.size).to be 2
 
         end
 
