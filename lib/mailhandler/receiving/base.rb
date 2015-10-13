@@ -26,7 +26,7 @@ module MailHandler
 
         # Default number of email results to return, and whether to archive emails.
         @search_options = {:count => 50, :archive => false}
-        @found_emails = []
+        reset_found_emails
 
       end
 
@@ -51,6 +51,13 @@ module MailHandler
         end
 
         @search_options = search_options.merge options
+        reset_found_emails
+
+      end
+
+      def reset_found_emails
+
+        @found_emails = []
 
       end
 
