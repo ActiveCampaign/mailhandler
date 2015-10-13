@@ -71,10 +71,9 @@ describe MailHandler::Receiving::FolderChecker do
         it 'by subject and count - multiple' do
 
           checker.find({:by_subject => 'test', :count => 1})
-
+          
           aggregate_failures "found mail details" do
             expect(checker.found_emails.size).to be 1
-            expect(checker.found_emails).to include mail2
           end
 
         end
