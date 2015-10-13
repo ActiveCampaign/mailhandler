@@ -30,6 +30,13 @@ describe MailHandler::Receiving::FolderChecker do
           expect(checker.found_emails).to be_empty
 
         end
+
+        it 'by date' do
+
+          checker.find({:by_date => Time.new(2015,10,14,13,30,0, "+02:00")})
+          expect(checker.found_emails).to be_empty
+
+        end
         
       end
 
@@ -71,10 +78,14 @@ describe MailHandler::Receiving::FolderChecker do
         it 'by subject and count - multiple' do
 
           checker.find({:by_subject => 'test', :count => 1})
-          
-          aggregate_failures "found mail details" do
-            expect(checker.found_emails.size).to be 1
-          end
+          expect(checker.found_emails.size).to be 1
+
+        end
+
+        it 'by date' do
+
+          checker.find({:by_date => Time.new(2015,10,12,13,30,0, "+02:00")})
+          expect(checker.found_emails.size).to be 2
 
         end
 
