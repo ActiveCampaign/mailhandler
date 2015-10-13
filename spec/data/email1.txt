@@ -1,6 +1,6 @@
 Date: Tue, 13 Oct 2015 14:12:52 +0200
 From: igor@example.com
-To: igor@example.com
+To: igor1@example.com
 Message-ID: <561cf544ef064_c1863ffde50601f859577@Igors-MacBook-Pro.local.mail>
 Subject: test email 1878271
 Mime-Version: 1.0
