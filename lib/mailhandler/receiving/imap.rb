@@ -35,43 +35,13 @@ module MailHandler
         verify_and_set_search_options(options)
         validate_options(options)
         init_retriever
-        emails = find_emails(search_options)
-
-        unless emails.empty?
-
-          emails.each do |email|
-
-            @found_emails << email if filter_by_options(email, options)
-
-          end
-
-        end
+        @found_emails = find_emails(search_options)
 
         search_result
 
       end
 
       private
-
-      def filter_by_options(email, options)
-
-        result = true
-
-        unless options[:by_subject].nil?
-
-          result = result && email.subject.include?(options[:by_subject])
-
-        end
-
-        unless options[:by_recipient].nil?
-
-          result = result && email[options[:by_recipient].keys.first].to_s.include?(options[:by_recipient].values.first)
-
-        end
-
-        result
-
-      end
 
       # delegate retrieval details to Mail library
       def init_retriever
@@ -115,13 +85,37 @@ module MailHandler
 
         if options[:archive]
 
-          Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
+          Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
 
         else
 
-          Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => ['SUBJECT', search_options[:by_subject]])
+          Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
 
         end
+
+      end
+
+      def imap_filter_keys(options)
+
+        keys = []
+
+        options.keys.each do |filter_option|
+
+          case filter_option
+
+            when :by_recipient
+
+              keys << options[:by_recipient].keys.first.to_s.upcase << options[:by_recipient].values.first
+
+            when :by_subject
+
+              keys << 'SUBJECT' << options[:by_subject]
+
+          end
+
+        end
+
+        keys
 
       end
 
