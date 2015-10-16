@@ -44,7 +44,7 @@ describe MailHandler::Receiving::FolderChecker do
 
         it 'by date' do
 
-          checker.find({:by_date => Time.new(2015,10,14,13,30,0, "+02:00")})
+          checker.find({:by_date => Time.now + 86400})
           expect(checker.found_emails).to be_empty
 
         end
