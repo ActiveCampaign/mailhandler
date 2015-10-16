@@ -22,6 +22,11 @@ module MailHandler
 
       ]
 
+      DEFAULT_SEARCH_OPTIONS = [
+
+          :count, :archive
+      ]
+
       def initialize
 
         # Default number of email results to return, and whether to archive emails.
@@ -46,12 +51,31 @@ module MailHandler
 
       def verify_and_set_search_options(options)
 
+        validate_used_options(options)
+        validate_mandatory_options(options)
+
+        @search_options = search_options.merge options
+        reset_found_emails
+
+      end
+
+      def validate_used_options(options)
+
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
           raise StandardError, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"
         end
 
-        @search_options = search_options.merge options
-        reset_found_emails
+      end
+
+      def validate_mandatory_options(options)
+
+        search = AVAILABLE_SEARCH_OPTIONS - DEFAULT_SEARCH_OPTIONS
+
+        unless search.any? { |e| options[e] != nil }
+
+          raise StandardError, "At least one of the following search options has to be used: #{search}"
+
+        end
 
       end
 

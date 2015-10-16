@@ -19,7 +19,8 @@ module MailHandler
 
           :by_subject,
           :count,
-          :archive
+          :archive,
+          :by_recipient
 
       ]
 
@@ -40,7 +41,7 @@ module MailHandler
 
           emails.each do |email|
 
-            @found_emails << email if email.subject.include? search_options[:by_subject]
+            @found_emails << email if filter_by_options(email, options)
 
           end
 
@@ -51,6 +52,26 @@ module MailHandler
       end
 
       private
+
+      def filter_by_options(email, options)
+
+        result = true
+
+        unless options[:by_subject].nil?
+
+          result = result && email.subject.include?(options[:by_subject])
+
+        end
+
+        unless options[:by_recipient].nil?
+
+          result = result && email[options[:by_recipient].keys.first].to_s.include?(options[:by_recipient].values.first)
+
+        end
+
+        result
+
+      end
 
       # delegate retrieval details to Mail library
       def init_retriever
