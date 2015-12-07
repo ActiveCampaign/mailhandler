@@ -15,6 +15,7 @@ module MailHandler
     module DEFAULTS
 
       MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
+      SEARCH_FREQUENCY = 1 # how frequently to check for email in inbox
 
     end
 
@@ -46,7 +47,7 @@ module MailHandler
         notify_observers(search)
 
         break if received
-        sleep 1
+        sleep DEFAULTS::SEARCH_FREQUENCY
 
       end
 
