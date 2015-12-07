@@ -62,6 +62,33 @@ describe MailHandler::Receiver do
 
     end
 
+    context '.search' do
+
+      let(:checker) {
+        checker = double('Checker')
+
+        allow(checker).to receive(:find) { sleep 1; false }
+        allow(checker).to receive(:search_result) { false }
+        allow(checker).to receive(:found_emails) { [] }
+        checker
+
+      }
+
+      [1,3,5].each do |duration|
+
+        it "max duration - #{duration} seconds" do
+
+          receiver.search_max_duration = duration
+          receiver.find_email(default_search_option)
+
+          expect(receiver.search.duration).to be_within(1).of(duration)
+
+        end
+
+      end
+
+    end
+
   end
 
 end

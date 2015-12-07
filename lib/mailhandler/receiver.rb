@@ -39,9 +39,9 @@ module MailHandler
 
       init_search_details(options)
 
-      while 1
+      until search_time_expired?
 
-        received = checker.find(options) || search_time_expired?
+        received = checker.find(options)
         update_search_details
         notify_observers(search)
 
