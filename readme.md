@@ -1,6 +1,6 @@
 # MailHandler Gem
 
-[![Build Status](https://travis-ci.org/ibalosh/MailHandler.svg?branch=master)](https://travis-ci.org/ibalosh/MailHandler)
+[![Build Status](https://travis-ci.org/wildbit/MailHandler.svg?branch=master)](https://travis-ci.org/wildbit/MailHandler)
 
 MailHandler is a simple wrapper for [mail](https://github.com/mikel/mail) and [postmark](https://github.com/wildbit/postmark-gem) libraries which allows you to send and retrieve emails, 
 and get more details about email sending and delivery. Main purpose of the gem is easier email sending/delivery testing. 

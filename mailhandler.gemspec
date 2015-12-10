@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.authors     = ["Igor Balos"]
-  s.email       = "ibalosh@gmail.com"
+  s.email       = ["ibalosh@gmail.com", "igor@wildbit.com"]
 
   s.summary     = "Postmark email receiving and sending handler."
   s.description = "Use this gem to send emails through SMTP and Postmark API. Check if email arrived by imap or folder check."
