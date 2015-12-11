@@ -85,13 +85,15 @@ module MailHandler
 
         if options[:archive]
 
-          Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
+          result = Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
 
         else
 
-          Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
+          result = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
 
         end
+
+        (result.kind_of? Array)? result : [result]
 
       end
 
@@ -111,11 +113,15 @@ module MailHandler
 
               keys << 'SUBJECT' << options[:by_subject]
 
+            else
+
+
           end
 
         end
 
-        keys
+        (keys.empty?)? nil : keys
+
 
       end
 

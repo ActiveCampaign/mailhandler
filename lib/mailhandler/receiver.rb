@@ -37,7 +37,7 @@ module MailHandler
     end
 
     def find_email(options)
-      
+
       init_search_details(options)
 
       until search_time_expired?
