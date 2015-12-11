@@ -61,11 +61,16 @@ email_receiver.find_email(:by_subject => subject, :archive => true)
 You can search imap mailbox by following options:
 
 * `:by_subject` - subject of the email
+* `:by_content` - search email content by keywords
+* `:by_recipient` - by email recipient
 
 You can search local mailbox by following options:
 
 * `:by_subject` - subject of the email   
 * `:by_recipient` - by email recipient
+* `:by_content` - search email content by keywords
+
+Recipient to search by needs to by added in following form: `by_recipient => { :to => 'igor@example.com' }`.
 
 If you would like email to be archived after its read, use `:archive => true` option (recommended)
 

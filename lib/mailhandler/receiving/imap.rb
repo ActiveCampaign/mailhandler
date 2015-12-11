@@ -18,6 +18,7 @@ module MailHandler
       AVAILABLE_SEARCH_OPTIONS = [
 
           :by_subject,
+          :by_content,
           :count,
           :archive,
           :by_recipient
@@ -112,6 +113,10 @@ module MailHandler
             when :by_subject
 
               keys << 'SUBJECT' << options[:by_subject]
+
+            when :by_content
+
+              keys << 'BODY' << options[:by_content]
 
             else
 

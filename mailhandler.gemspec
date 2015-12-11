@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.files       = `git ls-files`.split($/)
   s.test_files  = `git ls-files -- {spec}/*`.split("\n")
-  s.homepage    = 'https://github.com/wildbit'
+  s.homepage    = 'https://github.com/wildbit/mailhandler'
   s.require_paths = ["lib"]
 
   s.post_install_message = %q{
