@@ -47,6 +47,12 @@ module MailHandler
 
       end
 
+      def reset_found_emails
+
+        @found_emails = []
+
+      end
+
       protected
 
       def verify_and_set_search_options(options)
@@ -76,12 +82,6 @@ module MailHandler
           raise StandardError, "At least one of the following search options has to be used: #{search}"
 
         end
-
-      end
-
-      def reset_found_emails
-
-        @found_emails = []
 
       end
 

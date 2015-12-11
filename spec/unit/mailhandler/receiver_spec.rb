@@ -13,6 +13,7 @@ describe MailHandler::Receiver do
       allow(checker).to receive(:find) { sleep receiving_duration; true }
       allow(checker).to receive(:search_result) { true }
       allow(checker).to receive(:found_emails) { [found_email] }
+      allow(checker).to receive(:reset_found_emails) { [] }
       checker
 
     }
@@ -70,6 +71,7 @@ describe MailHandler::Receiver do
         allow(checker).to receive(:find) { sleep 1; false }
         allow(checker).to receive(:search_result) { false }
         allow(checker).to receive(:found_emails) { [] }
+        allow(checker).to receive(:reset_found_emails) { [] }
         checker
 
       }
