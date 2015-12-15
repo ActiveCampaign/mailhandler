@@ -18,10 +18,76 @@ describe MailHandler::Receiving::FolderChecker do
 
       context 'search options' do
 
-        it 'default' do
+        it 'by_subject' do
 
           checker.find({:by_subject => 'test'})
           expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_subject=>'test'})
+
+        end
+
+        it 'by_content' do
+
+          checker.find({:by_content => 'test'})
+          expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_content => 'test'})
+
+        end
+
+        context 'archive' do
+
+          it 'invalid' do
+
+            expect { checker.find({:archive => 'test'}) }.to raise_error MailHandler::Error
+
+          end
+
+        end
+
+        context 'by_date' do
+
+          it 'valid' do
+
+            time = Time.now
+            checker.find({:by_date => time})
+            expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_date => time })
+
+          end
+
+          it 'invalid' do
+
+            time = Time.now.to_s
+            expect { checker.find({:by_date => time}) }.to raise_error MailHandler::Error
+
+          end
+
+        end
+
+        it 'by_recipient' do
+
+          checker.find({:by_recipient => 'igor@example.com'})
+          expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_recipient =>  'igor@example.com' })
+
+        end
+
+        context 'count' do
+
+          it 'valid' do
+
+            checker.find({:count => 1})
+            expect(checker.search_options).to eq({:count=>1, :archive=>false})
+
+          end
+
+          it 'invalid - below limit' do
+
+            expect { checker.find({:count => -1}) }.to raise_error MailHandler::Error
+
+          end
+
+          it 'invalid - above limit' do
+
+            expect { checker.find({:count => 3000 }) }.to raise_error MailHandler::Error
+
+          end
 
         end
 

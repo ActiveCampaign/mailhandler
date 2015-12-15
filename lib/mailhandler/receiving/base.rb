@@ -24,14 +24,9 @@ module MailHandler
 
       ]
 
-      DEFAULT_SEARCH_OPTIONS = [
-
-          :archive
-      ]
-
       def initialize
 
-        base_search_options
+        set_base_search_options
         reset_found_emails
 
       end
@@ -56,20 +51,37 @@ module MailHandler
 
       protected
 
-      def base_search_options
+      def verify_and_set_search_options(options)
 
-        # Default number of email results to return, and whether to archive emails.
-        @search_options = {:count => 50, :archive => false}
+        validate_used_options(options)
+        validate_option_values(options)
+
+        set_base_search_options
+        add_additional_search_options(options)
+        reset_found_emails
 
       end
 
-      def verify_and_set_search_options(options)
+      def validate_option_values(options)
 
-        base_search_options
-        validate_used_options(options)
+        if options[:by_date]
 
-        @search_options = search_options.merge options
-        reset_found_emails
+          raise MailHandler::Error, "Incorrect option options[:by_date]=#{options[:date]}" unless options[:by_date].is_a? Time
+
+        end
+
+        unless options[:count].nil?
+
+          count = options[:count]
+          raise MailHandler::Error, "Incorrect option options[:count]=#{options[:count]}" if count < 0 or count > 2000
+
+        end
+
+        if options[:archive]
+
+          raise MailHandler::Error, "Incorrect option options[:archive]=#{options[:archive]}" unless options[:archive] == true or options[:archive] == false
+
+        end
 
       end
 
@@ -78,6 +90,19 @@ module MailHandler
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
           raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"
         end
+
+      end
+
+      def set_base_search_options
+
+        # Default number of email results to return, and whether to archive emails.
+        @search_options = {:count => 50, :archive => false}
+
+      end
+
+      def add_additional_search_options(options)
+
+        @search_options = @search_options.merge options
 
       end
 

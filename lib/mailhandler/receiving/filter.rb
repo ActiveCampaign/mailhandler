@@ -56,7 +56,7 @@ module Filter
 
     def initialize(content)
 
-      @content = content
+      @content = content.to_s
 
     end
 

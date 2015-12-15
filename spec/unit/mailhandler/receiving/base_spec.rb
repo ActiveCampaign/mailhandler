@@ -20,4 +20,10 @@ describe MailHandler::Receiving::Checker do
 
   end
 
+  it '.find' do
+
+    expect { subject.find(:by_subject => 'test') }.to raise_error(MailHandler::Error, 'Method not implemented')
+
+  end
+
 end

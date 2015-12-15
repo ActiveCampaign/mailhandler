@@ -114,11 +114,11 @@ module MailHandler
 
             when :by_subject
 
-              keys << 'SUBJECT' << options[:by_subject]
+              keys << 'SUBJECT' << options[:by_subject].to_s
 
             when :by_content
 
-              keys << 'BODY' << options[:by_content]
+              keys << 'BODY' << options[:by_content].to_s
 
             else
 
