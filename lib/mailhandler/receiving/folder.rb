@@ -26,6 +26,7 @@ module MailHandler
       def find(options)
 
         verify_and_set_search_options(options)
+        verify_mailbox_folders
         email_files = find_files(search_options)
 
         unless email_files.empty?
@@ -85,33 +86,32 @@ module MailHandler
 
       def move_files(files)
 
-        setup_inbox_folders
-
         files.each do |file|
 
           file = File.basename(file)
-
-          if inbox_folder != archive_folder
-
-            FileUtils.mv("#{inbox_folder}/#{file}", "#{archive_folder}/#{file}")
-
-          else
-
-            FileUtils.rm_r "#{inbox_folder}/#{file}", :force => true
-
-          end
+          (inbox_folder == archive_folder)? delete_file(file) : archive_file(file)
 
         end
 
       end
 
+      def archive_file(file)
+
+        FileUtils.mv("#{inbox_folder}/#{file}", "#{archive_folder}/#{file}")
+
+      end
+
+      def delete_file(file)
+
+        FileUtils.rm_r "#{inbox_folder}/#{file}", :force => true
+
+      end
+
       # create folders if they don't exist
-      def setup_inbox_folders
+      def verify_mailbox_folders
 
-        raise MailHandler::Error, 'Folder variables are not set' if inbox_folder.nil? or archive_folder.nil?
-
-        Dir::mkdir inbox_folder unless File.directory? inbox_folder
-        Dir::mkdir archive_folder unless File.directory? archive_folder
+        raise MailHandler::Error, 'Folder variables are not set.' if inbox_folder.nil? or archive_folder.nil?
+        raise MailHandler::FileError, 'Mailbox folders do not exist.' unless File.directory? inbox_folder and File.directory? archive_folder
 
       end
 

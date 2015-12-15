@@ -199,9 +199,15 @@ describe MailHandler::Receiving::FolderChecker do
 
         context 'archiving emails' do
 
+          before(:each) {
+
+            FileUtils.mkdir "#{data_folder}/checked" unless Dir.exists? "#{data_folder}/checked"
+
+          }
+
           after(:each) {
 
-            FileUtils.rm_r "#{data_folder}/checked", :force => true
+            FileUtils.rm_r "#{data_folder}/checked", :force => false if Dir.exists? "#{data_folder}"
 
           }
 
@@ -235,7 +241,6 @@ describe MailHandler::Receiving::FolderChecker do
             checker_archive.find({:by_subject => mail.subject, :archive => true})
             expect(checker_archive.found_emails).to be_empty
 
-
           end
 
         end
@@ -245,5 +250,24 @@ describe MailHandler::Receiving::FolderChecker do
     end
 
   end
+
+  context 'invalid folders' do
+
+    it 'inbox folder' do
+
+      checker = MailHandler::Receiving::FolderChecker.new('test', data_folder)
+      expect { checker.find :count => 1 }.to raise_error MailHandler::FileError
+
+    end
+
+    it 'archive folder' do
+
+      checker = MailHandler::Receiving::FolderChecker.new(data_folder, 'test')
+      expect { checker.find :count => 1 }.to raise_error MailHandler::FileError
+
+    end
+
+  end
+
 
 end
