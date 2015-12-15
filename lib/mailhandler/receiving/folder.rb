@@ -1,6 +1,7 @@
 require_relative 'base.rb'
 require_relative 'filter'
 require 'mail'
+require_relative '../errors'
 
 module MailHandler
 
@@ -107,7 +108,7 @@ module MailHandler
       # create folders if they don't exist
       def setup_inbox_folders
 
-        raise StandardError, 'Folder variables are not set' if inbox_folder.nil? or archive_folder.nil?
+        raise MailHandler::Error, 'Folder variables are not set' if inbox_folder.nil? or archive_folder.nil?
 
         Dir::mkdir inbox_folder unless File.directory? inbox_folder
         Dir::mkdir archive_folder unless File.directory? archive_folder

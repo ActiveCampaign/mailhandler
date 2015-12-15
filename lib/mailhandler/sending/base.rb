@@ -1,3 +1,5 @@
+require_relative '../errors'
+
 module MailHandler
 
   module Sending
@@ -10,7 +12,7 @@ module MailHandler
 
       def verify_email(email)
 
-        raise StandardError, "Invalid type error, only #{Mail.new.class} object type for sending allowed" unless email.is_a? Mail.new.class
+        raise MailHandler::TypeError, "Invalid type error, only #{Mail.new.class} object type for sending allowed" unless email.is_a? Mail.new.class
 
       end
 

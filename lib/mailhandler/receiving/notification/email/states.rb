@@ -1,4 +1,5 @@
 require_relative '../email'
+require_relative '../../../errors'
 
 module MailHandler
 
@@ -25,7 +26,7 @@ module MailHandler
 
         def notify(search)
 
-          raise StandardError, 'notify(search) interface has to be implemented'
+          raise MailHandler::Error, 'notify(search) interface has to be implemented'
 
         end
 

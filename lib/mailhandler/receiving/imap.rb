@@ -1,6 +1,8 @@
+# encoding: utf-8
+
 require 'mail'
 require_relative 'base.rb'
-# encoding: utf-8
+require_relative '../errors'
 
 module MailHandler
 
@@ -133,7 +135,7 @@ module MailHandler
       def validate_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
-          raise StandardError, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Not supported search option values for imap, options are #{AVAILABLE_SEARCH_OPTIONS}"
+          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Not supported search option values for imap, options are #{AVAILABLE_SEARCH_OPTIONS}"
         end
 
       end

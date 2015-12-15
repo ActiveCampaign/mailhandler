@@ -1,5 +1,6 @@
 require_relative 'email/content'
 require_relative 'email/states'
+require_relative '../../errors'
 
 module MailHandler
 
@@ -58,7 +59,7 @@ module MailHandler
 
         def verify_email_type(type)
 
-          raise StandardError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}" unless EMAIL_TYPES.include? type
+          raise MailHandler::TypeError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}" unless EMAIL_TYPES.include? type
 
         end
 

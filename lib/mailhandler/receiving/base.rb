@@ -1,3 +1,5 @@
+require_relative '../errors'
+
 module MailHandler
 
   module Receiving
@@ -36,7 +38,7 @@ module MailHandler
 
       def find(options)
 
-        raise StandardError, 'Method not implemented'
+        raise MailHandler::Error, 'Method not implemented'
 
       end
 
@@ -74,7 +76,7 @@ module MailHandler
       def validate_used_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
-          raise StandardError, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"
+          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"
         end
 
       end

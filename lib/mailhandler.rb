@@ -3,6 +3,10 @@ require_relative 'mailhandler/receiver'
 
 require_relative 'mailhandler/receiving/notification/email'
 require_relative 'mailhandler/receiving/notification/console'
+require_relative 'mailhandler/errors'
+
+# Main MailHandler class, that allows you to create sender and receiver objects.
+# Sender objects for sending emails, receiver objects for receiving emails from certain mailboxes.
 
 module MailHandler
 
@@ -72,6 +76,7 @@ module MailHandler
 
     private
 
+    # method for adding custom notifications, in case email delivery is delayed.
     def add_receiving_notifications(receiver, notifications)
 
       if (notifications - NOTIFICATION_TYPES.keys).empty?
@@ -84,7 +89,7 @@ module MailHandler
 
     def verify_type(type, types)
 
-      raise StandardError, "Unknown type - #{type}, possible options: #{types.keys}" unless types.keys.include? type
+      raise MailHandler::TypeError, "Unknown type - #{type}, possible options: #{types.keys}" unless types.keys.include? type
 
     end
 

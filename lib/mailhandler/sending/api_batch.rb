@@ -1,4 +1,5 @@
 require_relative 'api.rb'
+require_relative '../errors'
 
 module MailHandler
 
@@ -18,7 +19,7 @@ module MailHandler
 
       def verify_email(emails)
 
-        raise StandardError, "Invalid type error, only Array of Mail::Message object types for sending allowed" unless emails.is_a?(Array) && emails.all? { |e| e.is_a? Mail::Message }
+        raise MailHandler::TypeError, "Invalid type error, only Array of Mail::Message object types for sending allowed" unless emails.is_a?(Array) && emails.all? { |e| e.is_a? Mail::Message }
 
       end
 
