@@ -10,7 +10,7 @@ module MailHandler
 
     attr_accessor :checker,
                   :search,
-                  :search_max_duration
+                  :max_search_duration
 
     module DEFAULTS
 
@@ -32,7 +32,7 @@ module MailHandler
     def initialize(checker)
 
       @checker = checker
-      @search_max_duration = DEFAULTS::MAX_SEARCH_DURATION
+      @max_search_duration = DEFAULTS::MAX_SEARCH_DURATION
 
     end
 
@@ -62,7 +62,7 @@ module MailHandler
       @search = Search.new
       @search.options = options
       @search.started_at = Time.now
-      @search.max_duration = @search_max_duration
+      @search.max_duration = @max_search_duration
 
     end
 
@@ -78,7 +78,7 @@ module MailHandler
 
     def search_time_expired?
 
-      (Time.now - search.started_at) > @search_max_duration
+      (Time.now - search.started_at) > @max_search_duration
 
     end
 

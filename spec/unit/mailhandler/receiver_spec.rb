@@ -23,7 +23,7 @@ describe MailHandler::Receiver do
 
       it { is_expected.to respond_to(:checker) }
       it { is_expected.to respond_to(:search) }
-      it { is_expected.to respond_to(:search_max_duration) }
+      it { is_expected.to respond_to(:max_search_duration) }
 
     end
 
@@ -31,7 +31,7 @@ describe MailHandler::Receiver do
 
       it { is_expected.to respond_to(:checker=) }
       it { is_expected.to respond_to(:search=) }
-      it { is_expected.to respond_to(:search_max_duration=) }
+      it { is_expected.to respond_to(:max_search_duration=) }
 
     end
 
@@ -80,7 +80,7 @@ describe MailHandler::Receiver do
 
         it "max duration - #{duration} seconds" do
 
-          receiver.search_max_duration = duration
+          receiver.max_search_duration = duration
           receiver.find_email(default_search_option)
 
           expect(receiver.search.duration).to be_within(1).of(duration)
