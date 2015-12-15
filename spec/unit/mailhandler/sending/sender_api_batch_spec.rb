@@ -32,7 +32,7 @@ describe MailHandler::Sending::PostmarkBatchAPISender do
 
       sender = subject.new(api_token)
       expect{sender.send('test')}.
-          to raise_error StandardError, 'Invalid type error, only Array of Mail::Message object types for sending allowed'
+          to raise_error MailHandler::TypeError, 'Invalid type error, only Array of Mail::Message object types for sending allowed'
 
     end
 
@@ -40,7 +40,7 @@ describe MailHandler::Sending::PostmarkBatchAPISender do
 
       sender = subject.new(api_token)
       expect{sender.send([1,2,2])}.
-          to raise_error StandardError, 'Invalid type error, only Array of Mail::Message object types for sending allowed'
+          to raise_error MailHandler::TypeError, 'Invalid type error, only Array of Mail::Message object types for sending allowed'
 
     end
 

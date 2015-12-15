@@ -9,7 +9,7 @@ describe MailHandler::Handler do
     it 'create - invalid type' do
 
       expect { subject.init_receiver(:test) }.
-          to raise_error(StandardError, 'Unknown type - test, possible options: [:folder, :imap]')
+          to raise_error(MailHandler::TypeError, 'Unknown type - test, possible options: [:folder, :imap]')
 
     end
 
@@ -32,7 +32,7 @@ describe MailHandler::Handler do
     it 'create - invalid type' do
 
       expect { subject.init_sender(:test) }.
-          to raise_error(StandardError, 'Unknown type - test, possible options: [:postmark_api, :postmark_batch_api, :smtp]')
+          to raise_error(MailHandler::TypeError, 'Unknown type - test, possible options: [:postmark_api, :postmark_batch_api, :smtp]')
 
     end
 
