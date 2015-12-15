@@ -43,7 +43,7 @@ module MailHandler
       private
 
       # filter options which need to be done by searching files
-      FILE_SEARCH_OPTIONS = {
+      FILE_SEARCH_CLASSES = {
 
           :by_subject => Filter::ByContent,
           :by_content => Filter::ByContent,
@@ -68,7 +68,7 @@ module MailHandler
 
       end
 
-      # find files by FILE_SEARCH_OPTIONS options
+      # find files by FILE_SEARCH_CLASSES options
       # this will ignore filter criteria options which can't be done on files directly
       def find_files(options)
 
@@ -76,7 +76,7 @@ module MailHandler
 
         options.each do |key, value|
 
-          files = (files & FILE_SEARCH_OPTIONS[key].new(value).get(search_pattern)) if FILE_SEARCH_OPTIONS[key] != nil
+          files = (files & FILE_SEARCH_CLASSES[key].new(value).get(search_pattern)) if FILE_SEARCH_CLASSES[key] != nil
 
         end
 
@@ -107,7 +107,6 @@ module MailHandler
 
       end
 
-      # create folders if they don't exist
       def verify_mailbox_folders
 
         raise MailHandler::Error, 'Folder variables are not set.' if inbox_folder.nil? or archive_folder.nil?
