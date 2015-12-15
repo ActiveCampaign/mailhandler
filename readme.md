@@ -2,10 +2,10 @@
 
 [![Build Status](https://travis-ci.org/wildbit/mailhandler.svg?branch=master)](https://travis-ci.org/wildbit/mailhandler)
 
-MailHandler is a simple wrapper for [mail](https://github.com/mikel/mail) and [postmark](https://github.com/wildbit/postmark-gem) libraries which allows you to send and retrieve emails, 
-and get more details about email sending and delivery. Main purpose of the gem is easier email sending/delivery testing. 
+MailHandler is a simple wrapper on top of [mail gem](https://github.com/mikel/mail) and [postmark gem](https://github.com/wildbit/postmark-gem) libraries which allows you to send and retrieve emails and get details on how long these operations took.
+Main purpose of the gem is easier email sending/delivery testing with notifications if sending or retrieving email is taking too long. 
 
-The library supports sending by SMTP, Postmark API and checking email delivery by IMAP protocol, or by folder, if you have a local mailbox. 
+The library supports sending email by SMTP and Postmark API and checking email delivery by IMAP protocol, or by folder, if you have a local mailbox. 
 
 # Install the gem
 
@@ -21,12 +21,14 @@ Without Bundler:
 gem install mailhandler
 ``` 
 
-# Email arrival testing 
+# Email retrieval  
 
-## Configure local mailbox email to check
+## Configure local folder as your mailbox check for emails
 
-Checking emails locally option can be used when you have emails stored in certain local path. In order to search for email, all you need to do is setup inbox and archive folder.
-They can be the same if you don't plan to archive checked files.
+Searching emails locally is an option that can be used when you have emails stored in certain local path on your test machine. 
+In order to search for email, all you need to do is setup inbox folder and archive folder. 
+
+Folders can be the same if you don't plan to archive found emails. Retrieving emails from a folder would look like following:
 
 ``` ruby
 email_receiver = MailHandler.receiver(:folder) do |checker|
@@ -37,7 +39,7 @@ end
 
 ## Configure imap mailbox email to check
 
-If you plan to check for an email in your inbox which support IMAP, you can use mailhandler with provided IMAP settings. 
+If you plan to search for emails in your remote inbox which support IMAP, you can use Mailhandler with provided IMAP settings: 
  
 ``` ruby
 email_receiver = MailHandler.receiver(:imap) do |checker|
@@ -48,11 +50,12 @@ email_receiver = MailHandler.receiver(:imap) do |checker|
   checker.use_ssl  =  true
 end
 ``` 
-Email receiving handler will be referenced below as `email_receiver`
+
+Email receiving handler will be referenced in examples below as `email_receiver`.
 
 ## Searching for email
 
-Once you have setup mailbox checking type, you can search for email like this:
+Once you have setup mailbox searching type, you can search for email like this:
 
 ``` ruby
 email_receiver.find_email(:by_subject => subject, :archive => true)
@@ -70,29 +73,32 @@ You can search local mailbox by following options:
 * `:by_recipient` - by email recipient
 * `:by_content` - search email content by keywords
 
-Recipient to search by needs to by added in following form: `by_recipient => { :to => 'igor@example.com' }`.
+Recipient to search by needs to by added in the following form: `by_recipient => { :to => 'igor@example.com' }`.
+Library supports searching by :to, :cc recipients. At the moment, only searching by a single recipient email address is supported.
 
 If you would like email to be archived after its read, use `:archive => true` option (recommended)
 
 ## Search results
 
-Once email searching is finished, you can check search result by looking at: `email_receiver.search` object
+Once email searching is finished, you can check search results by checking: `email_receiver.search` object, which has following information:
 
 * `:options` - search options which were used (described above)
 * `:started_at` - time when search was initiated
 * `:finished_at` - time when search was stopped
 * `:duration` - time how long the search took 
 * `:max_duration` - maximum amount of time search can take in seconds (default is 240)
-* `:result - result of search - `true/false`
-* `:email` - email found in search 
-* `:emails` - array of emails found in search
+* `:result` - result of search - `true/false`
+* `:email` - first email found in search 
+* `:emails` - array of all emails found in search
 
 # Email search notifications
 
-While searching for an email, there is a possibility to get notification if emails sending is taking too long. 
-You can get an notification in console, by email or both. Console output is good if you are testing email delivery, and want to see how long its taking for email to arrive in console.
+While searching for an email, there is a possibility to get notification if emails searching is taking too long. 
+You can get an notification in console, by email or both. 
 
-To add notifications to email searching all you need to do is:
+Console notification is a good option if you are testing email delivery and want to see console output on how is the progress of search going.
+
+To add console or email notifications, to your email searching all you need to do is:
 
 ``` ruby
 email_receiver.add_observer(MailHandler::Receiving::Notification::Email.new(email_sender, contacts))
@@ -106,11 +112,7 @@ For email notifications, the parameters you need are:
  
 # Email sending 
 
-There are three ways you can send email. 
- 
-## Send by postmark
-
-To send email you can use SMTP protocol or Postmark.
+There are three ways you can send email, which we will describe below. To send email you can use SMTP protocol or Postmark API.
 
 ### Send by Postmark API 
 
@@ -148,7 +150,8 @@ Once you have setup your email sender, all you need to do is to send an email:
 email_sender.send_email(email)
 ```
 
-email has to be an email created with Mail gem. In order to send emails by Postmark batch, you will need to provide an Array of emails.
+Email you plan to send has to be an email created with Mail gem. 
+In order to send emails by Postmark batch, you will need to provide an Array of emails.
 
 ## Sending results
  
