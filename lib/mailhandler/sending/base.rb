@@ -12,7 +12,15 @@ module MailHandler
 
       def verify_email(email)
 
-        raise MailHandler::TypeError, "Invalid type error, only #{Mail.new.class} object type for sending allowed" unless email.is_a? Mail.new.class
+        raise MailHandler::TypeError, "Invalid type error, only #{allowed_email_type} object type for sending allowed" unless email.is_a? allowed_email_type
+
+      end
+
+      private
+
+      def allowed_email_type
+
+        Mail::Message
 
       end
 
