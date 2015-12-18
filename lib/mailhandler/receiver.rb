@@ -21,6 +21,8 @@ module MailHandler
     end
 
     # @param [Hash] - search options
+    # @see MailHandler::Receiving::Checker::AVAILABLE_SEARCH_OPTIONS for available options
+    #
     # @param [Time] - search started at Time
     # @param [Time] - search finished at Time
     # @param [int] - how long search lasted
