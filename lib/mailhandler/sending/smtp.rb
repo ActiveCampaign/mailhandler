@@ -29,20 +29,7 @@ module MailHandler
 
         verify_email(email)
         email = configure_sending(email)
-
-        response = nil
-
-        begin
-
-          response = email.deliver
-
-        rescue Exception => e
-
-          response = e.to_s
-
-        end
-
-        response
+        email.deliver
 
       end
 
