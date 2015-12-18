@@ -42,7 +42,6 @@ module MailHandler
       def find(options)
 
         verify_and_set_search_options(options)
-        validate_options(options)
         init_retriever
         @found_emails = find_emails(search_options)
 
