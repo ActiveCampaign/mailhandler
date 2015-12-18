@@ -17,6 +17,12 @@ module MailHandler
                     :authentication,
                     :use_ssl
 
+      # search options:
+      # by_subject - String, search by a whole string as part of the subject of the email
+      # by_content - String, search by a whole string as part of the content of the email
+      # count - Int, number of found emails to return
+      # archive - Boolean
+      # by_recipient - Hash, accepts a hash like: :to => 'igor@example.com'
       AVAILABLE_SEARCH_OPTIONS = [
 
           :by_subject,
