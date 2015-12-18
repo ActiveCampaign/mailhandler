@@ -8,11 +8,17 @@ module MailHandler
 
       attr_reader :type
 
+      def send(email)
+
+        raise MailHandler::InterfaceError, 'Send interface not implemented.'
+
+      end
+
       protected
 
       def verify_email(email)
 
-        raise MailHandler::TypeError, "Invalid type error, only #{allowed_email_type} object type for sending allowed" unless email.is_a? allowed_email_type
+        raise MailHandler::TypeError, "Invalid type error, only #{allowed_email_type} object type for sending allowed." unless email.is_a? allowed_email_type
 
       end
 

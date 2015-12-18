@@ -59,7 +59,7 @@ module MailHandler
 
         def verify_email_type(type)
 
-          raise MailHandler::TypeError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}" unless EMAIL_TYPES.include? type
+          raise MailHandler::TypeError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}." unless EMAIL_TYPES.include? type
 
         end
 

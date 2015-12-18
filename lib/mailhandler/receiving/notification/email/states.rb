@@ -26,7 +26,7 @@ module MailHandler
 
         def notify(search)
 
-          raise MailHandler::Error, 'notify(search) interface has to be implemented'
+          raise MailHandler::InterfaceError, 'notify(search) interface has to be implemented.'
 
         end
 

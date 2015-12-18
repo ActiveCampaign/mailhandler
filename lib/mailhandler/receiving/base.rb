@@ -33,7 +33,7 @@ module MailHandler
 
       def find(options)
 
-        raise MailHandler::Error, 'Method not implemented'
+        raise MailHandler::InterfaceError, 'Find interface not implemented.'
 
       end
 
@@ -66,20 +66,20 @@ module MailHandler
 
         if options[:by_date]
 
-          raise MailHandler::Error, "Incorrect option options[:by_date]=#{options[:date]}" unless options[:by_date].is_a? Time
+          raise MailHandler::Error, "Incorrect option options[:by_date]=#{options[:date]}." unless options[:by_date].is_a? Time
 
         end
 
         unless options[:count].nil?
 
           count = options[:count]
-          raise MailHandler::Error, "Incorrect option options[:count]=#{options[:count]}" if count < 0 or count > 2000
+          raise MailHandler::Error, "Incorrect option options[:count]=#{options[:count]}." if count < 0 or count > 2000
 
         end
 
         if options[:archive]
 
-          raise MailHandler::Error, "Incorrect option options[:archive]=#{options[:archive]}" unless options[:archive] == true or options[:archive] == false
+          raise MailHandler::Error, "Incorrect option options[:archive]=#{options[:archive]}." unless options[:archive] == true or options[:archive] == false
 
         end
 
@@ -88,7 +88,7 @@ module MailHandler
       def validate_used_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
-          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}"
+          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}."
         end
 
       end

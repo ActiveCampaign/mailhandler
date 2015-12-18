@@ -11,5 +11,6 @@ module MailHandler
   class UnknownError        < Error; end
   class TypeError           < Error; end
   class FileError           < Error; end
+  class InterfaceError      < Error; end
 
 end

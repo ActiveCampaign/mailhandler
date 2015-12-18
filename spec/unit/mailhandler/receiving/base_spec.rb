@@ -22,7 +22,7 @@ describe MailHandler::Receiving::Checker do
 
   it '.find' do
 
-    expect { subject.find(:by_subject => 'test') }.to raise_error(MailHandler::Error, 'Method not implemented')
+    expect { subject.find(:by_subject => 'test') }.to raise_error(MailHandler::InterfaceError, 'Find interface not implemented.')
 
   end
 

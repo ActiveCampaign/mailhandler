@@ -2,6 +2,7 @@ require_relative 'sending/smtp'
 require_relative 'sending/api'
 require_relative 'sending/api_batch'
 
+# Class for sending email, and storing details about the sending.
 module MailHandler
 
   class Sender

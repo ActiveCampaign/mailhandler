@@ -5,14 +5,14 @@ require_relative 'mailhandler/receiving/notification/email'
 require_relative 'mailhandler/receiving/notification/console'
 require_relative 'mailhandler/errors'
 
-# Main MailHandler class, that allows you to create sender and receiver objects.
-# Sender objects for sending emails, receiver objects for receiving emails from certain mailboxes.
-
+# Main MailHandler class, for creating sender and receiver objects.
+# Sender objects for sending emails, receiver objects for searching and receiving emails.
 module MailHandler
 
   extend self
 
   # sending accessor
+  # @return [Object] - sender for sending emails
   def sender(type = :postmark_api)
 
     handler = Handler.new
@@ -24,6 +24,7 @@ module MailHandler
   end
 
   # receiving accessor
+  # @return [Object] - receiver for searching emails
   def receiver(type = :folder, notifications = [])
 
     handler = Handler.new
@@ -34,7 +35,10 @@ module MailHandler
 
   end
 
-  # handling accessor
+  # Holder for receiving and sending handlers
+  #
+  # @param [Receiving::Class] receiver
+  # @param [Sending::Class] sender
   def handler(receiver, sender)
 
     handler = Handler.new
@@ -76,7 +80,11 @@ module MailHandler
 
     private
 
-    # method for adding custom notifications, in case email delivery is delayed.
+    # Add notifications, in case email receiving is delayed. 
+    # When email is delayed, email notification can be sent or console status update.
+    #
+    # @param [Receiving::Object] receiver
+    # @param [Array<Receiving::Notification::Class>] notifications
     def add_receiving_notifications(receiver, notifications)
 
       if (notifications - NOTIFICATION_TYPES.keys).empty?
@@ -89,7 +97,7 @@ module MailHandler
 
     def verify_type(type, types)
 
-      raise MailHandler::TypeError, "Unknown type - #{type}, possible options: #{types.keys}" unless types.keys.include? type
+      raise MailHandler::TypeError, "Unknown type - #{type}, possible options: #{types.keys}." unless types.keys.include? type
 
     end
 

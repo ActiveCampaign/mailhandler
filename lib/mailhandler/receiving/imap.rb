@@ -136,7 +136,7 @@ module MailHandler
       def validate_options(options)
 
         unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
-          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Not supported search option values for imap, options are #{AVAILABLE_SEARCH_OPTIONS}"
+          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Not supported search option values for imap, options are #{AVAILABLE_SEARCH_OPTIONS}."
         end
 
       end
