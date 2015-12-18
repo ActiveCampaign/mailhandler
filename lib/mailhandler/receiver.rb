@@ -10,12 +10,13 @@ module MailHandler
 
     attr_accessor :checker,
                   :search,
-                  :max_search_duration
+                  :max_search_duration,
+                  :search_frequency
 
     module DEFAULTS
 
       MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
-      SEARCH_FREQUENCY = 1 # how frequently to check for email in inbox
+      SEARCH_FREQUENCY = 1 # how frequently to check for email in inbox [seconds]
 
     end
 
@@ -33,6 +34,7 @@ module MailHandler
 
       @checker = checker
       @max_search_duration = DEFAULTS::MAX_SEARCH_DURATION
+      @search_frequency = DEFAULTS::SEARCH_FREQUENCY
 
     end
 
@@ -47,7 +49,7 @@ module MailHandler
         notify_observers(search)
 
         break if received
-        sleep DEFAULTS::SEARCH_FREQUENCY
+        sleep search_frequency
 
       end
 

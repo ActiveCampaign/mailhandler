@@ -12,11 +12,12 @@ module MailHandler
 
     # @param [Time] - sending started at Time
     # @param [Time] - sending finished at Time
-    # @param [int] - how long sending lasted
+    # @param [int] - how long sending lasted, seconds
     # @param [Object] - sending response message
     # @param [Mail] - email/emails sent
     Sending = Struct.new( :started_at, :finished_at, :duration, :response, :email)
 
+    # @param [Sending::Oblect] dispatcher - sender type used for sending email
     def initialize(dispatcher)
 
       @dispatcher = dispatcher
