@@ -73,7 +73,8 @@ module MailHandler
 
         def file_match_filter?(file)
 
-          read_email(File.read(file)).subject.include? @content
+          File.read(file).include? @content
+          #read_email(file_content).subject.include?(@content) slow, use something else for reading
 
         end
 
