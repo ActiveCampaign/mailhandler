@@ -1,7 +1,9 @@
-require_relative 'base.rb'
-require_relative 'filter'
 require 'mail'
+require_relative 'base.rb'
 require_relative '../errors'
+
+require_relative 'file_filter/base.rb'
+require_relative 'file_filter/filter.rb'
 
 module MailHandler
 
@@ -59,12 +61,7 @@ module MailHandler
 
       def read_found_emails(files, count)
 
-        files.first(count).map do |file|
-
-          email_content = File.read(file)
-          Mail.read_from_string(email_content)
-
-        end
+        files.first(count).map { |file| Mail.read_from_string(File.read(file)) }
 
       end
 
@@ -103,7 +100,7 @@ module MailHandler
 
       def delete_file(file)
 
-        FileUtils.rm_r "#{inbox_folder}/#{file}", :force => true
+        FileUtils.rm_r "#{inbox_folder}/#{file}", :force => false
 
       end
 
