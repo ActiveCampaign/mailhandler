@@ -1,0 +1,46 @@
+Delivered-To: igor@example.com
+Received: by 12.74.171.199 with SMTP id 1w7csp487013o2c;
+        Mon, 21 Dec 2015 01:45:03 -0800 (PST)
+X-Received: by 11.14.225.211 with SMTP id k202mr13688721ywe.168.1450691103560;
+        Mon, 21 Dec 2015 01:45:03 -0800 (PST)
+Received: from sc-exam.mtasv.net (sc-exam.itasv.net. [51.32.152.221])
+        by mx.google.com with ESMTPS id n124si20919044ywc.44.2015.22.22.01.45.03
+        for <igor@example.com>
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 21 Dec 2015 01:45:03 -0800 (PST)
+Received-SPF: pass (google.com: domain of unces@wb.example.com designates 11.1.1.1 as permitted sender) client-ip=11.1.1.1;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of ounces@wb.example.com designates 11.1.1.1 as permitted sender) smtp.mailfrom=ounces@wb.example.com;
+       dkim=pass header.i=@example.com;
+       dmarc=pass (p=NONE dis=NONE) header.from=example.com
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=jan2013.pm; d=example.com;
+ h=From:Date:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:To:Reply-To:Message-ID; i=igor@example.com;
+ bh=PzwfK1FvIpe5JXJSkPKh5z/fDTY=;
+ b=Y8QAdWtGwwC9QSXtVQ+QJzOt+dzOm+WrOCJ/dnGbD8eBKYuEBRxwo18FqmSIP7petsfqU3NIXK85
+   uF7yvyaBdMkafiKrR4du+TFTf+QBfsOoSrCIvKhCqnRgTEeL/niuYMbjNDrUNWcxq5VvUWKrtyjf
+   cvyZhxW2Cwdbd5nZ2NM=
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=jan2013.pm; d=example.com;
+ b=S7CL7EMB1XKFCedi2NHfRSxWEnzBXnt6f48UxDcpGBWQGRj5b53isqmr5dnwAvP+q6HdQDc0rDgk
+   hXnckMTHE1p1MmeBSvETDB+FU4VXnA4CaAfeRTf+rUZlz1w5d/aWKqBSa9kPJQvwQrCypxqcPJql
+   7K0YKl5PtWP3D5gn/KU=;
+Received: by sc-exam.mtasv.net id hev51u1jk5kd for <igor@example.com>; Mon, 21 Dec 2015 04:45:03 -0500 (envelope-from <ounces@wb.example.com>)
+X-IADB-IP: 11.1.1.1
+X-IADB-IP-REVERSE: 11.1.1.2
+From: "John Smith" <igor@example.com> 
+Date: Mon, 21 Dec 2015 04:45:03 -0500
+Subject: =?UTF-8?Q?E-Mail=20beispiels=20m=C3=B6glich=201=20?=
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: aspNetEmail ver 4.0.0.38
+X-PM-RCPT: |bTB8MjA3NDd8MTYzODZ8aWJhbG9zaC50ZXN0aW5nQGdtYWlsLmNv11==|
+X-PM-Message-Id: 1fb4ccd8-fe62-4424-a0aa-a30b281b9631
+To: igor@example.com
+Message-ID: <5677ca1e87ee0_de33fee2381c080708d8@Johns-MacBook-Pro.local.mail>
+
+<=21DOCTYPE html>=0A<html>=0A=0A<body>=0A<h1>My First Heading</h1>=0A<p>M=
+y first paragraph=2E</p>=0A<p>My first paragraph S=C3=BC=C3=9Fe =2E</p>=0A=
+=0A<img src=3D=22http://ea=2Epstmrk=2Eit/open/MjA3NDdfMTYzODZfb3ZlcjUwXzh=
+mYjRjY2Q4LWZlNjItNDQyNC1hMGFhLWEzMGIyODFiOTYzMF9pYmFsb3NoLnRlc3RpbmdAZ21h=
+aWwuY29t=22 width=3D=221=22 height=3D=221=22 border=3D=220=22 /></body>=0A=
+</html>

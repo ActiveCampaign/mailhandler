@@ -131,7 +131,7 @@ describe MailHandler::Receiving::FolderChecker do
 
         it 'by recipient' do
 
-          checker.find({:by_recipient => { to: 'igor@example.com'} })
+          checker.find({:by_recipient => { to: 'igor+nonexisting@example.com'} })
           expect(checker.found_emails).to be_empty
 
         end
@@ -161,6 +161,13 @@ describe MailHandler::Receiving::FolderChecker do
 
         end
 
+        it 'by content' do
+
+          checker.find({:by_content => '1878271'})
+          expect(checker.found_emails.size).to be 1
+
+        end
+
         it 'by subject - multiple' do
 
           checker.find({:by_subject => 'test'})
@@ -183,7 +190,7 @@ describe MailHandler::Receiving::FolderChecker do
         it 'by date' do
 
           checker.find({:by_date => Time.new(2015,10,12,13,30,0, "+02:00")})
-          expect(checker.found_emails.size).to be 2
+          expect(checker.found_emails.size).to be 4
 
         end
 
@@ -194,6 +201,24 @@ describe MailHandler::Receiving::FolderChecker do
 
           checker.find({:by_recipient => { to: 'igor2@example.com'} })
           expect(checker.found_emails.size).to be 1
+
+        end
+
+        context 'unicode' do
+
+          it 'by subject - cyrillic' do
+
+            checker.find({:by_subject => 'Е-маил пример'})
+            expect(checker.found_emails.size).to be 1
+
+          end
+
+          it 'by subject - german' do
+
+            checker.find({:by_subject => 'möglich'})
+            expect(checker.found_emails.size).to be 1
+
+          end
 
         end
 

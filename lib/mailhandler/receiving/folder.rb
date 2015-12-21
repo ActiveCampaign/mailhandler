@@ -45,7 +45,7 @@ module MailHandler
       # filter options which need to be done by searching files
       FILE_SEARCH_CLASSES = {
 
-          :by_subject => Filter::ByContent,
+          :by_subject => Filter::BySubject,
           :by_content => Filter::ByContent,
           :by_date => Filter::ByDate,
           :by_recipient => Filter::Email::ByRecipient

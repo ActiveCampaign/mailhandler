@@ -40,6 +40,14 @@ module Filter
 
     end
 
+    protected
+
+    def read_email(content)
+
+      Mail.read_from_string(content)
+
+    end
+
   end
 
   class ByFilename < Base
@@ -52,11 +60,59 @@ module Filter
 
   end
 
-  class ByContent < Base
+  class ContentBase < Base
 
     def initialize(content)
 
       @content = content.to_s
+
+    end
+
+  end
+
+  class BySubject < ContentBase
+
+    def initialize(content)
+
+      super(content)
+
+    end
+
+    def get(pattern)
+
+      files = super(pattern)
+
+      matched_files = []
+
+      files.each do |file|
+
+        begin
+
+          if read_email(File.read(file)).subject.include? @content
+
+            matched_files << file
+
+          end
+
+        rescue
+
+          # skip file reading if file is not there anymore
+
+        end
+
+      end
+
+      matched_files
+
+    end
+
+  end
+
+  class ByContent < ContentBase
+
+    def initialize(content)
+
+      super(content)
 
     end
 
@@ -139,9 +195,7 @@ module Filter
 
           begin
 
-            content = File.read(file)
-
-            email = Mail.read_from_string(content)
+            email = read_email(File.read(file))
             matched_files << file if email[@recipient.keys.first].to_s.include? @recipient.values.first
 
           rescue
