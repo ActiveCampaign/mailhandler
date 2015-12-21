@@ -91,16 +91,7 @@ module MailHandler
 
       def find_emails(options)
 
-        if options[:archive]
-
-          result = Mail.find_and_delete(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
-
-        else
-
-          result = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options))
-
-        end
-
+        result = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
       end
