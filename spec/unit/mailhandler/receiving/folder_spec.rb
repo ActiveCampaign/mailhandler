@@ -1,6 +1,5 @@
+# encoding: utf-8
 require 'spec_helper'
-
-Encoding.default_external = 'UTF-8'
 
 describe MailHandler::Receiving::FolderChecker do
 
