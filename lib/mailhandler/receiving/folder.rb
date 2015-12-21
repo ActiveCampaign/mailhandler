@@ -1,8 +1,6 @@
 require 'mail'
 require_relative 'base.rb'
 require_relative '../errors'
-
-require_relative 'file_filter/base.rb'
 require_relative 'file_filter/filter.rb'
 
 module MailHandler
