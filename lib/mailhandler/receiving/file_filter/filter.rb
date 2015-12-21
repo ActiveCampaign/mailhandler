@@ -73,8 +73,11 @@ module MailHandler
 
         def file_match_filter?(file)
 
+          # TODO: add UTF support
+          # string need to be read and converted
+          # read_email(file_content).subject.include?(@content) - 10x slower, use something else for reading
+          # Mail::Encodings.unquote_and_convert_to(content, "UTF-8") - 6x slower
           File.read(file).include? @content
-          #read_email(file_content).subject.include?(@content) slow, use something else for reading
 
         end
 

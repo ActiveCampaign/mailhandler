@@ -76,7 +76,9 @@ You can search local mailbox by following options:
 Recipient to search by needs to by added in the following form: `by_recipient => { :to => 'igor@example.com' }`.
 Library supports searching by :to, :cc recipients. At the moment, only searching by a single recipient email address is supported.
 
-If you would like email to be archived after its read, use `:archive => true` option (recommended)
+If you would like email to be archived after its read, use `:archive => true` option (recommended).
+
+**For now, Unicode is not supported for search by local mailbox, only ASCII.**
 
 ## Search results
 
