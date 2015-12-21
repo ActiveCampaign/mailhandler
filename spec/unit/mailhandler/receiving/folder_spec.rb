@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+Encoding.default_external = 'UTF-8'
+
 describe MailHandler::Receiving::FolderChecker do
 
   subject { MailHandler::Receiving::FolderChecker.new }
