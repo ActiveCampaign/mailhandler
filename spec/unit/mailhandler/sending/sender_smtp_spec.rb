@@ -15,22 +15,6 @@ describe MailHandler::Sending::SMTPSender do
 
       end
 
-      it 'incorrect auth' do
-
-        sender = subject.new
-        mail = Mail.new do
-
-          from 'igor@example.com'
-          subject 'example'
-          body 'example'
-          to 'igor@example'
-
-        end
-
-        expect { sender.send(mail) }.to raise_error Errno::ECONNREFUSED
-
-      end
-
     end
 
   end
