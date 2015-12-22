@@ -1,4 +1,4 @@
-<img src="http://http://assets.wildbit.com/postmark/blog/images/mailhandler-logo.png" alt="MailHandler Logo" title="Pistachio + Mustache =&gt; Mustachio" width="148" height="149">
+<img src="http://assets.wildbit.com/postmark/blog/images/mailhandler-logo.png" alt="MailHandler Logo" title="MailHandler" width="148" height="149">
 
 # MailHandler Gem
 
