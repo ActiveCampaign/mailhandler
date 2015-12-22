@@ -1,3 +1,5 @@
+<img src="http://http://assets.wildbit.com/postmark/blog/images/mailhandler-logo.png" alt="MailHandler Logo" title="Pistachio + Mustache =&gt; Mustachio" width="148" height="149">
+
 # MailHandler Gem
 
 [![Build Status](https://travis-ci.org/wildbit/mailhandler.svg?branch=master)](https://travis-ci.org/wildbit/mailhandler)
