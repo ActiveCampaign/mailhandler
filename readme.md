@@ -4,10 +4,10 @@
 
 [![Build Status](https://travis-ci.org/wildbit/mailhandler.svg?branch=master)](https://travis-ci.org/wildbit/mailhandler)
 
-MailHandler is a simple wrapper on top of [mail gem](https://github.com/mikel/mail) and [postmark gem](https://github.com/wildbit/postmark-gem) libraries which allows you to send and retrieve emails and get details on how long these operations took.
+MailHandler is a simple wrapper on top of [Mail gem](https://github.com/mikel/mail) and [Postmark gem](https://github.com/wildbit/postmark-gem) libraries. It allows you to send and retrieve emails and get details on how long these operations took.
 Main purpose of the gem is easier email sending/delivery testing with notifications if sending or retrieving email is taking too long. 
 
-The library supports sending email by SMTP and Postmark API and checking email delivery by IMAP protocol, or by folder, if you have a local mailbox. 
+The library supports sending email by SMTP and Postmark API and checking email delivery by IMAP protocol, or by folder if you have a local mailbox. 
 
 # Install the gem
 
@@ -34,8 +34,8 @@ Folders can be the same if you don't plan to archive found emails. Retrieving em
 
 ``` ruby
 email_receiver = MailHandler.receiver(:folder) do |checker|
-    checker.inbox_folder = folder_of_your_inbox
-    checker.archive_folder = folder_of_your_inbox_archive_folder
+    checker.inbox_folder = '/folder/mailbox/'
+    checker.archive_folder = '/folder/mailbox/archive/'
 end
 ```  
 
@@ -128,7 +128,7 @@ email_sender = MailHandler.sender(type) do |dispatcher|
 end
 ```
 
-* `:type` - type can be `:postmark_api` or `postmark_batch_api`
+* `:type` - type can be `:postmark_api` or `:postmark_batch_api`
 * `:api_token` - api token of one of your Postmark sending servers 
   
 ### Sending email by SMTP
