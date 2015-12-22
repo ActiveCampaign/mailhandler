@@ -18,7 +18,16 @@ describe MailHandler::Sending::SMTPSender do
       it 'incorrect auth' do
 
         sender = subject.new
-        expect { sender.send(Mail.read_from_string(File.read "#{data_folder}/email1.txt")) }.to raise_error Errno::ECONNREFUSED
+        mail = Mail.new do
+
+          from 'igor@example.com'
+          subject 'example'
+          body 'example'
+          to 'igor@example'
+
+        end
+
+        expect { sender.send(mail) }.to raise_error Errno::ECONNREFUSED
 
       end
 
