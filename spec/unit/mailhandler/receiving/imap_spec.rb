@@ -56,7 +56,7 @@ describe MailHandler::Receiving::IMAPChecker do
 
       it 'by date' do
 
-        expect { checker.find({:by_date => Time.now}) }.to raise_error MailHandler::Error
+        expect { checker.find({:since => Time.now}) }.to raise_error MailHandler::Error
 
       end
 

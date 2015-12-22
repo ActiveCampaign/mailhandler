@@ -47,7 +47,7 @@ module MailHandler
 
           :by_subject => Filter::BySubject,
           :by_content => Filter::ByContent,
-          :by_date => Filter::ByDate,
+          :since => Filter::ByDate,
           :by_recipient => Filter::Email::ByRecipient
       }
 

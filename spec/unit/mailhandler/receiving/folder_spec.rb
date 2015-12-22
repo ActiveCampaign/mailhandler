@@ -22,13 +22,13 @@ describe MailHandler::Receiving::FolderChecker do
         it 'by multiple search options' do
 
           time = Time.now
-          checker.find({:by_subject => 'test', :by_content => 'test', :by_date => time, :by_recipient => 'igor@example.com'})
+          checker.find({:by_subject => 'test', :by_content => 'test', :since => time, :by_recipient => 'igor@example.com'})
           expect(checker.search_options).to eq(
                                                 {:count=>50,
                                                  :archive=>false,
                                                  :by_subject => 'test',
                                                  :by_content => 'test',
-                                                 :by_date => time,
+                                                 :since => time,
                                                  :by_recipient => 'igor@example.com'})
 
         end
@@ -57,20 +57,20 @@ describe MailHandler::Receiving::FolderChecker do
 
         end
 
-        context 'by_date' do
+        context 'since' do
 
           it 'valid' do
 
             time = Time.now
-            checker.find({:by_date => time})
-            expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_date => time })
+            checker.find({:since => time})
+            expect(checker.search_options).to eq({:count=>50, :archive=>false, :since => time })
 
           end
 
           it 'invalid' do
 
             time = Time.now.to_s
-            expect { checker.find({:by_date => time}) }.to raise_error MailHandler::Error
+            expect { checker.find({:since => time}) }.to raise_error MailHandler::Error
 
           end
 
@@ -125,7 +125,7 @@ describe MailHandler::Receiving::FolderChecker do
 
         it 'by date' do
 
-          checker.find({:by_date => Time.now + 86400})
+          checker.find({:since => Time.now + 86400})
           expect(checker.found_emails).to be_empty
 
         end
@@ -214,7 +214,7 @@ describe MailHandler::Receiving::FolderChecker do
 
         it 'by date' do
 
-          checker.find({:by_date => Time.new(2015,10,12,13,30,0, "+02:00")})
+          checker.find({:since => Time.new(2015,10,12,13,30,0, "+02:00")})
           expect(checker.found_emails.size).to be 4
 
         end

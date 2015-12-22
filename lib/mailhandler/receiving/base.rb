@@ -46,7 +46,7 @@ module MailHandler
 
           :by_subject,
           :by_content,
-          :by_date,
+          :since,
           :by_recipient,
           :count,
           :archive
@@ -68,9 +68,9 @@ module MailHandler
 
       def validate_option_values(options)
 
-        if options[:by_date]
+        if options[:since]
 
-          raise MailHandler::Error, "Incorrect option options[:by_date]=#{options[:date]}." unless options[:by_date].is_a? Time
+          raise MailHandler::Error, "Incorrect option options[:since]=#{options[:since]}." unless options[:since].is_a? Time
 
         end
 
