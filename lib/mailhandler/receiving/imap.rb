@@ -17,6 +17,25 @@ module MailHandler
                     :authentication,
                     :use_ssl
 
+      def initialize
+
+        super
+        @available_search_options = AVAILABLE_SEARCH_OPTIONS
+
+      end
+
+      def find(options)
+
+        verify_and_set_search_options(options)
+        init_retriever
+        @found_emails = find_emails(search_options)
+
+        search_result
+
+      end
+
+      private
+
       # search options:
       # by_subject - String, search by a whole string as part of the subject of the email
       # by_content - String, search by a whole string as part of the content of the email
@@ -33,23 +52,6 @@ module MailHandler
 
       ]
 
-      def initialize
-
-        super
-
-      end
-
-      def find(options)
-
-        verify_and_set_search_options(options)
-        init_retriever
-        @found_emails = find_emails(search_options)
-
-        search_result
-
-      end
-
-      private
 
       # delegate retrieval details to Mail library
       def init_retriever

@@ -11,21 +11,12 @@ module MailHandler
     class Checker
 
       attr_accessor :search_options,
-                    :found_emails
-
-      AVAILABLE_SEARCH_OPTIONS = [
-
-          :by_subject,
-          :by_content,
-          :by_date,
-          :by_recipient,
-          :count,
-          :archive
-
-      ]
+                    :found_emails,
+                    :available_search_options
 
       def initialize
 
+        @available_search_options = AVAILABLE_SEARCH_OPTIONS
         set_base_search_options
         reset_found_emails
 
@@ -48,6 +39,19 @@ module MailHandler
         @found_emails = []
 
       end
+
+      private
+
+      AVAILABLE_SEARCH_OPTIONS = [
+
+          :by_subject,
+          :by_content,
+          :by_date,
+          :by_recipient,
+          :count,
+          :archive
+
+      ]
 
       protected
 
@@ -87,8 +91,8 @@ module MailHandler
 
       def validate_used_options(options)
 
-        unless (options.keys - AVAILABLE_SEARCH_OPTIONS).empty?
-          raise MailHandler::Error, "#{(options.keys - AVAILABLE_SEARCH_OPTIONS)} - Incorrect search option values, options are #{AVAILABLE_SEARCH_OPTIONS}."
+        unless (options.keys - available_search_options).empty?
+          raise MailHandler::Error, "#{(options.keys - available_search_options)} - Incorrect search option values, options are #{available_search_options}."
         end
 
       end
