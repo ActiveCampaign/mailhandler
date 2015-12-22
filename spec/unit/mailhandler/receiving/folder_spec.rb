@@ -144,6 +144,30 @@ describe MailHandler::Receiving::FolderChecker do
         let(:mail1) { Mail.read_from_string(File.read "#{data_folder}/email1.txt")}
         let(:mail2) { Mail.read_from_string(File.read "#{data_folder}/email2.txt")}
 
+        context 'search results' do
+
+          let(:search) {
+
+            checker.find({:by_subject => mail1.subject})
+            checker
+
+          }
+
+          it '.search_result' do
+
+            expect(search.search_result).to be true
+
+          end
+
+          it '.reset_found_emails' do
+
+            search.reset_found_emails
+            expect(search.search_result).to be false
+
+          end
+
+        end
+
         it 'result' do
 
           expect(checker.find({:by_subject => mail1.subject})).to be true

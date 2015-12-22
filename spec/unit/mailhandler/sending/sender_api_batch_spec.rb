@@ -19,7 +19,7 @@ describe MailHandler::Sending::PostmarkBatchAPISender do
 
   end
 
-  it '.send' do
+  it '.send - invalid auth' do
 
     sender = subject.new(api_token)
     expect{sender.send([Mail.new])}.to raise_error Postmark::InvalidApiKeyError

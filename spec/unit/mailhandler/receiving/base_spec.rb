@@ -26,4 +26,10 @@ describe MailHandler::Receiving::Checker do
 
   end
 
+  it '.search_result' do
+
+    expect(subject.search_result).to be false
+
+  end
+
 end
