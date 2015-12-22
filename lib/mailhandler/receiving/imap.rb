@@ -52,7 +52,6 @@ module MailHandler
 
       ]
 
-
       # delegate retrieval details to Mail library
       def init_retriever
 
