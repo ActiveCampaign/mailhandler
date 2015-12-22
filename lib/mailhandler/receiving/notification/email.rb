@@ -13,7 +13,8 @@ module MailHandler
         attr_reader   :sender,
                       :contacts,
                       :min_time_to_notify,
-                      :max_time_to_notify
+                      :max_time_to_notify,
+                      :current_state
 
         def initialize(sender, contacts, min_time_to_notify = 60)
 
