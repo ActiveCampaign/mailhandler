@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/wildbit/mailhandler.svg?branch=master)](https://travis-ci.org/wildbit/mailhandler)
 
-MailHandler is a simple wrapper on top of [Mail gem](https://github.com/mikel/mail) and [Postmark gem](https://github.com/wildbit/postmark-gem) libraries. It allows you to send and retrieve emails and get details on how long these operations took.
+MailHandler is a simple wrapper on top of [Mail gem](https://github.com/mikel/mail) and [Postmark gem](https://github.com/wildbit/postmark-gem) libraries. It allows you to send and retrieve emails and at the same time get details on how long these operations took.
 Main purpose of the gem is easier email sending/delivery testing with notifications if sending or retrieving email is taking too long. 
 
 The library supports sending email by SMTP and Postmark API and checking email delivery by IMAP protocol, or by folder if you have a local mailbox. 
