@@ -7,16 +7,6 @@ module MailHandler
 
     module Filter
 
-      class ByFilename < Base
-
-        def get(pattern)
-
-          super(pattern)
-
-        end
-
-      end
-
       class ContentBase < Base
 
         def initialize(content)
@@ -26,6 +16,12 @@ module MailHandler
         end
 
         protected
+
+        def read_email(content)
+
+          Mail.read_from_string(content)
+
+        end
 
         def filter_files(files)
 

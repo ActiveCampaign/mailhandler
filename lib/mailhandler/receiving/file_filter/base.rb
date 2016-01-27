@@ -5,7 +5,7 @@ module MailHandler
 
   module Receiving
 
-    module Filter
+    module FileList
 
       class Base
 
@@ -45,11 +45,61 @@ module MailHandler
 
         end
 
+      end
+
+    end
+
+    module FilterFiles
+
+      class Base
+
+        def get(files, content)
+
+          filter_files(files, content)
+
+        end
+
         protected
 
-        def read_email(content)
+        def filter_files(files, content)
 
-          Mail.read_from_string(content)
+          files.select do |file|
+
+            begin
+
+              content_in_file?(file, content)
+
+            rescue
+
+              false
+
+            end
+
+          end
+
+        end
+
+        def content_in_file?(file, content)
+
+          raise StandardError, 'Needs to be implemented'
+
+        end
+
+        def read_file(file)
+
+          File.read(file)
+
+        end
+
+      end
+
+      class BySubject < Base
+
+        private
+
+        def content_in_file?(file, content)
+
+          read_file(file).include? content
 
         end
 
