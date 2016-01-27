@@ -59,7 +59,7 @@ module MailHandler
 
       def read_found_emails(files, count)
 
-        files.first(count).map { |file| Mail.read_from_string(File.read(file)) }
+        files.first(count).map { |file| Mail.read(file ) }
 
       end
 
