@@ -28,13 +28,13 @@ describe MailHandler::Receiving::IMAPChecker do
 
     it 'by multiple search options' do
 
-      checker.find({:by_subject => 'test', :by_content => 'test', :by_recipient => 'igor@example.com'})
+      checker.find({:by_subject => 'test', :by_content => 'test', :by_recipient => {:to => 'igor@example.com'}})
       expect(checker.search_options).to eq(
                                             {:count=>50,
                                              :archive=>false,
                                              :by_subject => 'test',
                                              :by_content => 'test',
-                                             :by_recipient => 'igor@example.com'})
+                                             :by_recipient => {:to => 'igor@example.com'}})
 
     end
 

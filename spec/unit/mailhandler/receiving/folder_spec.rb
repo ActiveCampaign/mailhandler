@@ -22,14 +22,14 @@ describe MailHandler::Receiving::FolderChecker do
         it 'by multiple search options' do
 
           time = Time.now
-          checker.find({:by_subject => 'test', :by_content => 'test', :since => time, :by_recipient => 'igor@example.com'})
+          checker.find({:by_subject => 'test', :by_content => 'test', :since => time, :by_recipient => { :to => 'igor@example.com'}})
           expect(checker.search_options).to eq(
                                                 {:count=>50,
                                                  :archive=>false,
                                                  :by_subject => 'test',
                                                  :by_content => 'test',
                                                  :since => time,
-                                                 :by_recipient => 'igor@example.com'})
+                                                 :by_recipient => {:to => 'igor@example.com'}})
 
         end
 
@@ -78,8 +78,8 @@ describe MailHandler::Receiving::FolderChecker do
 
         it 'by_recipient' do
 
-          checker.find({:by_recipient => 'igor@example.com'})
-          expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_recipient =>  'igor@example.com' })
+          checker.find({:by_recipient => {:to => 'igor@example.com'}})
+          expect(checker.search_options).to eq({:count=>50, :archive=>false, :by_recipient =>  {:to => 'igor@example.com' }})
 
         end
 
@@ -320,6 +320,5 @@ describe MailHandler::Receiving::FolderChecker do
     end
 
   end
-
 
 end

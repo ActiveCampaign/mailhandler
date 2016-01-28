@@ -87,6 +87,12 @@ module MailHandler
 
         end
 
+        if options[:by_recipient]
+
+          raise MailHandler::Error, "Incorrect option options[:by_recipient]=#{options[:by_recipient]}." unless options[:by_recipient].is_a?(Hash)
+
+        end
+
       end
 
       def validate_used_options(options)

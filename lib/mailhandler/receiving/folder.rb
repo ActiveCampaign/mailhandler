@@ -45,10 +45,10 @@ module MailHandler
       # filter options which need to be done by searching files
       FILE_SEARCH_CLASSES = {
 
-          :by_subject => Filter::BySubject,
-          :by_content => Filter::ByContent,
-          :since => Filter::ByDate,
-          :by_recipient => Filter::Email::ByRecipient
+          :by_subject => FileList::Filter::ByEmailSubject,
+          :by_content => FileList::Filter::ByEmailContent,
+          :since => FileList::Filter::ByDate,
+          :by_recipient => FileList::Filter::ByEmailRecipient
       }
 
       def search_pattern
@@ -67,15 +67,15 @@ module MailHandler
       # this will ignore filter criteria options which can't be done on files directly
       def find_files(options)
 
-        files = Filter::Base.new.get(search_pattern)
+        files = FileList.get(search_pattern)
 
         options.each do |key, value|
 
-          files = (files & FILE_SEARCH_CLASSES[key].new(value).get(search_pattern)) if FILE_SEARCH_CLASSES[key] != nil
+          files = FILE_SEARCH_CLASSES[key].new(files, value).get if FILE_SEARCH_CLASSES[key] != nil
 
         end
 
-        Filter::Base.sort(files)
+        FileList.sort(files)
 
       end
 

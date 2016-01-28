@@ -5,35 +5,54 @@ module MailHandler
 
   module Receiving
 
-    module Filter
+    class FileList
 
-      class ContentBase < Base
+      module Filter
 
-        def initialize(content)
+        class Base
 
-          @content = content.to_s
+          attr_accessor :files
 
-        end
+          def initialize(files)
 
-        protected
+            @files=files
 
-        def read_email(content)
+          end
 
-          Mail.read_from_string(content)
+          def get
 
-        end
+            files.select { |file| ignore_exception { meets_expectation?(file) } }
 
-        def filter_files(files)
+          end
 
-          files.select do |file|
+          protected
+
+          def meet_expectation?(file)
+
+            raise StandardError, 'Needs to be implemented.'
+
+          end
+
+          def read_file(file)
+
+            # TODO: add UTF support
+            # string need to be read and converted
+            # read_email(file_content).subject.include?(@content) - 10x slower, use something else for reading
+            # Mail::Encodings.unquote_and_convert_to(content, "UTF-8") - 6x slower
+            File.read(file)
+
+          end
+
+          private
+
+          def ignore_exception
 
             begin
 
-              file_match_filter?(file)
+              yield
 
             rescue
 
-              # return false if error occurred or content was not found
               false
 
             end
@@ -42,125 +61,79 @@ module MailHandler
 
         end
 
-        def file_match_filter?(file)
+        class ByDate < Base
 
-          raise StandardError, 'Not implemented'
+          def initialize(files, date)
 
-        end
-
-      end
-
-      class BySubject < ContentBase
-
-        def initialize(content)
-
-          super(content)
-
-        end
-
-        def get(pattern)
-
-          files = super(pattern)
-          filter_files(files)
-
-        end
-
-        private
-
-        def file_match_filter?(file)
-
-          # TODO: add UTF support
-          # string need to be read and converted
-          # read_email(file_content).subject.include?(@content) - 10x slower, use something else for reading
-          # Mail::Encodings.unquote_and_convert_to(content, "UTF-8") - 6x slower
-          File.read(file).include? @content
-
-        end
-
-      end
-
-      class ByContent < ContentBase
-
-        def initialize(content)
-
-          super(content)
-
-        end
-
-        def get(pattern)
-
-          files = super(pattern)
-          filter_files(files)
-
-        end
-
-        private
-
-        def file_match_filter?(file)
-
-          File.read(file).include? @content
-
-        end
-
-      end
-
-      class ByDate < ContentBase
-
-        def initialize(date)
-
-          @date = date
-
-        end
-
-        def get(pattern)
-
-          files = super(pattern)
-          filter_files(files)
-
-        end
-
-        private
-
-        def file_match_filter?(file)
-
-          file = File.new(file)
-          if file != nil
-
-            file.ctime > @date
-
-          else
-
-            false
-
-          end
-
-        end
-
-      end
-
-      module Email
-
-        class ByRecipient < ContentBase
-
-          def initialize(recipient)
-
-            @recipient = recipient
-
-          end
-
-          def get(pattern)
-
-            files = super(pattern)
-            filter_files(files)
+            super(files)
+            @date = date
 
           end
 
           private
 
-          def file_match_filter?(file)
+          def meets_expectation?(file)
 
-            email = read_email(File.read(file))
-            email[@recipient.keys.first].to_s.include? @recipient.values.first
+            file = File.new(file)
+            (file != nil)? file.ctime > @date : false
+
+          end
+
+        end
+
+        class Email < Base
+
+          def initialize(files)
+
+            super(files)
+
+          end
+
+          protected
+
+          def read_email_from_file(file)
+
+            Mail.read(file)
+
+          end
+
+        end
+
+        class ByEmailContent < Email
+
+          def initialize(files, content)
+
+            super(files)
+            @content = content
+
+          end
+
+          protected
+
+          def meets_expectation?(file)
+
+            read_file(file).include? @content
+
+          end
+
+        end
+
+        class ByEmailSubject < ByEmailContent ; end
+
+        class ByEmailRecipient < Email
+
+          def initialize(files, recipient)
+
+            super(files)
+            @recipient = recipient
+
+          end
+
+          private
+
+          def meets_expectation?(file)
+
+            read_email_from_file(file)[@recipient.keys.first].to_s.include? @recipient.values.first
 
           end
 

@@ -5,73 +5,31 @@ module MailHandler
 
   module Receiving
 
-    module FileList
+    class FileList
 
-      class Base
+      def self.get(pattern)
 
-        def Base.sort(files)
-
-          swapped = true
-          j = 0
-
-          while swapped do
-
-            swapped = false
-            j+=1
-
-            (files.size - j).times do |i|
-
-              if File.new(files[i]).ctime < File.new(files[i + 1]).ctime
-                tmp = files[i]
-                files[i] = files[i + 1]
-                files[i + 1] = tmp
-                swapped = true
-
-              end
-
-            end
-
-          end
-
-          files
-
-        end
-
-        def get(pattern)
-
-          files = []
-          Dir.glob(pattern).each { |file| files << File.absolute_path(file) }
-          files
-
-        end
+        Dir.glob(pattern).map { |file| File.absolute_path(file) }
 
       end
 
-    end
+      def self.sort(files)
 
-    module FilterFiles
+        swapped = true
+        j = 0
 
-      class Base
+        while swapped do
 
-        def get(files, content)
+          swapped = false
+          j+=1
 
-          filter_files(files, content)
+          (files.size - j).times do |i|
 
-        end
-
-        protected
-
-        def filter_files(files, content)
-
-          files.select do |file|
-
-            begin
-
-              content_in_file?(file, content)
-
-            rescue
-
-              false
+            if File.new(files[i]).ctime < File.new(files[i + 1]).ctime
+              tmp = files[i]
+              files[i] = files[i + 1]
+              files[i + 1] = tmp
+              swapped = true
 
             end
 
@@ -79,29 +37,7 @@ module MailHandler
 
         end
 
-        def content_in_file?(file, content)
-
-          raise StandardError, 'Needs to be implemented'
-
-        end
-
-        def read_file(file)
-
-          File.read(file)
-
-        end
-
-      end
-
-      class BySubject < Base
-
-        private
-
-        def content_in_file?(file, content)
-
-          read_file(file).include? content
-
-        end
+        files
 
       end
 
@@ -110,3 +46,18 @@ module MailHandler
   end
 
 end
+
+=begin
+
+TEST EXAMPLE
+
+FileList.get('*.*')
+FileList::Filter::ByEmailSubject.new(files,'subject').get
+FileList::Filter::ByEmailContent.new(files,'content').get
+FileList::Filter::ByEmailDate.new(files, date).get
+FileList::Filter::ByEmailRecipient.new(files, recipient).get
+
+f = FileList::Filter::ByEmailSubject.new(FileList.get("*.*"), "binding")
+puts f.get
+
+=end
