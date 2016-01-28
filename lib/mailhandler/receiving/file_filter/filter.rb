@@ -74,8 +74,7 @@ module MailHandler
 
           def meets_expectation?(file)
 
-            file = File.new(file)
-            (file != nil)? file.ctime > @date : false
+            (File.exists? file)? (File.ctime file) > @date : false
 
           end
 
