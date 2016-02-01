@@ -5,15 +5,45 @@ module MailHandler
 
   module Receiving
 
-    class FileList
+    module FileHandling
 
-      def self.get(pattern)
+      # if file exists, execute file operation, otherwise return default return value when it doesn't
+      def access_file(file, default_return = false, &block)
 
-        Dir.glob(pattern).map { |file| File.absolute_path(file) }
+        if File.exists? file
+
+          begin
+
+            block.call
+
+          rescue => e
+
+            raise e if File.exists? file
+            default_return
+
+          end
+
+        else
+
+          default_return
+
+        end
 
       end
 
-      def self.sort(files)
+    end
+
+    class FileList
+
+      include FileHandling
+
+      def get(pattern)
+
+        Dir.glob(pattern)
+
+      end
+
+      def sort(files)
 
         swapped = true
         j = 0
@@ -25,7 +55,10 @@ module MailHandler
 
           (files.size - j).times do |i|
 
-            if File.new(files[i]).ctime < File.new(files[i + 1]).ctime
+            file1 = access_file(files[i], false) { File.new(files[i]).ctime }
+            file2 = access_file(files[i+1], false) { File.new(files[i+1]).ctime }
+
+            if file1 && file2 && file1 < file2
               tmp = files[i]
               files[i] = files[i + 1]
               files[i + 1] = tmp

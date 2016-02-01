@@ -9,6 +9,8 @@ module MailHandler
 
     class FolderChecker < Checker
 
+      include FileHandling
+
       # folders in which emails will be searched for and managed
       attr_accessor :inbox_folder,
                     :archive_folder
@@ -31,7 +33,7 @@ module MailHandler
 
         unless email_files.empty?
 
-          @found_emails = read_found_emails(email_files, search_options[:count])
+          @found_emails = parse_email_from_files(email_files, search_options[:count])
           move_files(email_files) if search_options[:archive]
 
         end
@@ -57,17 +59,12 @@ module MailHandler
 
       end
 
-      def read_found_emails(files, count)
-
-        files.first(count).map { |file| Mail.read(file ) }
-
-      end
-
       # find files by FILE_SEARCH_CLASSES options
       # this will ignore filter criteria options which can't be done on files directly
       def find_files(options)
 
-        files = FileList.get(search_pattern)
+        file_list = FileList.new
+        files = file_list.get(search_pattern)
 
         options.each do |key, value|
 
@@ -75,30 +72,45 @@ module MailHandler
 
         end
 
-        FileList.sort(files)
+        file_list.sort(files)
 
       end
 
       def move_files(files)
 
-        files.each do |file|
+        files.each { |file| (inbox_folder == archive_folder)? delete_file(file) : archive_file(file) }
 
-          file = File.basename(file)
-          (inbox_folder == archive_folder)? delete_file(file) : archive_file(file)
+      end
+
+      def parse_email_from_files(files, count)
+
+        read_files(files, count).map { |email_string| Mail.read_from_string(email_string) }
+
+      end
+
+      def read_files(files, count)
+
+        file_contents = []
+        files.first(count).each do |file|
+
+          file_content = access_file(file, nil) { File.read(file ) }
+          file_contents << file_content unless file_content.nil?
 
         end
+
+        file_contents
 
       end
 
       def archive_file(file)
 
-        FileUtils.mv("#{inbox_folder}/#{file}", "#{archive_folder}/#{file}")
+        access_file(file) { FileUtils.mv("#{inbox_folder}/#{File.basename(file)}", "#{archive_folder}/#{File.basename(file)}") }
 
       end
 
       def delete_file(file)
 
-        FileUtils.rm_r "#{inbox_folder}/#{file}", :force => false
+        access_file(file) { FileUtils.rm_r "#{inbox_folder}/#{File.basename(file)}", :force => false }
 
       end
 
