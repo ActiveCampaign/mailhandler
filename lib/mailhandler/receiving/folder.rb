@@ -66,17 +66,31 @@ module MailHandler
       def find_files(options)
 
         file_list = FileList.new
-        files = file_list.get(search_pattern)
-
-        options.each do |key, value|
-
-          files = FILE_SEARCH_CLASSES[key].new(files, value).get if FILE_SEARCH_CLASSES[key] != nil
-
-        end
-
+        files = filter_files(file_list.get(search_pattern), options)
         file_list.sort(files)
 
       end
+
+      def filter_files(files, options)
+
+        options.each do |key, value|
+
+          if FILE_SEARCH_CLASSES[key] != nil
+
+            filter = FILE_SEARCH_CLASSES[key].new(files, value)
+            #filter.fast_check = !options[:fast_check].nil? && options[:fast_check]
+            files = filter.get
+
+          end
+
+        end
+
+        files
+
+      end
+
+
+
 
       def move_files(files)
 
