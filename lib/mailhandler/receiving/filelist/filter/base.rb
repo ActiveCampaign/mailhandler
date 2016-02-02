@@ -10,7 +10,7 @@ module MailHandler
 
         class Base
 
-          attr_accessor :files
+          attr_accessor :files, :fast_check?
 
           def initialize(files)
 
@@ -34,10 +34,6 @@ module MailHandler
 
           def read_file(file)
 
-            # TODO: add UTF support
-            # string need to be read and converted
-            # read_email(file_content).subject.include?(@content) - 10x slower, use something else for reading
-            # Mail::Encodings.unquote_and_convert_to(content, "UTF-8") - 6x slower
             File.read(file)
 
           end

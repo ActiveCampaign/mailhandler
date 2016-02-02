@@ -40,7 +40,20 @@ module MailHandler
 
           def meets_expectation?(file)
 
+
+
+          end
+
+          private
+
+          def search_fast
+
             read_file(file).include? @content
+
+          end
+
+          def search_slow
+
 
           end
 
