@@ -4,6 +4,7 @@ module Mail
 
     def find2(options={}, &block)
 
+      connect if @imap_connection.nil?
       imap = @imap_connection
 
       options = validate_options(options)
@@ -51,22 +52,25 @@ module Mail
     # Start an IMAP session and ensures that it will be closed in any case.
     def connect(config=Mail::Configuration.instance)
 
-      @imap_connection = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
-      imap = @imap_connection
+        puts "new"
+
+        @imap_connection = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
+        imap = @imap_connection
 
 
-      if settings[:authentication].nil?
-        imap.login(settings[:user_name], settings[:password])
-      else
-        # Note that Net::IMAP#authenticate('LOGIN', ...) is not equal with Net::IMAP#login(...)!
-        # (see also http://www.ensta.fr/~diam/ruby/online/ruby-doc-stdlib/libdoc/net/imap/rdoc/classes/Net/IMAP.html#M000718)
-        imap.authenticate(settings[:authentication], settings[:user_name], settings[:password])
-      end
+        if settings[:authentication].nil?
+          imap.login(settings[:user_name], settings[:password])
+        else
+          # Note that Net::IMAP#authenticate('LOGIN', ...) is not equal with Net::IMAP#login(...)!
+          # (see also http://www.ensta.fr/~diam/ruby/online/ruby-doc-stdlib/libdoc/net/imap/rdoc/classes/Net/IMAP.html#M000718)
+          imap.authenticate(settings[:authentication], settings[:user_name], settings[:password])
+        end
 
     end
 
     def disconnect
 
+      puts "disconnect"
       imap = @imap_connection
 
       if defined?(imap) && imap && !imap.disconnected?
