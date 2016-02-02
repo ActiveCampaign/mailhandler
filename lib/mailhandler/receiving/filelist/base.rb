@@ -1,3 +1,5 @@
+require 'fileutils'
+
 # Base filtering class, which is used for reading list of all files based on passed pattern.
 # Patterns to be used can be checked here: http://ruby-doc.org/core-1.9.3/Dir.html
 
