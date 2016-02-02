@@ -49,7 +49,8 @@ module MailHandler
           :since,
           :by_recipient,
           :count,
-          :archive
+          :archive,
+          :fast_check
 
       ]
 

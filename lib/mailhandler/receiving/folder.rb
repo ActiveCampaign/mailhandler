@@ -78,7 +78,7 @@ module MailHandler
           if FILE_SEARCH_CLASSES[key] != nil
 
             filter = FILE_SEARCH_CLASSES[key].new(files, value)
-            #filter.fast_check = !options[:fast_check].nil? && options[:fast_check]
+            filter.fast_check = options[:fast_check] unless options[:fast_check].nil?
             files = filter.get
 
           end
@@ -88,9 +88,6 @@ module MailHandler
         files
 
       end
-
-
-
 
       def move_files(files)
 

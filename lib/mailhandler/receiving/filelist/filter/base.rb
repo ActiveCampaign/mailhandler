@@ -1,4 +1,5 @@
 require_relative '../base'
+require_relative '../../../errors'
 
 module MailHandler
 
@@ -10,7 +11,7 @@ module MailHandler
 
         class Base
 
-          attr_accessor :files, :fast_check?
+          attr_accessor :files, :fast_check
 
           def initialize(files)
 
@@ -28,7 +29,7 @@ module MailHandler
 
           def meet_expectation?(file)
 
-            raise StandardError, 'Needs to be implemented.'
+            raise MailHandler::InterfaceError, 'Interface not implemented.'
 
           end
 
