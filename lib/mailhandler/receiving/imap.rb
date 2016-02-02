@@ -3,6 +3,7 @@
 require 'mail'
 require_relative 'base.rb'
 require_relative '../errors'
+require_relative 'mail.rb'
 
 module MailHandler
 
@@ -92,7 +93,11 @@ module MailHandler
 
       def find_emails(options)
 
-        result = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
+        Mail.retriever_method.connect
+
+        result = Mail.retriever_method.find2(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
+
+        Mail.retriever_method.disconnect
         (result.kind_of? Array)? result : [result]
 
       end
