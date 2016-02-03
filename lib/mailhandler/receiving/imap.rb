@@ -76,6 +76,8 @@ module MailHandler
 
           :by_subject,
           :by_content,
+          :since,
+          :before,
           :count,
           :archive,
           :by_recipient
@@ -122,6 +124,7 @@ module MailHandler
 
       def find_emails(options)
 
+        binding.pry
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
@@ -146,6 +149,14 @@ module MailHandler
             when :by_content
 
               keys << 'BODY' << options[:by_content].to_s
+
+            when :since
+
+              keys << 'SINCE' << Net::IMAP.format_date(options[:since])
+
+            when :before
+
+              keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
 
             else
 

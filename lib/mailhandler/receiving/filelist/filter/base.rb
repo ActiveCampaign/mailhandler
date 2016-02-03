@@ -57,20 +57,43 @@ module MailHandler
 
         end
 
-        class ByDate < Base
+        module ByDate
 
-          def initialize(files, date)
+          class Since < Base
 
-            super(files)
-            @date = date
+            def initialize(files, date)
+
+              super(files)
+              @date = date
+
+            end
+
+            private
+
+            def meets_expectation?(file)
+
+              (File.exists? file)? (File.ctime file) > @date : false
+
+            end
 
           end
 
-          private
+          class Before < Base
 
-          def meets_expectation?(file)
+            def initialize(files, date)
 
-            (File.exists? file)? (File.ctime file) > @date : false
+              super(files)
+              @date = date
+
+            end
+
+            private
+
+            def meets_expectation?(file)
+
+              (File.exists? file)? (File.ctime file) < @date : false
+
+            end
 
           end
 
