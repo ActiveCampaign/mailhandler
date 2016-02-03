@@ -51,7 +51,7 @@ module Mail
           end
 
         end
-        
+
         imap.expunge if options[:delete_after_find]
         emails.size == 1 && options[:count] == 1 ? emails.first : emails
 
@@ -62,6 +62,7 @@ module Mail
     # Start an IMAP session
     def connect(config=Mail::Configuration.instance)
 
+        puts "connect"
         @imap = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
 
         if settings[:authentication].nil?
@@ -76,6 +77,7 @@ module Mail
 
     def disconnect
 
+      puts "disconnect"
       if defined?(imap) && imap && !imap.disconnected?
 
         imap.disconnect
