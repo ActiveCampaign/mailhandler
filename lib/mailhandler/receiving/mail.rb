@@ -38,15 +38,20 @@ module Mail
       else
 
         emails = []
-        uids.each do |uid|
-          uid = options[:uid].to_i unless options[:uid].nil?
-          fetchdata = imap.uid_fetch(uid, ['RFC822'])[0]
-          emails << Mail.new(fetchdata.attr['RFC822'])
-          imap.uid_store(uid, "+FLAGS", [Net::IMAP::DELETED]) if options[:delete_after_find]
-          break unless options[:uid].nil?
+
+        unless uids.nil?
+
+          uids.each do |uid|
+            uid = options[:uid].to_i unless options[:uid].nil?
+            fetchdata = imap.uid_fetch(uid, ['RFC822'])[0]
+            emails << Mail.new(fetchdata.attr['RFC822'])
+            imap.uid_store(uid, "+FLAGS", [Net::IMAP::DELETED]) if options[:delete_after_find]
+            break unless options[:uid].nil?
+
+          end
 
         end
-
+        
         imap.expunge if options[:delete_after_find]
         emails.size == 1 && options[:count] == 1 ? emails.first : emails
 
