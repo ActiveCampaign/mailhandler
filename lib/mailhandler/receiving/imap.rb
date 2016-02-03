@@ -124,7 +124,6 @@ module MailHandler
 
       def find_emails(options)
 
-        binding.pry
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
