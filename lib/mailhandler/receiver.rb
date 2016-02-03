@@ -44,8 +44,7 @@ module MailHandler
     def find_email(options)
 
       init_search_details(options)
-      checker.init_retriever
-      checker.connect
+      checker.start
 
       until search_time_expired?
 
@@ -58,9 +57,12 @@ module MailHandler
 
       end
 
-      checker.disconnect
       checker.search_result
 
+      ensure
+
+        checker.stop
+      
     end
 
     private

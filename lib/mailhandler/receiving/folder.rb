@@ -44,6 +44,12 @@ module MailHandler
 
       end
 
+      def start
+
+        verify_mailbox_folders
+
+      end
+
       private
 
       # filter options which need to be done by searching files

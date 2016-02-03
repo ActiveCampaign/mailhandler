@@ -2,10 +2,9 @@ module Mail
 
   class IMAP
 
-    def find2(options={}, &block)
+    attr_accessor :imap
 
-      connect if @imap_connection.nil?
-      imap = @imap_connection
+    def find(options={}, &block)
 
       options = validate_options(options)
 
@@ -19,6 +18,7 @@ module Mail
 
 
       if block_given?
+
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
           fetchdata = imap.uid_fetch(uid, ['RFC822'])[0]
@@ -32,8 +32,11 @@ module Mail
           imap.uid_store(uid, "+FLAGS", [Net::IMAP::DELETED]) if options[:delete_after_find] && new_message.is_marked_for_delete?
           break unless options[:uid].nil?
         end
+
         imap.expunge if options[:delete_after_find]
+
       else
+
         emails = []
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
@@ -41,22 +44,20 @@ module Mail
           emails << Mail.new(fetchdata.attr['RFC822'])
           imap.uid_store(uid, "+FLAGS", [Net::IMAP::DELETED]) if options[:delete_after_find]
           break unless options[:uid].nil?
+
         end
+
         imap.expunge if options[:delete_after_find]
         emails.size == 1 && options[:count] == 1 ? emails.first : emails
-      end
 
+      end
 
     end
 
-    # Start an IMAP session and ensures that it will be closed in any case.
+    # Start an IMAP session
     def connect(config=Mail::Configuration.instance)
 
-        puts "new"
-
-        @imap_connection = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
-        imap = @imap_connection
-
+        @imap = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
 
         if settings[:authentication].nil?
           imap.login(settings[:user_name], settings[:password])
@@ -70,11 +71,10 @@ module Mail
 
     def disconnect
 
-      puts "disconnect"
-      imap = @imap_connection
-
       if defined?(imap) && imap && !imap.disconnected?
+
         imap.disconnect
+
       end
 
     end

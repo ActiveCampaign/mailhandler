@@ -14,6 +14,8 @@ describe MailHandler::Receiver do
       allow(checker).to receive(:search_result) { true }
       allow(checker).to receive(:found_emails) { [found_email] }
       allow(checker).to receive(:reset_found_emails) { [] }
+      allow(checker).to receive(:start) { nil }
+      allow(checker).to receive(:stop) { nil }
       checker
 
     }
@@ -72,6 +74,8 @@ describe MailHandler::Receiver do
         allow(checker).to receive(:search_result) { false }
         allow(checker).to receive(:found_emails) { [] }
         allow(checker).to receive(:reset_found_emails) { [] }
+        allow(checker).to receive(:start) { nil }
+        allow(checker).to receive(:stop) { nil }
         checker
 
       }

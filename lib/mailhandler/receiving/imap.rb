@@ -27,12 +27,26 @@ module MailHandler
       def find(options)
 
         verify_and_set_search_options(options)
-        init_retriever
         @found_emails = find_emails(search_options)
 
         search_result
 
       end
+
+      def start
+
+        init_retriever
+        connect
+
+      end
+
+      def stop
+
+        disconnect
+
+      end
+
+      private
 
       def mailer
 
@@ -52,6 +66,22 @@ module MailHandler
 
       end
 
+      # search options:
+      # by_subject - String, search by a whole string as part of the subject of the email
+      # by_content - String, search by a whole string as part of the content of the email
+      # count - Int, number of found emails to return
+      # archive - Boolean
+      # by_recipient - Hash, accepts a hash like: :to => 'igor@example.com'
+      AVAILABLE_SEARCH_OPTIONS = [
+
+          :by_subject,
+          :by_content,
+          :count,
+          :archive,
+          :by_recipient
+
+      ]
+
       # delegate retrieval details to Mail library
       def init_retriever
 
@@ -70,24 +100,6 @@ module MailHandler
         end
 
       end
-
-      private
-
-      # search options:
-      # by_subject - String, search by a whole string as part of the subject of the email
-      # by_content - String, search by a whole string as part of the content of the email
-      # count - Int, number of found emails to return
-      # archive - Boolean
-      # by_recipient - Hash, accepts a hash like: :to => 'igor@example.com'
-      AVAILABLE_SEARCH_OPTIONS = [
-
-          :by_subject,
-          :by_content,
-          :count,
-          :archive,
-          :by_recipient
-
-      ]
 
       def retriever_set?
 
@@ -110,7 +122,7 @@ module MailHandler
 
       def find_emails(options)
 
-        result = mailer.find2(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
+        result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
       end
