@@ -84,6 +84,8 @@ module MailHandler
 
       ]
 
+      RETRY_IMAP_SEARCH = 3
+
       # delegate retrieval details to Mail library
       def init_retriever
 
@@ -124,11 +126,11 @@ module MailHandler
 
       def find_emails(options)
 
-        imap_search(3)
+        imap_search(RETRY_IMAP_SEARCH, options)
 
       end
 
-      def imap_search(retry_times)
+      def imap_search(retry_times, options)
 
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
