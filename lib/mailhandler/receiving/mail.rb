@@ -62,7 +62,6 @@ module Mail
     # Start an IMAP session
     def connect(config=Mail::Configuration.instance)
 
-        puts "connect"
         @imap = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
 
         if settings[:authentication].nil?
@@ -76,8 +75,7 @@ module Mail
     end
 
     def disconnect
-
-      puts "disconnect"
+      
       if defined?(imap) && imap && !imap.disconnected?
 
         imap.disconnect
