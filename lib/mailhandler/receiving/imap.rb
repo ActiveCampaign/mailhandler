@@ -124,8 +124,20 @@ module MailHandler
 
       def find_emails(options)
 
+        imap_search(3)
+
+      end
+
+      def imap_search(retry_times)
+
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
+
+      rescue Net::IMAP::Error::ResponseError => e
+
+        puts e
+        retry unless (retry_times -=1).zero?
+        []
 
       end
 

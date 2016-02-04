@@ -75,7 +75,7 @@ module Mail
     end
 
     def disconnect
-      
+
       if defined?(imap) && imap && !imap.disconnected?
 
         imap.disconnect
