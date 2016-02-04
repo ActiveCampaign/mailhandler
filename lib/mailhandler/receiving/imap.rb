@@ -54,6 +54,13 @@ module MailHandler
 
       end
 
+      def reconnect
+
+        mailer.disconnect
+        mailer.connect
+
+      end
+
       def connect
 
         mailer.connect
@@ -137,6 +144,7 @@ module MailHandler
 
       rescue Net::IMAP::Error::ResponseError => e
 
+        puts e
         retry unless (retry_times -=1).zero?
         raise e
 
