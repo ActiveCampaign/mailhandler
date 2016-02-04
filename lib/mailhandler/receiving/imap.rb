@@ -137,9 +137,8 @@ module MailHandler
 
       rescue Net::IMAP::Error::ResponseError => e
 
-        puts e
         retry unless (retry_times -=1).zero?
-        []
+        raise e
 
       end
 
