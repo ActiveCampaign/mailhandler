@@ -91,7 +91,7 @@ module MailHandler
 
       ]
 
-      RETRY_IMAP_SEARCH = 3
+      RETRY_ON_ERROR_COUNT = 3
 
       # delegate retrieval details to Mail library
       def init_retriever
@@ -133,18 +133,18 @@ module MailHandler
 
       def find_emails(options)
 
-        imap_search(RETRY_IMAP_SEARCH, options)
+        imap_search(RETRY_ON_ERROR_COUNT, options)
 
       end
 
-      def imap_search(retry_times, options)
+      def imap_search(retry_count, options)
 
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
       rescue Net::IMAP::ResponseError => e
 
-        if (retry_times -=1) >= 0
+        if (retry_count -=1) >= 0
 
           puts e
           reconnect
