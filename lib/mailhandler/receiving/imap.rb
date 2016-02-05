@@ -87,7 +87,8 @@ module MailHandler
           :before,
           :count,
           :archive,
-          :by_recipient
+          :by_recipient,
+          :fast_check
 
       ]
 

@@ -55,6 +55,7 @@ module MailHandler
           :by_subject,
           :by_content,
           :since,
+          :before,
           :by_recipient,
           :count,
           :archive,
