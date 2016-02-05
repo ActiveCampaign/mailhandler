@@ -144,7 +144,7 @@ module MailHandler
 
       rescue Net::IMAP::ResponseError => e
 
-        if (retry_times -=1).zero?
+        if (retry_times -=1) >= 0
 
           puts e
           reconnect
