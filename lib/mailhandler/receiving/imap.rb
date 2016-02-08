@@ -143,7 +143,8 @@ module MailHandler
         result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
-      rescue Net::IMAP::ResponseError => e
+      # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
+      rescue Net::IMAP::ResponseError, EOFError, NoMethodError => e
 
         if (retry_count -=1) >= 0
 
