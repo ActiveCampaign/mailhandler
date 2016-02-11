@@ -7,7 +7,6 @@ module Mail
     def find(options={}, &block)
 
       options = validate_options(options)
-
       options[:read_only] ? imap.examine(options[:mailbox]) : imap.select(options[:mailbox])
 
       uids = imap.uid_search(options[:keys])

@@ -182,11 +182,11 @@ module MailHandler
 
             when :since
 
-              keys << 'SINCE' << Net::IMAP.format_date(options[:since])
+              keys << 'SINCE' << Net::IMAP.format_datetime(options[:since])
 
             when :before
 
-              keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
+              keys << 'BEFORE' << Net::IMAP.format_datetime(options[:before])
 
             else
 
