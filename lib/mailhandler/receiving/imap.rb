@@ -140,7 +140,7 @@ module MailHandler
 
       def imap_search(retry_count, options)
 
-        result = mailer.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
+        result = mailer.find_emails(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
 
       # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
@@ -182,11 +182,11 @@ module MailHandler
 
             when :since
 
-              keys << 'SINCE' << Net::IMAP.format_datetime(options[:since])
+              keys << 'SINCE' << Net::IMAP.format_date(options[:since])
 
             when :before
 
-              keys << 'BEFORE' << Net::IMAP.format_datetime(options[:before])
+              keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
 
             else
 
