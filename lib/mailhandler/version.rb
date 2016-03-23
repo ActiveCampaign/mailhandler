@@ -1,5 +1,5 @@
 module MailHandler
 
-  VERSION = '1.0.22'
+  VERSION = '1.0.28'
 
 end

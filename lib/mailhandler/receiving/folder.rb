@@ -44,6 +44,12 @@ module MailHandler
 
       end
 
+      def start
+
+        verify_mailbox_folders
+
+      end
+
       private
 
       # filter options which need to be done by searching files
@@ -51,7 +57,8 @@ module MailHandler
 
           :by_subject => FileList::Filter::ByEmailSubject,
           :by_content => FileList::Filter::ByEmailContent,
-          :since => FileList::Filter::ByDate,
+          :since => FileList::Filter::ByDate::Since,
+          :before => FileList::Filter::ByDate::Before,
           :by_recipient => FileList::Filter::ByEmailRecipient
       }
 

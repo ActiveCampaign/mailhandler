@@ -22,6 +22,14 @@ module MailHandler
 
       end
 
+      def start
+
+      end
+
+      def stop
+
+      end
+
       def find(options)
 
         raise MailHandler::InterfaceError, 'Find interface not implemented.'
@@ -47,6 +55,7 @@ module MailHandler
           :by_subject,
           :by_content,
           :since,
+          :before,
           :by_recipient,
           :count,
           :archive,

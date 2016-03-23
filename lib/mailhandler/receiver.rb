@@ -1,6 +1,7 @@
 require_relative 'receiving/folder'
 require_relative 'receiving/imap'
 require_relative 'receiving/observer'
+require_relative 'receiving/mail.rb'
 
 module MailHandler
 
@@ -43,6 +44,7 @@ module MailHandler
     def find_email(options)
 
       init_search_details(options)
+      checker.start
 
       until search_time_expired?
 
@@ -57,6 +59,10 @@ module MailHandler
 
       checker.search_result
 
+      ensure
+
+        checker.stop
+      
     end
 
     private

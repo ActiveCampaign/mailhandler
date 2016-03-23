@@ -54,12 +54,6 @@ describe MailHandler::Receiving::IMAPChecker do
 
     context 'invalid' do
 
-      it 'by date' do
-
-        expect { checker.find({:since => Time.now}) }.to raise_error MailHandler::Error
-
-      end
-
       it 'by_test' do
 
         expect { checker.find({:by_test => 'test'}) }.to raise_error MailHandler::Error

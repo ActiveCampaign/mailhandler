@@ -27,14 +27,51 @@ module MailHandler
       def find(options)
 
         verify_and_set_search_options(options)
-        init_retriever
         @found_emails = find_emails(search_options)
 
         search_result
 
       end
 
+      def start
+
+        init_retriever
+        connect
+
+      end
+
+      def stop
+
+        disconnect
+
+      end
+
       private
+
+      def mailer
+
+        @mailer ||= Mail.retriever_method
+
+      end
+
+      def reconnect
+
+        mailer.disconnect
+        mailer.connect
+
+      end
+
+      def connect
+
+        mailer.connect
+
+      end
+
+      def disconnect
+
+        mailer.disconnect
+
+      end
 
       # search options:
       # by_subject - String, search by a whole string as part of the subject of the email
@@ -46,11 +83,16 @@ module MailHandler
 
           :by_subject,
           :by_content,
+          :since,
+          :before,
           :count,
           :archive,
-          :by_recipient
+          :by_recipient,
+          :fast_check
 
       ]
+
+      RETRY_ON_ERROR_COUNT = 3
 
       # delegate retrieval details to Mail library
       def init_retriever
@@ -92,8 +134,29 @@ module MailHandler
 
       def find_emails(options)
 
-        result = Mail.find(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
+        imap_search(RETRY_ON_ERROR_COUNT, options)
+
+      end
+
+      def imap_search(retry_count, options)
+
+        result = mailer.find_emails(:what => :last, :count => search_options[:count], :order => :desc, :keys => imap_filter_keys(options), :delete_after_find => options[:archive])
         (result.kind_of? Array)? result : [result]
+
+      # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
+      rescue Net::IMAP::ResponseError, EOFError, NoMethodError => e
+
+        if (retry_count -=1) >= 0
+
+          puts e
+          reconnect
+          retry
+
+        else
+
+          raise e
+
+        end
 
       end
 
@@ -116,6 +179,14 @@ module MailHandler
             when :by_content
 
               keys << 'BODY' << options[:by_content].to_s
+
+            when :since
+
+              keys << 'SINCE' << Net::IMAP.format_date(options[:since])
+
+            when :before
+
+              keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
 
             else
 
