@@ -167,6 +167,9 @@ Once email sending is finished, you can check sending result by looking at: `ema
 * `:response` - response from sending
 * `:email` - email sent
  
+### License
+
+MailHandler Library is licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form") license. Refere to the [LICENSE](https://github.com/wildbit/mailhandler/blob/master/LICENSE) file for more information. 
 
 
 
