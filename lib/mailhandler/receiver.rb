@@ -57,6 +57,7 @@ module MailHandler
 
       end
 
+      notify_observers(search)
       checker.search_result
 
       ensure
