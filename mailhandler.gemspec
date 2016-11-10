@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
     ==================
   }
 
-  s.required_rubygems_version = ">= 1.8.7"
+  s.required_rubygems_version = ">= 1.9.3"
 
   s.add_dependency "mail"
   s.add_dependency "postmark", '~> 1.7.0','>= 1.7.0'
