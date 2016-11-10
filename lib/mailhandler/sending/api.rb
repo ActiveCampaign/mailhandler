@@ -19,20 +19,22 @@ module MailHandler
         @host = DEFAULT_HOST
         @api_token = api_token
         @use_ssl = false
-        @client = setup_sending_client
 
       end
 
       def send(email)
 
         verify_email(email)
+        init_client
         client.deliver_message(email)
 
       end
 
-      protected
+      def init_client
 
-      DEFAULT_HOST = 'api.postmarkapp.com'
+        @client = setup_sending_client
+
+      end
 
       def setup_sending_client
 
@@ -41,6 +43,10 @@ module MailHandler
         Postmark::ApiClient.new(api_token, http_open_timeout: 15, host: host, secure: @use_ssl)
 
       end
+
+      protected
+
+      DEFAULT_HOST = 'api.postmarkapp.com'
 
     end
 

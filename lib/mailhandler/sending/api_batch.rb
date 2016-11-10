@@ -16,6 +16,7 @@ module MailHandler
       def send(emails)
 
         verify_email(emails)
+        init_client
         client.deliver_messages(emails)
 
       end
