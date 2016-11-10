@@ -10,7 +10,8 @@ module MailHandler
 
       attr_accessor :host,
                     :api_token,
-                    :use_ssl
+                    :use_ssl,
+                    :client
 
       def initialize(api_token = nil)
 
@@ -18,14 +19,13 @@ module MailHandler
         @host = DEFAULT_HOST
         @api_token = api_token
         @use_ssl = false
+        @client = setup_sending_client
 
       end
 
       def send(email)
 
         verify_email(email)
-
-        client = setup_sending_client
         client.deliver_message(email)
 
       end
