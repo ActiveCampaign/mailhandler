@@ -17,7 +17,7 @@ module MailHandler
     module DEFAULTS
 
       MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
-      SEARCH_FREQUENCY = 1 # how frequently to check for email in inbox [seconds]
+      SEARCH_FREQUENCY = 0.5 # how frequently to check for email in inbox [seconds]
 
     end
 
@@ -51,7 +51,6 @@ module MailHandler
         received = checker.find(options)
         update_search_details
         notify_observers(search)
-
         break if received
         sleep search_frequency
 
@@ -63,7 +62,7 @@ module MailHandler
       ensure
 
         checker.stop
-      
+
     end
 
     private

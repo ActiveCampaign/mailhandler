@@ -17,9 +17,14 @@ module MailHandler
                     :authentication,
                     :use_ssl
 
+      # Connection is closed by default after each search.
+      # By setting this flag, closing connection is ignored and you need to close it manually.
+      attr_accessor :manual_connection_manage
+
       def initialize
 
         super
+        @manual_connection_manage = false
         @available_search_options = AVAILABLE_SEARCH_OPTIONS
 
       end
@@ -35,14 +40,49 @@ module MailHandler
 
       def start
 
-        init_retriever
-        connect
+        unless manual_connection_manage
+          init_retriever
+          connect
+        end
 
       end
 
       def stop
 
-        disconnect
+        unless manual_connection_manage
+          disconnect
+        end
+
+      end
+
+      def connect
+
+        mailer.connect
+
+      end
+
+      def disconnect
+
+        mailer.disconnect unless mailer.imap_connection.disconnected?
+
+      end
+
+      # delegate retrieval details to Mail library
+      def init_retriever
+
+        # set imap settings if they are not set
+        unless retriever_set?
+
+          imap_settings = retriever_settings
+
+          Mail.defaults do
+
+            retriever_method :imap,
+                             imap_settings
+
+          end
+
+        end
 
       end
 
@@ -56,20 +96,8 @@ module MailHandler
 
       def reconnect
 
-        mailer.disconnect
-        mailer.connect
-
-      end
-
-      def connect
-
-        mailer.connect
-
-      end
-
-      def disconnect
-
-        mailer.disconnect
+        disconnect
+        connect
 
       end
 
@@ -93,25 +121,6 @@ module MailHandler
       ]
 
       RETRY_ON_ERROR_COUNT = 3
-
-      # delegate retrieval details to Mail library
-      def init_retriever
-
-        # set imap settings if they are not set
-        unless retriever_set?
-
-          imap_settings = retriever_settings
-
-          Mail.defaults do
-
-            retriever_method :imap,
-                             imap_settings
-
-          end
-
-        end
-
-      end
 
       def retriever_set?
 
