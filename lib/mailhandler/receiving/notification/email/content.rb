@@ -8,39 +8,40 @@ module MailHandler
 
       class EmailContent
 
+        # @param [Symbol] type - notification type
         # @param [Hash] options - search options used for searching for an email
         # @param [Int] delay - delay in seconds
         # @param [String] from - email address
         # @param [String] to - email address
-        def self.email_received(options, delay, from, to)
+        def retrieve(type, options, delay, from, to)
 
-          Mail.new do
+          mail = Mail.new
+          mail.from = from
+          mail.to = to
+          delay = (delay.to_f/60).round(2)
 
-            from from
-            subject "Received - delay was #{(delay.to_f/60).round(2)} minutes"
-            body "Received - delay was #{(delay.to_f/60).round(2)} minutes - search by #{options}"
-            to to
+          case type
 
-          end
+            when :received
 
-        end
+              mail.subject = "Received - delay was #{delay} minutes"
+              mail.body = "Received - delay was #{delay} minutes - search by #{options}"
 
-        # @param [Hash] options - search options used for searching for an email
-        # @param [Int] delay - delay in seconds
-        # @param [String] from - email address
-        # @param [String] to - email address
-        def self.email_delayed(options, delay, from, to)
+            when :delayed
 
-          Mail.new do
+              mail.subject = "Over #{delay} minutes delay"
+              mail.body = "Over #{delay} minutes delay - search by #{options}"
 
-            from from
-            subject "Over #{(delay.to_f/60).round(2)} minutes delay"
-            body "Over #{(delay.to_f/60).round(2)} minutes delay - search by #{options}"
-            to to
+            else
+
+              raise StandardError, "Incorrect type: #{type}"
 
           end
 
+          mail
+
         end
+
 
       end
 

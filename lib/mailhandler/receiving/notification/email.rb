@@ -23,6 +23,7 @@ module MailHandler
           @sender = sender
           @contacts = contacts
           init_state
+          set_content_handler(EmailContent.new)
 
         end
 
@@ -43,10 +44,18 @@ module MailHandler
         def send_email(type, search)
 
           verify_email_type(type)
-          content = EmailContent.send("email_#{type}",search.options, Time.now - search.started_at, sender.dispatcher.username, contacts)
+          content = @content_handler.retrieve(type, search.options, Time.now - search.started_at,
+                                              sender.dispatcher.username, contacts)
           sender.send_email content
 
         end
+
+        # Allow users to specify their own content classes.
+        # Class must match by methods to the interface of MailHandler::Receiving::Notification::EmailContent
+        def set_content_handler(content_handler)
+          @content_handler = content_handler
+        end
+
 
         private
 
