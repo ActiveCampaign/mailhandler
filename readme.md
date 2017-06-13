@@ -1,4 +1,4 @@
-<img src="http://assets.wildbit.com/postmark/blog/images/mailhandler-logo.png" alt="MailHandler Logo" title="MailHandler" width="148" height="149">
+<img src="http://assets.wildbit.com/postmark/misc/mailhandler-logo@2x.png" alt="MailHandler Logo" title="MailHandler" width="148" height="148" align="right">
 
 # MailHandler Gem
 
