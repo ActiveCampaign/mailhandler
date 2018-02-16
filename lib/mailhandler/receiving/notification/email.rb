@@ -11,17 +11,19 @@ module MailHandler
       class Email
 
         attr_reader   :sender,
+                      :from,
                       :contacts,
                       :min_time_to_notify,
                       :max_time_to_notify,
                       :current_state
 
-        def initialize(sender, contacts, min_time_to_notify = 60)
+        def initialize(sender, from, to, min_time_to_notify = 60)
 
           @min_time_to_notify = min_time_to_notify
 
           @sender = sender
-          @contacts = contacts
+          @from = from
+          @contacts = to
           init_state
           set_content_handler(EmailContent.new)
 
@@ -44,8 +46,7 @@ module MailHandler
         def send_email(type, search)
 
           verify_email_type(type)
-          content = @content_handler.retrieve(type, search.options, Time.now - search.started_at,
-                                              sender.dispatcher.username, contacts)
+          content = @content_handler.retrieve(type, search.options, Time.now - search.started_at, from, contacts)
           sender.send_email content
 
         end

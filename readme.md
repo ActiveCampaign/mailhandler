@@ -105,13 +105,14 @@ Console notification is a good option if you are testing email delivery and want
 To add console or email notifications, to your email searching all you need to do is:
 
 ``` ruby
-email_receiver.add_observer(MailHandler::Receiving::Notification::Email.new(email_sender, contacts))
+email_receiver.add_observer(MailHandler::Receiving::Notification::Email.new(email_sender, from, contacts))
 email_receiver.add_observer(MailHandler::Receiving::Notification::Console.new)
 ``` 
 
 For email notifications, the parameters you need are:
 
 * `email_sender` - email sender you will use for sending an email (it should be one of senders described below)
+* `from` - email address from which email is sent 
 * `contacts` - list of contacts to receive the notification (for example: `john@example.com, igor@example.com`
  
 # Email sending 
