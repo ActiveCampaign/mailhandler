@@ -45,7 +45,7 @@ end
 
 ## Configure imap mailbox email to check
 
-If you plan to search for emails in your remote inbox which supports IMAP, you can use Mailhandler with provided IMAP settings.
+If you plan to search for emails in your remote inbox which supports IMAP, you can use Mailhandler by providing IMAP settings.
 We recommend to keep credentials for your IMAP settings safe, and read them from config file or environment variables.
 Do NOT keep credentials in your repositories. 
  
@@ -54,7 +54,7 @@ Do NOT keep credentials in your repositories.
 address = 'imap.example.com'
 port = 993
 username = 'john'
-password = 'xxxxxxx'
+password = 'xxxxxxxxxxxxxx'
 use_ssl = true
 
 email_receiver = MailHandler.receiver(:imap) do |checker|
@@ -159,7 +159,7 @@ address = 'imap.example.com'
 domain = 'example.com'
 port = 587
 username = 'john'
-password = 'xxxxxxx'
+password = 'xxxxxxxxxxxxxx'
 use_ssl = true
 
 email_sender = MailHandler.sender(:smtp) do |dispatcher|
