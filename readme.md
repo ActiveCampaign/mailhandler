@@ -33,23 +33,36 @@ In order to search for email, all you need to do is setup inbox folder and archi
 Folders can be the same if you don't plan to archive found emails. Retrieving emails from a folder would look like following:
 
 ``` ruby
+
+inbox_folder = '/folder/mailbox/inbox'
+archive_folder = '/folder/mailbox/archive/'
+
 email_receiver = MailHandler.receiver(:folder) do |checker|
-    checker.inbox_folder = '/folder/mailbox/'
-    checker.archive_folder = '/folder/mailbox/archive/'
+    checker.inbox_folder = inbox_folder
+    checker.archive_folder = archive_folder
 end
 ```  
 
 ## Configure imap mailbox email to check
 
-If you plan to search for emails in your remote inbox which support IMAP, you can use Mailhandler with provided IMAP settings: 
+If you plan to search for emails in your remote inbox which supports IMAP, you can use Mailhandler with provided IMAP settings.
+We recommend to keep credentials for your IMAP settings safe, and read them from config file or environment variables.
+Do NOT keep credentials in your repositories. 
  
 ``` ruby
+
+address = 'imap.example.com'
+port = 993
+username = 'john'
+password = 'xxxxxxx'
+use_ssl = true
+
 email_receiver = MailHandler.receiver(:imap) do |checker|
-  checker.address = 'imap.example.com'
-  checker.port = 993
-  checker.username = 'username'
-  checker.password = 'password'
-  checker.use_ssl  =  true
+  checker.address = address
+  checker.port = port
+  checker.username = username
+  checker.password = password
+  checker.use_ssl  =  use_ssl
 end
 ``` 
 
@@ -124,6 +137,8 @@ There are three ways you can send email, which we will describe below. To send e
 To send email with Postmark, you need to choose type of sending, api token options.
  
 ``` ruby
+api_token = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
 email_sender = MailHandler.sender(type) do |dispatcher|
     dispatcher.api_token = api_token
 end
@@ -135,8 +150,18 @@ end
 ### Sending email by SMTP
 
 To send email with SMTP you need to configure standard SMTP settings.
+We recommend to keep credentials for your SMTP settings safe, and read them from config file or environment variables.
+Do NOT keep credentials in your repositories. 
 
 ``` ruby
+
+address = 'imap.example.com'
+domain = 'example.com'
+port = 587
+username = 'john'
+password = 'xxxxxxx'
+use_ssl = true
+
 email_sender = MailHandler.sender(:smtp) do |dispatcher|
     dispatcher.address = address
     dispatcher.port = port
