@@ -6,12 +6,13 @@ module MailHandler
   module Receiving
     module Notification
       class Email
-        attr_reader   :sender,
+        attr_accessor :sender,
                       :from,
                       :contacts,
                       :min_time_to_notify,
-                      :max_time_to_notify,
-                      :current_state
+                      :max_time_to_notify
+
+        attr_reader   :current_state
 
         def initialize(sender, from, to, min_time_to_notify = 60)
           @min_time_to_notify = min_time_to_notify
