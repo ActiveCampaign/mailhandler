@@ -3,11 +3,8 @@ require 'postmark'
 require_relative 'base.rb'
 
 module MailHandler
-
   module Sending
-
     class PostmarkAPISender < Sender
-
       attr_accessor :host,
                     :api_token,
                     :use_ssl,
@@ -43,10 +40,7 @@ module MailHandler
 
       protected
 
-      DEFAULT_HOST = 'api.postmarkapp.com'
-
+      DEFAULT_HOST = 'api.postmarkapp.com'.freeze
     end
-
   end
-
 end

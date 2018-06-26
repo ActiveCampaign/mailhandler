@@ -4,9 +4,7 @@ require_relative 'receiving/observer'
 require_relative 'receiving/mail.rb'
 
 module MailHandler
-
   class Receiver
-
     include Receiving::Observer
 
     attr_accessor :checker,
@@ -15,10 +13,8 @@ module MailHandler
                   :search_frequency
 
     module DEFAULTS
-
       MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
       SEARCH_FREQUENCY = 0.5 # how frequently to check for email in inbox [seconds]
-
     end
 
     # @param [Hash] - search options
@@ -31,18 +27,15 @@ module MailHandler
     # @param [boolean] - result of search
     # @param [Mail] - first email found
     # @param [Array] - all emails found
-    Search = Struct.new( :options, :started_at, :finished_at, :duration, :max_duration, :result, :email, :emails)
+    Search = Struct.new(:options, :started_at, :finished_at, :duration, :max_duration, :result, :email, :emails)
 
     def initialize(checker)
-
       @checker = checker
       @max_search_duration = DEFAULTS::MAX_SEARCH_DURATION
       @search_frequency = DEFAULTS::SEARCH_FREQUENCY
-
     end
 
     def find_email(options)
-
       init_search_details(options)
       checker.start
 
@@ -58,40 +51,29 @@ module MailHandler
 
       notify_observers(search)
       checker.search_result
-
-      ensure
-
-        checker.stop
-
+    ensure
+      checker.stop
     end
 
     private
 
     def init_search_details(options)
-
       @search = Search.new
       @search.options = options
       @search.started_at = Time.now
       @search.max_duration = @max_search_duration
-
     end
 
     def update_search_details
-
       search.finished_at = Time.now
       search.duration = search.finished_at - search.started_at
       search.result = checker.search_result
       search.emails = checker.found_emails
       search.email = search.emails.first
-
     end
 
     def search_time_expired?
-
       (Time.now - search.started_at) > @max_search_duration
-
     end
-
   end
-
 end
