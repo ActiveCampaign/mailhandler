@@ -14,31 +14,33 @@ module MailHandler
                     :authentication,
                     :use_ssl
 
+      attr_accessor :save_response
+
       def initialize
         @type = :smtp
         @authentication = 'plain'
         @use_ssl = false
+        @save_response = true
       end
 
       def send(email)
         verify_email(email)
         email = configure_sending(email)
-        email.deliver
+        save_response ? email.deliver! : email.deliver
       end
 
       private
 
       def configure_sending(email)
         options = {
-
           address: address,
           port: port,
           domain: domain,
           user_name: username,
           password: password,
           authentication: @authentication,
-          enable_starttls_auto: @use_ssl
-
+          enable_starttls_auto: @use_ssl,
+          return_response: save_response
         }
 
         email.delivery_method :smtp, options
