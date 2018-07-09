@@ -14,13 +14,18 @@ module MailHandler
                     :authentication,
                     :use_ssl
 
-      attr_accessor :save_response
+      attr_accessor :open_timeout,
+                    :read_timeout,
+                    :save_response
 
       def initialize
         @type = :smtp
         @authentication = 'plain'
         @use_ssl = false
-        @save_response = true
+        @save_response = false
+
+        @open_timeout = 60
+        @read_timeout = 60
       end
 
       def send(email)
@@ -40,7 +45,10 @@ module MailHandler
           password: password,
           authentication: @authentication,
           enable_starttls_auto: @use_ssl,
-          return_response: save_response
+
+          return_response: save_response,
+          open_timeout: open_timeout,
+          read_timeout: read_timeout
         }
 
         email.delivery_method :smtp, options
