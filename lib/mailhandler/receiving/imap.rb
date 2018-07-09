@@ -115,7 +115,7 @@ module MailHandler
 
       def imap_search(retry_count, options)
         result = mailer.find_emails(what: :last, count: search_options[:count], order: :desc, keys: imap_filter_keys(options), delete_after_find: options[:archive])
-        result.is_a? Array ? result : [result]
+        result.is_a?(Array)? result : [result]
 
       # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
       rescue Net::IMAP::ResponseError, EOFError, NoMethodError => e

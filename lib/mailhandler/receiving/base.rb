@@ -61,7 +61,7 @@ module MailHandler
       def validate_option_values(options)
         if options[:since]
 
-          raise MailHandler::Error, "Incorrect option options[:since]=#{options[:since]}." unless options[:since].is_a? Time
+          raise MailHandler::Error, "Incorrect option options[:since]=#{options[:since]}." unless options[:since].is_a?(Time)
 
         end
 
