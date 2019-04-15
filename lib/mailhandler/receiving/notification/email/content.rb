@@ -3,6 +3,7 @@ require 'mail'
 module MailHandler
   module Receiving
     module Notification
+      # email notification sent
       class EmailContent
         # @param [Symbol] type - notification type
         # @param [Hash] options - search options used for searching for an email
@@ -16,19 +17,15 @@ module MailHandler
           delay = (delay.to_f / 60).round(2)
 
           case type
-
           when :received
-
             mail.subject = "Received - delay was #{delay} minutes"
             mail.body = "Received - delay was #{delay} minutes - search by #{options}"
 
           when :delayed
-
             mail.subject = "Over #{delay} minutes delay"
             mail.body = "Over #{delay} minutes delay - search by #{options}"
 
           else
-
             raise StandardError, "Incorrect type: #{type}"
 
           end

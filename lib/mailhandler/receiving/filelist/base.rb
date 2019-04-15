@@ -2,9 +2,10 @@ require 'fileutils'
 
 # Base filtering class, which is used for reading list of all files based on passed pattern.
 # Patterns to be used can be checked here: http://ruby-doc.org/core-1.9.3/Dir.html
-
 module MailHandler
+  # namespace
   module Receiving
+    # namespace
     module FileHandling
       # if file exists, execute file operation, otherwise return default return value when it doesn't
       def access_file(file, default_return = false)
@@ -14,6 +15,7 @@ module MailHandler
             yield
           rescue StandardError => e
             raise e if File.exist? file
+
             default_return
           end
 
@@ -25,6 +27,7 @@ module MailHandler
       end
     end
 
+    # base filelist
     class FileList
       include FileHandling
 
@@ -37,24 +40,32 @@ module MailHandler
         j = 0
 
         while swapped
-
           swapped = false
           j += 1
 
           (files.size - j).times do |i|
-            file1 = access_file(files[i], false) { File.new(files[i]).ctime }
-            file2 = access_file(files[i + 1], false) { File.new(files[i + 1]).ctime }
+            next unless swap_files?(files[i], files[i + 1])
 
-            next unless file1 && file2 && file1 < file2
             tmp = files[i]
             files[i] = files[i + 1]
             files[i + 1] = tmp
             swapped = true
           end
-
         end
 
         files
+      end
+
+      private
+
+      def swap_files?(current_file, next_file)
+        file1 = get_file(current_file)
+        file2 = get_file(next_file)
+        file1 && file2 && file1 < file2
+      end
+
+      def get_file(file)
+        access_file(file, false) { File.new(file).ctime }
       end
     end
   end

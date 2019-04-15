@@ -5,6 +5,7 @@ require_relative '../../errors'
 module MailHandler
   module Receiving
     module Notification
+      # notification in form of sent email
       class Email
         attr_accessor :sender,
                       :from,
@@ -21,7 +22,7 @@ module MailHandler
           @from = from
           @contacts = to
           init_state
-          set_content_handler(EmailContent.new)
+          change_content_handler(EmailContent.new)
         end
 
         def notify(search)
@@ -30,7 +31,7 @@ module MailHandler
           @current_state.notify(search)
         end
 
-        def set_state(state)
+        def change_state(state)
           @current_state = state
         end
 
@@ -42,7 +43,7 @@ module MailHandler
 
         # Allow users to specify their own content classes.
         # Class must match by methods to the interface of MailHandler::Receiving::Notification::EmailContent
-        def set_content_handler(content_handler)
+        def change_content_handler(content_handler)
           @content_handler = content_handler
         end
 
@@ -55,7 +56,9 @@ module MailHandler
         EMAIL_TYPES = %i[delayed received].freeze
 
         def verify_email_type(type)
-          raise MailHandler::TypeError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}." unless EMAIL_TYPES.include? type
+          return if EMAIL_TYPES.include?(type)
+
+          raise MailHandler::TypeError, "Incorrect type: #{type}, allowed types: #{EMAIL_TYPES}."
         end
       end
     end

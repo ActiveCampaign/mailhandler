@@ -1,0 +1,8 @@
+require: rubocop-rspec
+
+# increase line length since we are checking test files
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 15  

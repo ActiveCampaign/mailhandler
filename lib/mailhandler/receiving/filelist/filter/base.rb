@@ -3,8 +3,11 @@ require_relative '../../../errors'
 
 module MailHandler
   module Receiving
+    # namespace
     class FileList
+      # namespace
       module Filter
+        # base filter for files
         class Base
           attr_accessor :files, :fast_check
 
@@ -36,7 +39,7 @@ module MailHandler
         end
 
         module ByDate
-
+          # filter files by date
           class BaseDate < Base
             def initialize(files, date)
               super(files)
@@ -44,19 +47,21 @@ module MailHandler
             end
           end
 
+          # since date filter
           class Since < BaseDate
             private
 
             def meets_expectation?(file)
-              File.exist?(file)? (File.ctime file) > @date : false
+              File.exist?(file) ? (File.ctime file) > @date : false
             end
           end
 
+          # before date filter
           class Before < Base
             private
 
             def meets_expectation?(file)
-              File.exist?(file)? (File.ctime file) < @date : false
+              File.exist?(file) ? (File.ctime file) < @date : false
             end
           end
         end

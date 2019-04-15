@@ -45,6 +45,7 @@ module MailHandler
         update_search_details
         notify_observers(search)
         break if received
+
         sleep search_frequency
 
       end

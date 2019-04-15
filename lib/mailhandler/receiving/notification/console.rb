@@ -1,6 +1,7 @@
 module MailHandler
   module Receiving
     module Notification
+      # notification in form of console output
       class Console
         def notify(search)
           output_delay Time.now - search.started_at

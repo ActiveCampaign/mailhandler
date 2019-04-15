@@ -7,6 +7,7 @@ require_relative 'filelist/filter/email.rb'
 
 module MailHandler
   module Receiving
+    # folder checking base class
     class FolderChecker < Checker
       include FileHandling
 
@@ -76,7 +77,7 @@ module MailHandler
       end
 
       def move_files(files)
-        files.each { |file| (inbox_folder == archive_folder) ? delete_file(file) : archive_file(file) }
+        files.each { |file| inbox_folder == archive_folder ? delete_file(file) : archive_file(file) }
       end
 
       def parse_email_from_files(files, count)
@@ -94,7 +95,10 @@ module MailHandler
       end
 
       def archive_file(file)
-        access_file(file) { FileUtils.mv("#{inbox_folder}/#{File.basename(file)}", "#{archive_folder}/#{File.basename(file)}") }
+        access_file(file) do
+          FileUtils.mv("#{inbox_folder}/#{File.basename(file)}",
+                       "#{archive_folder}/#{File.basename(file)}")
+        end
       end
 
       def delete_file(file)
@@ -103,7 +107,8 @@ module MailHandler
 
       def verify_mailbox_folders
         raise MailHandler::Error, 'Folder variables are not set.' if inbox_folder.nil? || archive_folder.nil?
-        raise MailHandler::FileError, 'Mailbox folders do not exist.' unless File.directory?(inbox_folder) && File.directory?(archive_folder)
+        raise MailHandler::FileError, 'Mailbox folders do not exist.' unless File.directory?(inbox_folder) &&
+                                                                             File.directory?(archive_folder)
       end
     end
   end

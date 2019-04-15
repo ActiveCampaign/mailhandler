@@ -23,52 +23,46 @@ module MailHandler
         protected
 
         def send_notification_email(type, search)
-          unless notified
+          return if notified
 
-            context.send_email(type, search)
-            notification_fired
-
-          end
+          context.send_email(type, search)
+          notification_fired
         end
       end
 
+      # there was no delay
       class NoDelay < DelayState
         def notify(search)
           if Time.now - search.started_at >= context.min_time_to_notify
-
-            context.set_state(Delay.new(context))
+            context.change_state(Delay.new(context))
             context.notify(search)
-
           end
         end
       end
 
+      # delay happened
       class Delay < DelayState
         def notify(search)
           if search.result
-
-            context.set_state(Received.new(context))
+            context.change_state(Received.new(context))
             context.notify(search)
-
           elsif Time.now - search.started_at >= context.max_time_to_notify
-
-            context.set_state(MaxDelay.new(context))
+            context.change_state(MaxDelay.new(context))
             context.notify(search)
-
           else
-
             send_notification_email(:delayed, search)
-
           end
         end
       end
 
+      # maximum delay checked happened
       class MaxDelay < DelayState
         def notify(search)
           send_notification_email(:delayed, search)
         end
       end
 
+      # no more delays will be fired
       class Received < DelayState
         def notify(search)
           send_notification_email(:received, search)

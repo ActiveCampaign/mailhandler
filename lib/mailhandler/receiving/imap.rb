@@ -4,6 +4,7 @@ require_relative '../errors'
 
 module MailHandler
   module Receiving
+    # in charge of retrieving email by IMAP
     class IMAPChecker < Checker
       attr_accessor :address,
                     :port,
@@ -30,14 +31,16 @@ module MailHandler
       end
 
       def start
-        unless manual_connection_manage
-          init_retriever
-          connect
-        end
+        return if manual_connection_manage
+
+        init_retriever
+        connect
       end
 
       def stop
-        disconnect unless manual_connection_manage
+        return if manual_connection_manage
+
+        disconnect
       end
 
       def connect
@@ -45,21 +48,21 @@ module MailHandler
       end
 
       def disconnect
-        mailer.disconnect unless mailer.imap_connection.disconnected?
+        return if mailer.imap_connection.disconnected?
+
+        mailer.disconnect
       end
 
       # delegate retrieval details to Mail library
+      # set imap settings if they are not set
       def init_retriever
-        # set imap settings if they are not set
-        unless retriever_set?
+        return if retriever_set?
 
-          imap_settings = retriever_settings
+        imap_settings = retriever_settings
 
-          Mail.defaults do
-            retriever_method :imap,
-                             imap_settings
-          end
-
+        Mail.defaults do
+          retriever_method :imap,
+                           imap_settings
         end
       end
 
@@ -81,7 +84,6 @@ module MailHandler
       # archive - Boolean
       # by_recipient - Hash, accepts a hash like: :to => 'igor@example.com'
       AVAILABLE_SEARCH_OPTIONS = %i[
-
         by_subject
         by_content
         since
@@ -114,21 +116,20 @@ module MailHandler
       end
 
       def imap_search(retry_count, options)
-        result = mailer.find_emails(what: :last, count: search_options[:count], order: :desc, keys: imap_filter_keys(options), delete_after_find: options[:archive])
-        result.is_a?(Array)? result : [result]
+        result = mailer.find_emails(what: :last,
+                                    count: search_options[:count],
+                                    order: :desc,
+                                    keys: imap_filter_keys(options),
+                                    delete_after_find: options[:archive])
+        result.is_a?(Array) ? result : [result]
 
       # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
       rescue Net::IMAP::ResponseError, EOFError, NoMethodError => e
         if (retry_count -= 1) >= 0
-
-          puts e
           reconnect
           retry
-
         else
-
           raise e
-
         end
       end
 
@@ -139,29 +140,22 @@ module MailHandler
           case filter_option
 
           when :by_recipient
-
             keys << options[:by_recipient].keys.first.to_s.upcase << options[:by_recipient].values.first
 
           when :by_subject
-
             keys << 'SUBJECT' << options[:by_subject].to_s
 
           when :by_content
-
             keys << 'BODY' << options[:by_content].to_s
 
           when :since
-
             keys << 'SINCE' << Net::IMAP.format_date(options[:since])
 
           when :before
-
             keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
 
           else
-
-            # do nothing
-
+            # type code here
           end
         end
 

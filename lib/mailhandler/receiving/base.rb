@@ -33,10 +33,7 @@ module MailHandler
         @found_emails = []
       end
 
-      private
-
       AVAILABLE_SEARCH_OPTIONS = %i[
-
         by_subject
         by_content
         since
@@ -59,36 +56,45 @@ module MailHandler
       end
 
       def validate_option_values(options)
-        if options[:since]
+        validate_since_option(options)
+        validate_count_option(options)
+        validate_archive_option(options)
+        validate_recipient_option(options)
+      end
 
-          raise MailHandler::Error, "Incorrect option options[:since]=#{options[:since]}." unless options[:since].is_a?(Time)
+      def validate_recipient_option(options)
+        return if options[:by_recipient].nil?
 
-        end
+        error_message = "Incorrect option options[:by_recipient]=#{options[:by_recipient]}."
+        raise MailHandler::Error, error_message unless options[:by_recipient].is_a?(Hash)
+      end
 
-        unless options[:count].nil?
+      def validate_archive_option(options)
+        return if options[:archive].nil?
 
-          count = options[:count]
-          raise MailHandler::Error, "Incorrect option options[:count]=#{options[:count]}." if (count < 0) || (count > 2000)
+        error_message = "Incorrect option options[:archive]=#{options[:archive]}."
+        raise MailHandler::Error, error_message unless [true, false].include?(options[:archive])
+      end
 
-        end
+      def validate_since_option(options)
+        return if options[:since].nil?
 
-        if options[:archive]
+        error_message = "Incorrect option options[:since]=#{options[:since]}."
+        raise MailHandler::Error, error_message unless options[:since].is_a?(Time)
+      end
 
-          raise MailHandler::Error, "Incorrect option options[:archive]=#{options[:archive]}." unless (options[:archive] == true) || (options[:archive] == false)
+      def validate_count_option(options)
+        return if options[:count].nil?
 
-        end
-
-        if options[:by_recipient]
-
-          raise MailHandler::Error, "Incorrect option options[:by_recipient]=#{options[:by_recipient]}." unless options[:by_recipient].is_a?(Hash)
-
-        end
+        count = options[:count]
+        error_message = "Incorrect option options[:count]=#{options[:count]}."
+        raise MailHandler::Error, error_message if (count < 0) || (count > 2000)
       end
 
       def validate_used_options(options)
-        unless (options.keys - available_search_options).empty?
-          raise MailHandler::Error, "#{(options.keys - available_search_options)} - Incorrect search option values, options are #{available_search_options}."
-        end
+        error_message = "#{(options.keys - available_search_options)} - Incorrect search option values,"\
+                                    " options are #{available_search_options}."
+        raise MailHandler::Error, error_message unless (options.keys - available_search_options).empty?
       end
 
       def set_base_search_options

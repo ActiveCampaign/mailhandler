@@ -26,7 +26,8 @@ module Mail
             yield new_message
           end
 
-          imap_connection.uid_store(uid, '+FLAGS', [Net::IMAP::DELETED]) if options[:delete_after_find] && new_message.is_marked_for_delete?
+          imap_connection.uid_store(uid, '+FLAGS', [Net::IMAP::DELETED]) if options[:delete_after_find] &&
+                                                                            new_message.is_marked_for_delete?
           break unless options[:uid].nil?
         end
 
@@ -64,11 +65,7 @@ module Mail
     end
 
     def disconnect
-      if defined?(imap_connection) && imap_connection && !imap_connection.disconnected?
-
-        imap_connection.disconnect
-
-      end
+      imap_connection.disconnect if defined?(imap_connection) && imap_connection && !imap_connection.disconnected?
     end
   end
 end

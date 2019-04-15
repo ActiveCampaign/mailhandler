@@ -33,6 +33,7 @@ module MailHandler
           end
         end
 
+        # filter by email content
         class ByEmailContent < Email
           def initialize(files, content)
             super(files)
@@ -60,6 +61,7 @@ module MailHandler
           end
         end
 
+        # filter by email subject
         class ByEmailSubject < ByEmailContent
           private
 
@@ -72,6 +74,7 @@ module MailHandler
           end
         end
 
+        # filter by email recipient
         class ByEmailRecipient < Email
           def initialize(files, recipient)
             super(files)

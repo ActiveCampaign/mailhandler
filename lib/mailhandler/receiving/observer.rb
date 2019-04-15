@@ -5,7 +5,7 @@ module MailHandler
         @observers = []
       end
 
-      def get_observers()
+      def get_observers
         @observers
       end
 
