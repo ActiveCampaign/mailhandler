@@ -2,8 +2,8 @@ require_relative 'sending/smtp'
 require_relative 'sending/api'
 require_relative 'sending/api_batch'
 
-# Class for sending email, and storing details about the sending.
 module MailHandler
+  # Class for sending email, and storing details about the sending.
   class Sender
     attr_accessor :dispatcher,
                   :sending

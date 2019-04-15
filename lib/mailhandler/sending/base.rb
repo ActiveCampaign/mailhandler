@@ -2,6 +2,7 @@ require_relative '../errors'
 
 module MailHandler
   module Sending
+    # email sending handler class
     class Sender
       attr_reader :type
 
@@ -12,7 +13,9 @@ module MailHandler
       protected
 
       def verify_email(email)
-        raise MailHandler::TypeError, "Invalid type error, only #{allowed_email_type} object type for sending allowed." unless email.is_a?(allowed_email_type)
+        return if email.is_a?(allowed_email_type)
+
+        raise MailHandler::TypeError, "Invalid type error, only #{allowed_email_type} object type for sending allowed."
       end
 
       private

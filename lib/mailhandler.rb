@@ -71,11 +71,9 @@ module MailHandler
     # @param [Receiving::Object] receiver
     # @param [Array<Receiving::Notification::Class>] notifications
     def add_receiving_notifications(receiver, notifications)
-      if (notifications - NOTIFICATION_TYPES.keys).empty?
+      return unless (notifications - NOTIFICATION_TYPES.keys).empty?
 
-        notifications.each { |n| receiver.add_observer(NOTIFICATION_TYPES[n].new) }
-
-      end
+      notifications.each { |n| receiver.add_observer(NOTIFICATION_TYPES[n].new) }
     end
 
     def verify_type(type, types)

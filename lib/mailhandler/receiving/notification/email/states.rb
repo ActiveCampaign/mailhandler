@@ -4,6 +4,7 @@ require_relative '../../../errors'
 module MailHandler
   module Receiving
     module Notification
+      # base state
       class DelayState
         attr_accessor :context,
                       :notified
@@ -33,10 +34,10 @@ module MailHandler
       # there was no delay
       class NoDelay < DelayState
         def notify(search)
-          if Time.now - search.started_at >= context.min_time_to_notify
-            context.change_state(Delay.new(context))
-            context.notify(search)
-          end
+          return unless Time.now - search.started_at >= context.min_time_to_notify
+
+          context.change_state(Delay.new(context))
+          context.notify(search)
         end
       end
 

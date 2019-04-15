@@ -1,4 +1,5 @@
 module MailHandler
+  # base error
   class Error < StandardError
     def initialize(message = nil)
       super(message)

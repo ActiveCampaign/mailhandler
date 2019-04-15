@@ -1,11 +1,12 @@
 module MailHandler
   module Receiving
+    # observer handler
     module Observer
       def init_observer
         @observers = []
       end
 
-      def get_observers
+      def observers
         @observers
       end
 

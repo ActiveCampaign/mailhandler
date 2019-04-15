@@ -4,6 +4,7 @@ require_relative 'receiving/observer'
 require_relative 'receiving/mail.rb'
 
 module MailHandler
+  # handling receiving email
   class Receiver
     include Receiving::Observer
 
@@ -40,14 +41,9 @@ module MailHandler
       checker.start
 
       until search_time_expired?
-
-        received = checker.find(options)
-        update_search_details
-        notify_observers(search)
-        break if received
+        break if single_search(options)
 
         sleep search_frequency
-
       end
 
       notify_observers(search)
@@ -57,6 +53,13 @@ module MailHandler
     end
 
     private
+
+    def single_search(options)
+      received = checker.find(options)
+      update_search_details
+      notify_observers(search)
+      received
+    end
 
     def init_search_details(options)
       @search = Search.new

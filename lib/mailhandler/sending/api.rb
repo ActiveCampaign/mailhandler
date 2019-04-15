@@ -4,6 +4,7 @@ require_relative 'base.rb'
 
 module MailHandler
   module Sending
+    # sending email by Postmark API
     class PostmarkAPISender < Sender
       attr_accessor :host,
                     :api_token,
@@ -35,10 +36,9 @@ module MailHandler
       def setup_sending_client
         # clearing cache so valid host is accepted, and not the cached one
         Postmark::HttpClient.instance_variable_set('@http', nil)
-        Postmark::ApiClient.new(api_token, http_open_timeout: http_open_timeout, http_read_timeout: http_read_timeout, host: host, secure: @use_ssl)
+        Postmark::ApiClient.new(api_token, http_open_timeout: http_open_timeout, http_read_timeout: http_read_timeout,
+                                           host: host, secure: @use_ssl)
       end
-
-      protected
 
       DEFAULT_HOST = 'api.postmarkapp.com'.freeze
     end

@@ -16,7 +16,7 @@ module MailHandler
         # print to screen delay length
         def output_delay(delay)
           delay_seconds = delay.to_i
-          output(delay_seconds) if [0, 1].include? (delay_seconds % Seconds::TO_SHOW)
+          output(delay_seconds) if [0, 1].include?(delay_seconds % Seconds::TO_SHOW)
         end
 
         # print to screen delay length
