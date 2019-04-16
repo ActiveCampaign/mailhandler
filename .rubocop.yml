@@ -9,3 +9,18 @@ Metrics/MethodLength:
 
 Metrics/ClassLength:
   Max: 120
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/NestedGroups:
+ Max: 7
+
+Metrics/BlockLength:
+  Max: 200
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 10

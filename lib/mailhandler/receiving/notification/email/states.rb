@@ -29,6 +29,11 @@ module MailHandler
           context.send_email(type, search)
           notification_fired
         end
+
+        def change_notification_state(search, state)
+          context.change_state(state)
+          context.notify(search)
+        end
       end
 
       # there was no delay
@@ -36,8 +41,7 @@ module MailHandler
         def notify(search)
           return unless Time.now - search.started_at >= context.min_time_to_notify
 
-          context.change_state(Delay.new(context))
-          context.notify(search)
+          change_notification_state(search, Delay.new(context))
         end
       end
 
@@ -45,14 +49,18 @@ module MailHandler
       class Delay < DelayState
         def notify(search)
           if search.result
-            context.change_state(Received.new(context))
-            context.notify(search)
-          elsif Time.now - search.started_at >= context.max_time_to_notify
-            context.change_state(MaxDelay.new(context))
-            context.notify(search)
+            change_notification_state(search, Received.new(context))
+          elsif max_time_to_notify?(search)
+            change_notification_state(search, MaxDelay.new(context))
           else
             send_notification_email(:delayed, search)
           end
+        end
+
+        private
+
+        def max_time_to_notify?(search)
+          Time.now - search.started_at >= context.max_time_to_notify
         end
       end
 

@@ -81,25 +81,19 @@ module MailHandler
     end
 
     CHECKER_TYPES = {
-
       folder: Receiving::FolderChecker,
       imap: Receiving::IMAPChecker
-
     }.freeze
 
     SENDER_TYPES = {
-
       postmark_api: Sending::PostmarkAPISender,
       postmark_batch_api: Sending::PostmarkBatchAPISender,
       smtp: Sending::SMTPSender
-
     }.freeze
 
     NOTIFICATION_TYPES = {
-
       console: Receiving::Notification::Console,
       email: Receiving::Notification::Email
-
     }.freeze
   end
 end

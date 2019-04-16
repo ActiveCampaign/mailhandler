@@ -1,13 +1,17 @@
 require 'spec_helper'
 
 describe MailHandler::Sender do
-  subject { MailHandler::Sender }
+  subject { described_class }
 
   let(:send_duration) { 3 }
   let(:dispatcher) do
-    dispatcher = double('Dispatcher')
+    dispatcher = instance_double('Dispatcher')
 
-    allow(dispatcher).to receive(:send) { sleep send_duration; 'Sent' }
+    allow(dispatcher).to receive(:send) do
+      sleep send_duration
+      'Sent'
+    end
+
     dispatcher
   end
   let(:mail) do

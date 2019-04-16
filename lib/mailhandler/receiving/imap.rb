@@ -102,10 +102,8 @@ module MailHandler
 
       def retriever_settings
         {
-          address: address,
-          port: port,
-          user_name: username,
-          password: password,
+          address: address, port: port,
+          user_name: username, password: password,
           authentication: authentication,
           enable_ssl: use_ssl
         }
@@ -125,7 +123,7 @@ module MailHandler
 
       # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times
       rescue Net::IMAP::ResponseError, EOFError, NoMethodError => e
-        if (retry_count -= 1) >= 0
+        if (retry_count -= 1) >= 0 # rubocop:disable all
           reconnect
           retry
         else
@@ -135,31 +133,41 @@ module MailHandler
 
       def imap_filter_keys(options)
         keys = []
-
-        options.keys.each do |filter_option|
-          case filter_option
-
-          when :by_recipient
-            keys << options[:by_recipient].keys.first.to_s.upcase << options[:by_recipient].values.first
-
-          when :by_subject
-            keys << 'SUBJECT' << options[:by_subject].to_s
-
-          when :by_content
-            keys << 'BODY' << options[:by_content].to_s
-
-          when :since
-            keys << 'SINCE' << Net::IMAP.format_date(options[:since])
-
-          when :before
-            keys << 'BEFORE' << Net::IMAP.format_date(options[:before])
-
-          else
-            # type code here
-          end
-        end
-
+        options.each { |key, value| keys += retrieve_filter_setting(key, value) }
         keys.empty? ? nil : keys
+      end
+
+      def retrieve_filter_setting(key, value)
+        case key
+        when :by_recipient
+          imap_recipient_search_pair(value)
+
+        when :by_subject
+          imap_string_search_pair('SUBJECT', value)
+
+        when :by_content
+          imap_string_search_pair('BODY', value)
+
+        when :since
+          imap_date_search_pair('SINCE', value)
+
+        when :before
+          imap_date_search_pair('BEFORE', value)
+        else
+          []
+        end
+      end
+
+      def imap_recipient_search_pair(value)
+        [value.keys.first.to_s.upcase, value.values.first]
+      end
+
+      def imap_string_search_pair(name, value)
+        [name, value.to_s]
+      end
+
+      def imap_date_search_pair(name, value)
+        [name, Net::IMAP.format_date(value)]
       end
     end
   end

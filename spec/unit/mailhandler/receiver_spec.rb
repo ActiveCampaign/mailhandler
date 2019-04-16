@@ -2,21 +2,26 @@ require 'spec_helper'
 
 describe MailHandler::Receiver do
   context 'valid receiver' do
+    subject(:receiver) { described_class.new(checker) }
+
     let(:default_search_option) { { by_subject: 'test' } }
     let(:receiving_duration) { 5 }
     let(:found_email) { Mail.new { subject 'test email' } }
     let(:checker) do
-      checker = double('Checker')
+      checker = instance_double('Checker')
 
-      allow(checker).to receive(:find) { sleep receiving_duration; true }
-      allow(checker).to receive(:search_result) { true }
+      allow(checker).to receive(:find) do
+        sleep receiving_duration
+        true
+      end
+
+      allow(checker).to receive(:search_result).and_return(true)
       allow(checker).to receive(:found_emails) { [found_email] }
-      allow(checker).to receive(:reset_found_emails) { [] }
-      allow(checker).to receive(:start) { nil }
-      allow(checker).to receive(:stop) { nil }
+      allow(checker).to receive(:reset_found_emails).and_return([])
+      allow(checker).to receive(:start).and_return(nil)
+      allow(checker).to receive(:stop).and_return(nil)
       checker
     end
-    subject(:receiver) { MailHandler::Receiver.new(checker) }
 
     context 'att readers' do
       it { is_expected.to respond_to(:checker) }
@@ -31,7 +36,7 @@ describe MailHandler::Receiver do
     end
 
     it 'create' do
-      is_expected.to be_kind_of MailHandler::Receiver
+      expect(receiver).to be_kind_of described_class
     end
 
     it '.find_email' do
@@ -54,14 +59,17 @@ describe MailHandler::Receiver do
 
     context '.search' do
       let(:checker) do
-        checker = double('Checker')
+        checker = instance_double('Checker')
 
-        allow(checker).to receive(:find) { sleep 1; false }
-        allow(checker).to receive(:search_result) { false }
-        allow(checker).to receive(:found_emails) { [] }
-        allow(checker).to receive(:reset_found_emails) { [] }
-        allow(checker).to receive(:start) { nil }
-        allow(checker).to receive(:stop) { nil }
+        allow(checker).to receive(:find) do
+          sleep 1
+          false
+        end
+        allow(checker).to receive(:search_result).and_return(false)
+        allow(checker).to receive(:found_emails).and_return([])
+        allow(checker).to receive(:reset_found_emails).and_return([])
+        allow(checker).to receive(:start).and_return(nil)
+        allow(checker).to receive(:stop).and_return(nil)
         checker
       end
 

@@ -1,8 +1,9 @@
 module Mail
+  # IMAP class patch to better manage connection and search of emails
   class IMAP
     attr_accessor :imap_connection
 
-    def find_emails(options = {}, &block)
+    def find_emails(options = {}, &block) # rubocop:disable all
       options = validate_options(options)
       options[:read_only] ? imap_connection.examine(options[:mailbox]) : imap_connection.select(options[:mailbox])
       uids = imap_connection.uid_search(options[:keys])
@@ -13,7 +14,6 @@ module Mail
                        (options[:what].to_sym != :last && options[:order].to_sym == :desc)
 
       if block_given?
-
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
           fetchdata = imap_connection.uid_fetch(uid, ['RFC822'])[0]
@@ -30,11 +30,8 @@ module Mail
                                                                             new_message.is_marked_for_delete?
           break unless options[:uid].nil?
         end
-
         imap_connection.expunge if options[:delete_after_find]
-
       else
-
         emails = []
 
         uids.each do |uid|
@@ -47,12 +44,11 @@ module Mail
 
         imap_connection.expunge if options[:delete_after_find]
         emails.size == 1 && options[:count] == 1 ? emails.first : emails
-
       end
     end
 
     # Start an IMAP session
-    def connect(_config = Mail::Configuration.instance)
+    def connect(_config = Mail::Configuration.instance) # rubocop:disable all
       @imap_connection = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
 
       if settings[:authentication].nil?

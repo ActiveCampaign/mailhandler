@@ -72,8 +72,12 @@ module MailHandler
       search.finished_at = Time.now
       search.duration = search.finished_at - search.started_at
       search.result = checker.search_result
+      update_search_email_details
+    end
+
+    def update_search_email_details
       search.emails = checker.found_emails
-      search.email = search.emails.first
+      search.email = checker.found_emails.first
     end
 
     def search_time_expired?

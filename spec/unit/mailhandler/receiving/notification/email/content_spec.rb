@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MailHandler::Receiving::Notification::EmailContent do
-  subject { MailHandler::Receiving::Notification::EmailContent.new }
+  subject(:notification_email_content) { described_class.new }
 
   let(:to) { 'john@example.com' }
   let(:from) { 'igor@example.com' }
@@ -9,33 +9,35 @@ describe MailHandler::Receiving::Notification::EmailContent do
 
   context '.email_received' do
     it 'create email' do
-      expect(subject.retrieve(:received, options, 60, from, to)).to be_kind_of Mail::Message
+      expect(notification_email_content.retrieve(:received, options, 60, from, to)).to be_kind_of Mail::Message
     end
 
     context 'email content' do
       it 'sender' do
-        expect(subject.retrieve(:received, options, 60, from, to)[:from].to_s).to eq from
+        expect(notification_email_content.retrieve(:received, options, 60, from, to)[:from].to_s).to eq from
       end
 
       it 'single recipient' do
-        expect(subject.retrieve(:received, options, 60, from, to)[:to].to_s).to eq to
+        expect(notification_email_content.retrieve(:received, options, 60, from, to)[:to].to_s).to eq to
       end
 
       it 'multiple recipients' do
         to = 'john1@example.com, john2@example.com'
-        expect(subject.retrieve(:received, options, 60, from, to)[:to].to_s).to eq to
+        expect(notification_email_content.retrieve(:received, options, 60, from, to)[:to].to_s).to eq to
       end
 
-      it 'subject - 1 minute delay' do
-        expect(subject.retrieve(:received, options, 60, from, to).subject).to eq 'Received - delay was 1.0 minutes'
+      it 'notification_email_content - 1 minute delay' do
+        expect(notification_email_content.retrieve(:received, options, 60, from, to).subject)
+          .to eq 'Received - delay was 1.0 minutes'
       end
 
-      it 'subject - 1.5 minute delay' do
-        expect(subject.retrieve(:received, options, 90, from, to).subject).to eq 'Received - delay was 1.5 minutes'
+      it 'notification_email_content - 1.5 minute delay' do
+        expect(notification_email_content.retrieve(:received, options, 90, from, to).subject)
+          .to eq 'Received - delay was 1.5 minutes'
       end
 
       it 'body' do
-        expect(subject.retrieve(:received, options, 90, from, to).body.to_s)
+        expect(notification_email_content.retrieve(:received, options, 90, from, to).body.to_s)
           .to eq "Received - delay was 1.5 minutes - search by #{options}"
       end
     end
@@ -43,28 +45,30 @@ describe MailHandler::Receiving::Notification::EmailContent do
 
   context '.email_delayed' do
     it 'sender' do
-      expect(subject.retrieve(:delayed, options, 60, from, to)[:from].to_s).to eq from
+      expect(notification_email_content.retrieve(:delayed, options, 60, from, to)[:from].to_s).to eq from
     end
 
     it 'single recipient' do
-      expect(subject.retrieve(:delayed, options, 60, from, to)[:to].to_s).to eq to
+      expect(notification_email_content.retrieve(:delayed, options, 60, from, to)[:to].to_s).to eq to
     end
 
     it 'multiple recipients' do
       to = 'john1@example.com, john2@example.com'
-      expect(subject.retrieve(:delayed, options, 60, from, to)[:to].to_s).to eq to
+      expect(notification_email_content.retrieve(:delayed, options, 60, from, to)[:to].to_s).to eq to
     end
 
-    it 'subject - 1 minute delay' do
-      expect(subject.retrieve(:delayed, options, 60, from, to).subject).to eq 'Over 1.0 minutes delay'
+    it 'notification_email_content - 1 minute delay' do
+      expect(notification_email_content.retrieve(:delayed, options, 60, from, to).subject)
+        .to eq 'Over 1.0 minutes delay'
     end
 
-    it 'subject - 1.5 minute delay' do
-      expect(subject.retrieve(:delayed, options, 90, from, to).subject).to eq 'Over 1.5 minutes delay'
+    it 'notification_email_content - 1.5 minute delay' do
+      expect(notification_email_content.retrieve(:delayed, options, 90, from, to).subject)
+        .to eq 'Over 1.5 minutes delay'
     end
 
     it 'body' do
-      expect(subject.retrieve(:delayed, options, 90, from, to).body.to_s)
+      expect(notification_email_content.retrieve(:delayed, options, 90, from, to).body.to_s)
         .to eq "Over 1.5 minutes delay - search by #{options}"
     end
   end

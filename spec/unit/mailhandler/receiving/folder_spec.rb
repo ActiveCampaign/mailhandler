@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe MailHandler::Receiving::FolderChecker do
-  subject { MailHandler::Receiving::FolderChecker.new }
+  subject(:folder_checker) { described_class.new }
 
   it '.create' do
-    is_expected.to be_kind_of MailHandler::Receiving::Checker
+    expect(folder_checker).to be_kind_of MailHandler::Receiving::Checker
   end
 
   context 'search emails' do
-    let(:checker) { MailHandler::Receiving::FolderChecker.new(data_folder, data_folder) }
+    let(:checker) { described_class.new(data_folder, data_folder) }
 
     context '.find email' do
       context 'search options' do
@@ -80,7 +80,7 @@ describe MailHandler::Receiving::FolderChecker do
           expect(checker.find(by_subject: 'test123')).to be false
         end
 
-        it 'by subject' do
+        it 'by folder_checker' do
           checker.find(by_subject: 'test123')
           expect(checker.found_emails).to be_empty
         end
@@ -120,7 +120,7 @@ describe MailHandler::Receiving::FolderChecker do
           expect(checker.find(by_subject: mail1.subject)).to be true
         end
 
-        it 'by subject - single' do
+        it 'by folder_checker - single' do
           checker.find(by_subject: mail1.subject)
 
           aggregate_failures 'found mail details' do
@@ -135,7 +135,7 @@ describe MailHandler::Receiving::FolderChecker do
           expect(checker.found_emails.size).to be 1
         end
 
-        it 'by subject - multiple' do
+        it 'by folder_checker - multiple' do
           checker.find(by_subject: 'test')
 
           aggregate_failures 'found mail details' do
@@ -155,22 +155,26 @@ describe MailHandler::Receiving::FolderChecker do
           expect(checker.found_emails.size).to be 4
         end
 
-        it 'by recipient' do
-          checker.find(by_recipient: { to: 'igor1@example.com' })
-          expect(checker.found_emails.size).to be 1
+        context 'by recipient' do
+          it 'check by one recipient' do
+            checker.find(by_recipient: { to: 'igor1@example.com' })
+            expect(checker.found_emails.size).to be 1
+          end
 
-          checker.find(by_recipient: { to: 'igor2@example.com' })
-          expect(checker.found_emails.size).to be 1
+          it 'check by other recipient' do
+            checker.find(by_recipient: { to: 'igor2@example.com' })
+            expect(checker.found_emails.size).to be 1
+          end
         end
 
         context 'unicode' do
-          it 'by subject - cyrillic' do
+          it 'by folder_checker - cyrillic' do
             skip
             checker.find(by_subject: 'Е-маил пример')
             expect(checker.found_emails.size).to be 1
           end
 
-          it 'by subject - german' do
+          it 'by folder_checker - german' do
             skip
             checker.find(by_subject: 'möglich')
             expect(checker.found_emails.size).to be 1
@@ -178,11 +182,11 @@ describe MailHandler::Receiving::FolderChecker do
         end
 
         context 'archiving emails' do
-          before(:each) do
+          before do
             FileUtils.mkdir "#{data_folder}/checked" unless Dir.exist? "#{data_folder}/checked"
           end
 
-          after(:each) do
+          after do
             FileUtils.rm_r "#{data_folder}/checked", force: false if Dir.exist? data_folder.to_s
           end
 
@@ -193,22 +197,32 @@ describe MailHandler::Receiving::FolderChecker do
             mail
           end
 
-          let(:checker_archive) { MailHandler::Receiving::FolderChecker.new(data_folder, "#{data_folder}/checked") }
+          let(:checker_archive) { described_class.new(data_folder, "#{data_folder}/checked") }
 
-          it 'to same folder - delete' do
-            checker.find(by_subject: mail.subject, archive: true)
-            expect(checker.found_emails.size).to be 1
+          context 'to same folder' do
+            it 'delete' do
+              checker.find(by_subject: mail.subject, archive: true)
+              expect(checker.found_emails.size).to be 1
+            end
 
-            checker.find(by_subject: mail.subject, archive: true)
-            expect(checker.found_emails).to be_empty
+            it 'delete all' do
+              checker.find(by_subject: mail.subject, archive: true)
+              checker.find(by_subject: mail.subject, archive: true)
+              expect(checker.found_emails).to be_empty
+            end
           end
 
-          it 'to separate folder' do
-            checker_archive.find(by_subject: mail.subject, archive: true)
-            expect(checker_archive.found_emails.size).to be 1
+          context 'to separate folder' do
+            it 'delete' do
+              checker_archive.find(by_subject: mail.subject, archive: true)
+              expect(checker_archive.found_emails.size).to be 1
+            end
 
-            checker_archive.find(by_subject: mail.subject, archive: true)
-            expect(checker_archive.found_emails).to be_empty
+            it 'delete all' do
+              checker_archive.find(by_subject: mail.subject, archive: true)
+              checker_archive.find(by_subject: mail.subject, archive: true)
+              expect(checker_archive.found_emails).to be_empty
+            end
           end
         end
       end
@@ -217,12 +231,12 @@ describe MailHandler::Receiving::FolderChecker do
 
   context 'invalid folders' do
     it 'inbox folder' do
-      checker = MailHandler::Receiving::FolderChecker.new('test', data_folder)
+      checker = described_class.new('test', data_folder)
       expect { checker.find count: 1 }.to raise_error MailHandler::FileError
     end
 
     it 'archive folder' do
-      checker = MailHandler::Receiving::FolderChecker.new(data_folder, 'test')
+      checker = described_class.new(data_folder, 'test')
       expect { checker.find count: 1 }.to raise_error MailHandler::FileError
     end
   end

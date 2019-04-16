@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe MailHandler::Sending::PostmarkAPISender do
-  subject { MailHandler::Sending::PostmarkAPISender }
+  subject(:postmark_api_sender) { described_class }
 
   let(:api_token) { '122878782' }
 
   it 'create' do
-    sender = subject.new(api_token)
+    sender = postmark_api_sender.new(api_token)
 
     aggregate_failures 'init details' do
       expect(sender.api_token).to eq api_token
@@ -17,13 +17,13 @@ describe MailHandler::Sending::PostmarkAPISender do
   end
 
   it '.send - invalid auth' do
-    sender = subject.new(api_token)
+    sender = postmark_api_sender.new(api_token)
     expect { sender.send(Mail.new) }.to raise_error Postmark::InvalidApiKeyError
   end
 
   context 'invalid sending object' do
     it '.send' do
-      sender = subject.new(api_token)
+      sender = postmark_api_sender.new(api_token)
       expect { sender.send('test') }.to raise_error StandardError
     end
   end
