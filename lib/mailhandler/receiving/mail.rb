@@ -3,6 +3,9 @@ module Mail
   class IMAP
     attr_accessor :imap_connection
 
+    # fetch emails with different flag, to make it work with icloud
+    FETCH_EMAIL_FLAG = "BODY[]" #"RFC822"
+
     def find_emails(options = {}, &block) # rubocop:disable all
       options = validate_options(options)
       options[:read_only] ? imap_connection.examine(options[:mailbox]) : imap_connection.select(options[:mailbox])
@@ -36,8 +39,8 @@ module Mail
 
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
-          fetchdata = imap_connection.uid_fetch(uid, ['RFC822'])[0]
-          emails << Mail.new(fetchdata.attr['RFC822'])
+          fetchdata = imap_connection.uid_fetch(uid, [FETCH_EMAIL_FLAG])[0]
+          emails << Mail.new(fetchdata.attr[FETCH_EMAIL_FLAG])
           imap_connection.uid_store(uid, '+FLAGS', [Net::IMAP::DELETED]) if options[:delete_after_find]
           break unless options[:uid].nil?
         end
