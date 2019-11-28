@@ -1,10 +1,9 @@
+# frozen_string_literal: true
+
 module Mail
   # IMAP class patch to better manage connection and search of emails
   class IMAP
     attr_accessor :imap_connection
-
-    # fetch emails with different flag, to make it work with icloud
-    FETCH_EMAIL_FLAG = "BODY[]" #"RFC822"
 
     def find_emails(options = {}, &block) # rubocop:disable all
       options = validate_options(options)
@@ -19,8 +18,7 @@ module Mail
       if block_given?
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
-          fetchdata = imap_connection.uid_fetch(uid, ['RFC822'])[0]
-          new_message = Mail.new(fetchdata.attr['RFC822'])
+          new_message = retrieve_email_content(uid, options[:fetch_type])
           new_message.mark_for_delete = true if options[:delete_after_find]
 
           if block.arity == 3
@@ -39,8 +37,7 @@ module Mail
 
         uids.each do |uid|
           uid = options[:uid].to_i unless options[:uid].nil?
-          fetchdata = imap_connection.uid_fetch(uid, [FETCH_EMAIL_FLAG])[0]
-          emails << Mail.new(fetchdata.attr[FETCH_EMAIL_FLAG])
+          emails << retrieve_email_content(uid, options[:fetch_type])
           imap_connection.uid_store(uid, '+FLAGS', [Net::IMAP::DELETED]) if options[:delete_after_find]
           break unless options[:uid].nil?
         end
@@ -65,6 +62,45 @@ module Mail
 
     def disconnect
       imap_connection.disconnect if defined?(imap_connection) && imap_connection && !imap_connection.disconnected?
+    end
+
+    private
+
+    # fetch emails with different flag
+    # to make it work with icloud
+    FETCH_FLAG = {
+      body: 'BODY[]',
+      rfc: 'RFC822',
+      envelope: 'ENVELOPE'
+    }.freeze
+
+    def retrieve_email_content(uid, flag_type = :body)
+      case flag_type
+      when :body
+        retrieve_email_content_by_body(uid)
+      when :envelope
+        retrieve_email_content_by_envelope(uid)
+
+      else
+        retrieve_email_content_by_body(uid)
+      end
+    end
+
+    def retrieve_email_content_by_body(uid)
+      fetchdata = retrieve_fetch_type_data(FETCH_FLAG[:body], uid)
+      Mail.new(fetchdata)
+    end
+
+    def retrieve_email_content_by_envelope(uid)
+      fetchdata = retrieve_fetch_type_data(FETCH_FLAG[:envelope], uid)
+      mail = Mail.new
+      mail.subject = fetchdata.subject
+      mail
+    end
+
+    def retrieve_fetch_type_data(fetch_type, uid)
+      fetchdata = imap_connection.uid_fetch(uid, fetch_type)[0]
+      fetchdata.attr[fetch_type]
     end
   end
 end

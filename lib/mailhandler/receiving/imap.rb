@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mail'
 require_relative 'base.rb'
 require_relative '../errors'
@@ -92,6 +94,7 @@ module MailHandler
         archive
         by_recipient
         fast_check
+        fetch_type
       ].freeze
 
       RETRY_ON_ERROR_COUNT = 3
@@ -118,7 +121,7 @@ module MailHandler
                                     count: search_options[:count],
                                     order: :desc,
                                     keys: imap_filter_keys(options),
-                                    delete_after_find: options[:archive])
+                                    delete_after_find: options[:archive], fetch_type: options[:fetch_type])
         result.is_a?(Array) ? result : [result]
 
       # Silently ignore IMAP search errors, [RETRY_ON_ERROR_COUNT] times

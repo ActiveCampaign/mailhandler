@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe MailHandler::Receiver do
@@ -57,7 +59,7 @@ describe MailHandler::Receiver do
       end
     end
 
-    context '.search' do
+    describe '.search' do
       let(:checker) do
         checker = instance_double('Checker')
 

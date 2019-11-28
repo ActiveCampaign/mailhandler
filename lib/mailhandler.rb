@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'mailhandler/sender'
 require_relative 'mailhandler/receiver'
 

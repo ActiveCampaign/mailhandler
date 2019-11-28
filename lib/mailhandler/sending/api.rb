@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mail'
 require 'postmark'
 require_relative 'base.rb'

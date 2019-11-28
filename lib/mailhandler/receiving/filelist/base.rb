@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 # Base filtering class, which is used for reading list of all files based on passed pattern.

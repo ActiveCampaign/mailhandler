@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe MailHandler::Sending::SMTPSender do
   subject(:smtp_sender) { described_class }
 
-  context '.send' do
+  describe '.send' do
     context 'invalid' do
       it 'incorrect mail type' do
         sender = smtp_sender.new
@@ -12,7 +14,7 @@ describe MailHandler::Sending::SMTPSender do
     end
   end
 
-  context '.new' do
+  describe '.new' do
     context 'smtp timeouts' do
       it 'open' do
         sender = smtp_sender.new

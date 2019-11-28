@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe MailHandler::Receiving::FolderChecker do
@@ -10,7 +12,7 @@ describe MailHandler::Receiving::FolderChecker do
   context 'search emails' do
     let(:checker) { described_class.new(data_folder, data_folder) }
 
-    context '.find email' do
+    describe '.find email' do
       context 'search options' do
         it 'by multiple search options' do
           time = Time.now

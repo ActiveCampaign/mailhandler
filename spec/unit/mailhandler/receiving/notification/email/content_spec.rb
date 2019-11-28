@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe MailHandler::Receiving::Notification::EmailContent do
@@ -7,7 +9,7 @@ describe MailHandler::Receiving::Notification::EmailContent do
   let(:from) { 'igor@example.com' }
   let(:options) { { test: 'test' } }
 
-  context '.email_received' do
+  describe '.email_received' do
     it 'create email' do
       expect(notification_email_content.retrieve(:received, options, 60, from, to)).to be_kind_of Mail::Message
     end
@@ -43,7 +45,7 @@ describe MailHandler::Receiving::Notification::EmailContent do
     end
   end
 
-  context '.email_delayed' do
+  describe '.email_delayed' do
     it 'sender' do
       expect(notification_email_content.retrieve(:delayed, options, 60, from, to)[:from].to_s).to eq from
     end

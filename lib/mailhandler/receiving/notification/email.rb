@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'email/content'
 require_relative 'email/states'
 require_relative '../../errors'

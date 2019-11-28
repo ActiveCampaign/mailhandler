@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'receiving/folder'
 require_relative 'receiving/imap'
 require_relative 'receiving/observer'
