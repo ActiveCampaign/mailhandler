@@ -44,7 +44,6 @@ module MailHandler
 
       until search_time_expired?
         break if single_search(options)
-
         sleep search_frequency
       end
 
@@ -77,13 +76,17 @@ module MailHandler
       update_search_email_details
     end
 
+    def search_details_set?
+      !search.duration.nil?
+    end
+
     def update_search_email_details
       search.emails = checker.found_emails
       search.email = checker.found_emails.first
     end
 
     def search_time_expired?
-      (Time.now - search.started_at) > @max_search_duration
+      ((Time.now - search.started_at) > @max_search_duration) && search_details_set?
     end
   end
 end
