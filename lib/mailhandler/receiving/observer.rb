@@ -18,11 +18,11 @@ module MailHandler
       end
 
       def delete_observer(observer)
-        @observers&.delete(observer)
+        @observers.delete(observer) if @observers
       end
 
       def notify_observers(search)
-        @observers&.each { |observer| observer.notify(search) }
+        @observers.each { |observer| observer.notify(search) } if @observers
       end
     end
   end
