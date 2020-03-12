@@ -90,7 +90,7 @@ module MailHandler
 
         count = options[:count]
         error_message = "Incorrect option options[:count]=#{options[:count]}."
-        raise MailHandler::Error, error_message if count.negative? || (count > 2000)
+        raise MailHandler::Error, error_message if (count <0) || (count > 2000)
       end
 
       def validate_used_options(options)
