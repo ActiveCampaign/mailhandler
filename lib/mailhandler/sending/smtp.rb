@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'net/imap'
 require_relative 'base'
 
 module MailHandler
@@ -23,7 +22,7 @@ module MailHandler
         @type = :smtp
         @authentication = 'plain'
         @use_ssl = false
-        @save_response = false
+        @save_response = true
 
         @open_timeout = 60
         @read_timeout = 60
@@ -35,10 +34,31 @@ module MailHandler
         save_response ? email.deliver! : email.deliver
       end
 
+      def send_raw_email(text_email, smtp_from, smtp_to)
+        response = init_net_smtp.start(domain, username, password, authentication) do |smtp|
+          smtp.send_message(text_email, smtp_from, smtp_to)
+        end
+
+        save_response ? response : nil
+      end
+
       private
 
+      def init_net_smtp
+        sending = Net::SMTP.new(address, port)
+        sending.read_timeout = read_timeout
+        sending.open_timeout = open_timeout
+        sending.enable_starttls_auto if use_ssl
+        sending
+      end
+
       def configure_sending(email)
-        options = {
+        email.delivery_method :smtp, delivery_options
+        email
+      end
+
+      def delivery_options
+        {
           address: address,
           port: port,
           domain: domain,
@@ -51,9 +71,6 @@ module MailHandler
           open_timeout: open_timeout,
           read_timeout: read_timeout
         }
-
-        email.delivery_method :smtp, options
-        email
       end
     end
   end

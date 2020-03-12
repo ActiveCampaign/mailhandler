@@ -28,7 +28,7 @@ describe MailHandler::Sending::SMTPSender do
     end
 
     it 'save response' do
-      expect(smtp_sender.new.save_response).to be false
+      expect(smtp_sender.new.save_response).to be true
     end
 
     it 'use ssl' do

@@ -2,8 +2,8 @@
 
 require_relative 'receiving/folder'
 require_relative 'receiving/imap'
+require_relative 'extensions/mail/imap'
 require_relative 'receiving/observer'
-require_relative 'receiving/mail.rb'
 
 module MailHandler
   # handling receiving email
@@ -44,6 +44,7 @@ module MailHandler
 
       until search_time_expired?
         break if single_search(options)
+
         sleep search_frequency
       end
 

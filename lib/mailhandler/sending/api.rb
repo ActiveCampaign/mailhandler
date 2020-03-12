@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'mail'
 require 'postmark'
 require_relative 'base.rb'
 
@@ -11,18 +10,19 @@ module MailHandler
       attr_accessor :host,
                     :api_token,
                     :use_ssl,
-                    :client,
                     :http_open_timeout,
-                    :http_read_timeout
+                    :http_read_timeout,
+                    :client
 
       def initialize(api_token = nil)
         @type = :postmark_api
-        @host = DEFAULT_HOST
+        @host = DEFAULTS[:host]
         @api_token = api_token
         @use_ssl = false
 
-        @http_open_timeout = 15
-        @http_read_timeout = 15
+        @http_open_timeout = DEFAULTS[:open_timeout]
+        @http_read_timeout = DEFAULTS[:read_timeout]
+        init_client
       end
 
       def send(email)
@@ -42,7 +42,11 @@ module MailHandler
                                            host: host, secure: @use_ssl)
       end
 
-      DEFAULT_HOST = 'api.postmarkapp.com'.freeze
+      DEFAULTS = {
+        host: 'api.postmarkapp.com',
+        read_timeout: 15,
+        open_timeout: 15
+      }.freeze
     end
   end
 end

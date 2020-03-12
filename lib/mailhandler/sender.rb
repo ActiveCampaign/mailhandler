@@ -31,6 +31,10 @@ module MailHandler
       response
     end
 
+    def dispatcher_client
+      dispatcher.client if dispatcher.respond_to?(:client)
+    end
+
     private
 
     def init_sending_details(email)
