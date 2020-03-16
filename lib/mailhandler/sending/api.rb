@@ -11,8 +11,7 @@ module MailHandler
                     :api_token,
                     :use_ssl,
                     :http_open_timeout,
-                    :http_read_timeout,
-                    :client
+                    :http_read_timeout
 
       def initialize(api_token = nil)
         @type = :postmark_api
@@ -29,6 +28,10 @@ module MailHandler
         verify_email(email)
         init_client
         client.deliver_message(email)
+      end
+
+      def client
+        init_client
       end
 
       def init_client
