@@ -8,7 +8,8 @@ module MailHandler
   # Class for sending email, and storing details about the sending.
   class Sender
     attr_accessor :dispatcher,
-                  :sending
+                  :sending,
+                  :validate_response
 
     # @param [Time] - sending started at Time
     # @param [Time] - sending finished at Time
@@ -21,13 +22,14 @@ module MailHandler
     def initialize(dispatcher)
       @dispatcher = dispatcher
       @sending = Sending.new
+      @validate_response = false
     end
 
     def send_email(email)
       init_sending_details(email)
       response = dispatcher.send(email)
       update_sending_details(response)
-
+      check_response(response)
       response
     end
 
@@ -36,6 +38,13 @@ module MailHandler
     end
 
     private
+
+    def check_response(response)
+      return unless validate_response
+      return if dispatcher.valid_response?(response)
+
+      raise "Invalid sending response: #{response}"
+    end
 
     def init_sending_details(email)
       @sending = Sending.new

@@ -13,6 +13,10 @@ module MailHandler
         raise MailHandler::InterfaceError, 'Send interface not implemented.'
       end
 
+      def valid_response?(_response)
+        raise MailHandler::InterfaceError, 'Method not implemented.'
+      end
+
       protected
 
       def verify_email(email)

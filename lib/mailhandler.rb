@@ -34,12 +34,7 @@ module MailHandler
   #
   def sender(type = :postmark_api, settings = {})
     handler = Handler.new
-    handler.init_sender(type)
-
-    settings.each do |setting_name, setting_value|
-      handler.sender.dispatcher.instance_variable_set("@#{setting_name}", setting_value)
-    end
-
+    handler.init_sender(type, settings)
     yield(handler.sender.dispatcher) if block_given?
 
     handler.sender
@@ -72,12 +67,7 @@ module MailHandler
   #
   def receiver(type = :folder, settings = {})
     handler = Handler.new
-    handler.init_receiver(type, settings[:notifications])
-
-    settings.each do |setting_name, setting_value|
-      handler.receiver.checker.instance_variable_set("@#{setting_name}", setting_value)
-    end
-
+    handler.init_receiver(type, settings)
     yield(handler.receiver.checker) if block_given?
     handler.receiver
   end
@@ -96,16 +86,26 @@ module MailHandler
     attr_accessor :sender,
                   :receiver
 
-    def init_sender(type = :postmark_api)
+    def init_sender(type = :postmark_api, settings = {})
       verify_type(type, SENDER_TYPES)
       @sender = MailHandler::Sender.new(SENDER_TYPES[type].new)
+
+      settings.each do |setting_name, setting_value|
+        @sender.dispatcher.instance_variable_set("@#{setting_name}", setting_value)
+      end
+
+      @sender
     end
 
-    def init_receiver(type = :folder, notifications = [])
+    def init_receiver(type = :folder, settings = {})
       verify_type(type, CHECKER_TYPES)
       receiver = MailHandler::Receiver.new(CHECKER_TYPES[type].new)
 
-      add_receiving_notifications(receiver, notifications)
+      settings.each do |setting_name, setting_value|
+        receiver.checker.instance_variable_set("@#{setting_name}", setting_value)
+      end
+
+      add_receiving_notifications(receiver, settings[:notifications])
       @receiver = receiver
     end
 

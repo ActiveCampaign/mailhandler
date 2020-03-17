@@ -17,6 +17,10 @@ module MailHandler
         client.deliver_messages(emails)
       end
 
+      def valid_response?(responses)
+        responses.map { |response| super(response) }.all?(true)
+      end
+
       protected
 
       def verify_email(emails)

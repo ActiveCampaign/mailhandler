@@ -42,6 +42,10 @@ module MailHandler
         save_response ? response : nil
       end
 
+      def valid_response?(response)
+        response.string.to_s.downcase.include?('250 2.0.0 ok')
+      end
+
       private
 
       def init_net_smtp

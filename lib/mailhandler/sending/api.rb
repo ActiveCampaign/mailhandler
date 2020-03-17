@@ -45,6 +45,18 @@ module MailHandler
                                            host: host, secure: @use_ssl)
       end
 
+      def formatted_response(response)
+        return if response.keys.select { |key| key.is_a? Symbol }.empty?
+        return unless response.is_a? Hash
+
+        response.keys.select { |key| key.is_a? String }.each { |s| response.delete(s) }
+        response
+      end
+
+      def valid_response?(response)
+        response[:message].to_s.strip.downcase == 'ok' && response[:error_code].to_s.downcase == '0'
+      end
+
       DEFAULTS = {
         host: 'api.postmarkapp.com',
         read_timeout: 15,
