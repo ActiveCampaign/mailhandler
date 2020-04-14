@@ -59,6 +59,34 @@ describe MailHandler::Receiver do
       end
     end
 
+    describe '.search not found' do
+      let(:checker) do
+        checker = instance_double('Checker')
+
+        allow(checker).to receive(:find).and_return(false)
+        allow(checker).to receive(:search_result).and_return(false)
+        allow(checker).to receive(:found_emails).and_return([])
+        allow(checker).to receive(:reset_found_emails).and_return([])
+        allow(checker).to receive(:start).and_return(nil)
+        allow(checker).to receive(:stop).and_return(nil)
+        checker
+      end
+
+      it "raise error" do
+        receiver.max_search_duration = 3
+        receiver.validate_result=true
+        expect { receiver.find_email(default_search_option) }.
+            to raise_error(MailHandler::SearchEmailError,
+                           "Email searched by {:by_subject=>\"test\"} not found for 3 seconds.")
+      end
+
+      it "do not raise error" do
+        receiver.max_search_duration = 3
+        receiver.validate_result=false
+        expect(receiver.find_email(default_search_option)).to be false
+      end
+    end
+
     describe '.search' do
       let(:checker) do
         checker = instance_double('Checker')
@@ -67,7 +95,7 @@ describe MailHandler::Receiver do
           sleep 1
           false
         end
-        allow(checker).to receive(:search_result).and_return(false)
+        allow(checker).to receive(:search_result).and_return(true)
         allow(checker).to receive(:found_emails).and_return([])
         allow(checker).to receive(:reset_found_emails).and_return([])
         allow(checker).to receive(:start).and_return(nil)

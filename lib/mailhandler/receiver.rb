@@ -4,6 +4,7 @@ require_relative 'receiving/folder'
 require_relative 'receiving/imap'
 require_relative 'extensions/mail/imap'
 require_relative 'receiving/observer'
+require_relative 'errors'
 
 module MailHandler
   # handling receiving email
@@ -13,7 +14,8 @@ module MailHandler
     attr_accessor :checker,
                   :search,
                   :max_search_duration,
-                  :search_frequency
+                  :search_frequency,
+                  :validate_result
 
     module DEFAULTS
       MAX_SEARCH_DURATION = 240 # maximum time for search to last in [seconds]
@@ -36,6 +38,7 @@ module MailHandler
       @checker = checker
       @max_search_duration = DEFAULTS::MAX_SEARCH_DURATION
       @search_frequency = DEFAULTS::SEARCH_FREQUENCY
+      @validate_result = false
     end
 
     def find_email(options)
@@ -52,9 +55,17 @@ module MailHandler
       checker.search_result
     ensure
       checker.stop
+      check_result
     end
 
     private
+
+    def check_result
+      return unless validate_result
+      return if checker.search_result
+
+      raise SearchEmailError, "Email searched by #{@search.options} not found for #{@search.max_duration} seconds."
+    end
 
     def single_search(options)
       received = checker.find(options)

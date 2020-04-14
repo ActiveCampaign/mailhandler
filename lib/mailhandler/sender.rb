@@ -3,6 +3,7 @@
 require_relative 'sending/smtp'
 require_relative 'sending/api'
 require_relative 'sending/api_batch'
+require_relative 'errors'
 
 module MailHandler
   # Class for sending email, and storing details about the sending.
@@ -43,7 +44,7 @@ module MailHandler
       return unless validate_response
       return if dispatcher.valid_response?(response)
 
-      raise "Invalid sending response: #{response}"
+      raise SendEmailError, "Invalid sending response: #{response}."
     end
 
     def init_sending_details(email)

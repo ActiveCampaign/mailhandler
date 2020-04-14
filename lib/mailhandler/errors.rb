@@ -8,6 +8,8 @@ module MailHandler
     end
   end
 
+  class SearchEmailError    < Error; end
+  class SendEmailError      < Error; end
   class UnknownError        < Error; end
   class TypeError           < Error; end
   class FileError           < Error; end
