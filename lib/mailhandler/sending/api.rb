@@ -57,10 +57,15 @@ module MailHandler
         response[:message].to_s.strip.downcase == 'ok' && response[:error_code].to_s.downcase == '0'
       end
 
+      def timeout=(value)
+        @http_open_timeout = value
+        @http_read_timeout = value
+      end
+
       DEFAULTS = {
         host: 'api.postmarkapp.com',
-        read_timeout: 15,
-        open_timeout: 15
+        read_timeout: 60,
+        open_timeout: 60
       }.freeze
     end
   end

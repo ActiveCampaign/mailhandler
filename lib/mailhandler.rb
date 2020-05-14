@@ -91,7 +91,9 @@ module MailHandler
       @sender = MailHandler::Sender.new(SENDER_TYPES[type].new)
 
       settings.each do |setting_name, setting_value|
-        @sender.dispatcher.instance_variable_set("@#{setting_name}", setting_value)
+        if @sender.dispatcher.respond_to?(setting_name)
+          @sender.dispatcher.instance_variable_set("@#{setting_name}", setting_value)
+        end
       end
 
       @sender
@@ -102,7 +104,9 @@ module MailHandler
       receiver = MailHandler::Receiver.new(CHECKER_TYPES[type].new)
 
       settings.each do |setting_name, setting_value|
-        receiver.checker.instance_variable_set("@#{setting_name}", setting_value)
+        if receiver.checker.respond_to?(setting_name)
+          receiver.checker.instance_variable_set("@#{setting_name}", setting_value)
+        end
       end
 
       add_receiving_notifications(receiver, settings[:notifications])

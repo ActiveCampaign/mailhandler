@@ -46,6 +46,11 @@ module MailHandler
         response.string.to_s.downcase.include?('250 2.0.0 ok')
       end
 
+      def timeout=(value)
+        @read_timeout = value
+        @open_timeout = value
+      end
+
       private
 
       def init_net_smtp
