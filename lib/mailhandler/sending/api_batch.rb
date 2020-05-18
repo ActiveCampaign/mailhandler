@@ -14,7 +14,8 @@ module MailHandler
       def send(emails)
         verify_email(emails)
         init_client
-        client.deliver_messages(emails)
+        response = client.deliver_messages(emails)
+        format_response(response)
       end
 
       def valid_response?(responses)
@@ -22,6 +23,10 @@ module MailHandler
       end
 
       protected
+
+      def format_response(response)
+        response.map { |r| super(r) }
+      end
 
       def verify_email(emails)
         return if emails.is_a?(Array) && emails.all? { |e| e.is_a? allowed_email_type }

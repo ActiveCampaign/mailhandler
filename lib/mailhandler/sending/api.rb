@@ -27,7 +27,8 @@ module MailHandler
       def send(email)
         verify_email(email)
         init_client
-        client.deliver_message(email)
+        response = client.deliver_message(email)
+        format_response(response)
       end
 
       def client
@@ -45,14 +46,6 @@ module MailHandler
                                            host: host, secure: @use_ssl)
       end
 
-      def formatted_response(response)
-        return if response.keys.select { |key| key.is_a? Symbol }.empty?
-        return unless response.is_a? Hash
-
-        response.keys.select { |key| key.is_a? String }.each { |s| response.delete(s) }
-        response
-      end
-
       def valid_response?(response)
         response[:message].to_s.strip.downcase == 'ok' && response[:error_code].to_s.downcase == '0'
       end
@@ -67,6 +60,16 @@ module MailHandler
         read_timeout: 60,
         open_timeout: 60
       }.freeze
+
+      protected
+
+      def format_response(response)
+        return response unless response.is_a? Hash
+        return response if response.keys.select { |key| key.is_a? Symbol }.empty?
+
+        response.keys.select { |key| key.is_a? String }.each { |s| response.delete(s) }
+        response
+      end
     end
   end
 end
