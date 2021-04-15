@@ -12,7 +12,8 @@ module MailHandler
                     :username,
                     :password,
                     :authentication,
-                    :use_ssl
+                    :use_ssl,
+                    :openssl_verify_mode
 
       attr_accessor :open_timeout,
                     :read_timeout,
@@ -75,6 +76,7 @@ module MailHandler
           password: password,
           authentication: @authentication,
           enable_starttls_auto: @use_ssl,
+          openssl_verify_mode: @openssl_verify_mode,
 
           return_response: save_response,
           open_timeout: open_timeout,
