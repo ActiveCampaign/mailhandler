@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'base'
+require_relative "../extensions/mail/smtp"
 
 module MailHandler
   module Sending
