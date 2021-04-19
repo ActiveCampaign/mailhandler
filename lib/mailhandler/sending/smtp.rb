@@ -36,10 +36,8 @@ module MailHandler
       end
 
       def send_raw_email(text_email, smtp_from, smtp_to)
-        response = init_net_smtp.start(domain, username, password, authentication) do |smtp|
-          smtp.send_message(text_email, smtp_from, smtp_to)
-        end
-
+        # use same settings as when sending mail created with Mail gem
+        response = Mail::SMTP.new(delivery_options).deliver_raw!(text_email, smtp_from, smtp_to)
         save_response ? response : nil
       end
 
@@ -53,14 +51,6 @@ module MailHandler
       end
 
       private
-
-      def init_net_smtp
-        sending = Net::SMTP.new(address, port)
-        sending.read_timeout = read_timeout
-        sending.open_timeout = open_timeout
-        sending.enable_starttls_auto if use_ssl
-        sending
-      end
 
       def configure_sending(email)
         email.delivery_method :smtp, delivery_options
