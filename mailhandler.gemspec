@@ -11,14 +11,14 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.authors     = ['Igor Balos']
-  s.email       = ['ibalosh@gmail.com', 'igor@wildbit.com']
+  s.email       = ['ibalosh@gmail.com', 'ibalos@activecampaign.com']
 
   s.summary     = 'Postmark email receiving and sending handler.'
   s.description = 'Use this gem to send emails through SMTP and Postmark API and check if email arrived.'
 
   s.files       = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.test_files  = `git ls-files -- {spec}/*`.split("\n")
-  s.homepage    = 'https://github.com/wildbit/mailhandler'
+  s.homepage    = 'https://github.com/ActiveCampaign/mailhandler'
   s.require_paths = ['lib']
 
   s.post_install_message = '
