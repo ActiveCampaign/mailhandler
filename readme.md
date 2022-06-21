@@ -4,7 +4,7 @@
 
 # MailHandler Gem
 
-[![Build Status](https://travis-ci.org/wildbit/mailhandler.svg?branch=master)](https://travis-ci.org/wildbit/mailhandler)
+[![Build Status](https://circleci.com/gh/ActiveCampaign/mailhandler.svg?style=shield)](https://circleci.com/gh/ActiveCampaign/mailhandler)
 
 MailHandler is a simple wrapper on top of [Mail gem](https://github.com/mikel/mail) and [Postmark gem](https://github.com/ActiveCampaign/postmark-gem) libraries. It allows you to send and retrieve emails and at the same time get details on how long these operations took.
 Main purpose of the gem is easier email sending/delivery testing with notification option if sending or retrieving email is taking too long. 
