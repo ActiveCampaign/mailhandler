@@ -1,0 +1,43 @@
+version: 2.1
+
+workflows:
+  ruby-tests:
+    jobs:
+      - unit-tests:
+          name: ruby24
+          version: "2.4.6"
+      - unit-tests:
+          name: ruby25
+          version: "2.5.5"
+          requires:
+            - ruby24
+      - unit-tests:
+          name: ruby27
+          version: "2.7.5"
+          requires:
+            - ruby25
+      - unit-tests:
+          name: ruby30
+          version: "3.0.0"
+          requires:
+            - ruby27
+
+jobs:
+  unit-tests:
+    parameters:
+      version:
+        type: string
+    docker:
+      - image: cimg/ruby:<< parameters.version >>
+    steps:
+      - checkout
+      - run:
+          name: Versions
+          command: |
+            echo "ruby: $(ruby --version)"
+      - run:
+          name: Install dependencies
+          command: bundle install
+      - run:
+          name: Run tests
+          command: bundle exec rspec
