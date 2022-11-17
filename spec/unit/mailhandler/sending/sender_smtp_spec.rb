@@ -32,7 +32,7 @@ describe MailHandler::Sending::SMTPSender do
     end
 
     it 'use ssl' do
-      expect(smtp_sender.new.use_ssl).to be false
+      expect(smtp_sender.new.use_ssl).to be true
     end
 
     it 'authentication' do

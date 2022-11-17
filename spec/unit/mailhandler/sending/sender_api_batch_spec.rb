@@ -13,7 +13,7 @@ describe MailHandler::Sending::PostmarkBatchAPISender do
     aggregate_failures 'init details' do
       expect(sender.api_token).to eq api_token
       expect(sender.type).to eq :postmark_api
-      expect(sender.use_ssl).to be false
+      expect(sender.use_ssl).to be true
       expect(sender.host).to eq 'api.postmarkapp.com'
     end
   end

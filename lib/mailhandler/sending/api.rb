@@ -17,7 +17,7 @@ module MailHandler
         @type = :postmark_api
         @host = DEFAULTS[:host]
         @api_token = api_token
-        @use_ssl = false
+        @use_ssl = true
 
         @http_open_timeout = DEFAULTS[:open_timeout]
         @http_read_timeout = DEFAULTS[:read_timeout]

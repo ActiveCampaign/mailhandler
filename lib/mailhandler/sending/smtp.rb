@@ -23,7 +23,7 @@ module MailHandler
       def initialize
         @type = :smtp
         @authentication = 'plain'
-        @use_ssl = false
+        @use_ssl = true
         @save_response = true
 
         @open_timeout = 60
