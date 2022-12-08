@@ -29,7 +29,7 @@ describe MailHandler::Sending::SMTPSender do
 
     it 'can_authenticated' do
       sender = smtp_sender.new
-      expect { sender.can_authenticate? }.to raise_error Errno::ECONNREFUSED
+      expect { sender.can_authenticate? }.to raise_error StandardError
     end
 
     it 'type' do
