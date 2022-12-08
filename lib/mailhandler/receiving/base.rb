@@ -94,7 +94,7 @@ module MailHandler
       end
 
       def validate_used_options(options)
-        error_message = "#{(options.keys - available_search_options)} - Incorrect search option values,"\
+        error_message = "#{options.keys - available_search_options} - Incorrect search option values,"\
                                     " options are #{available_search_options}."
         raise MailHandler::Error, error_message unless (options.keys - available_search_options).empty?
       end

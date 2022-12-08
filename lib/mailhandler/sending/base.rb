@@ -9,6 +9,10 @@ module MailHandler
     class Sender
       attr_reader :type
 
+      def initialize(type)
+        @type = type
+      end
+
       def send(_email)
         raise MailHandler::InterfaceError, 'Send interface not implemented.'
       end

@@ -27,6 +27,16 @@ describe MailHandler::Sending::SMTPSender do
       end
     end
 
+    it 'can_authenticated' do
+      sender = smtp_sender.new
+      expect { sender.can_authenticate? }.to raise_error Errno::ECONNREFUSED
+    end
+
+    it 'type' do
+      sender = smtp_sender.new
+      expect(sender.type).to eq :smtp
+    end
+
     it 'save response' do
       expect(smtp_sender.new.save_response).to be true
     end

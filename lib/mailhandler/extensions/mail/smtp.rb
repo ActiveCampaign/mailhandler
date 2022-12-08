@@ -3,8 +3,8 @@ module Mail
   class SMTP
     def deliver_raw!(raw_source_email, smtp_from, smtp_to)
       response = start_smtp_session do |smtp|
-        Mail::SMTPConnection.new(:connection => smtp, :return_response => true).
-          deliver_raw!(raw_source_email, smtp_from, smtp_to)
+        Mail::SMTPConnection.new(connection: smtp, return_response: true)
+                            .deliver_raw!(raw_source_email, smtp_from, smtp_to)
       end
 
       settings[:return_response] ? response : self

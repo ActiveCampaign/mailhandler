@@ -8,7 +8,7 @@ describe MailHandler::Receiver do
 
     let(:default_search_option) { { by_subject: 'test' } }
     let(:receiving_duration) { 5 }
-    let(:found_email) { Mail.new { subject 'test email' } }
+    let(:found_email) { Mail.new { subject :"test email" } }
     let(:checker) do
       checker = instance_double('Checker')
 
@@ -72,17 +72,17 @@ describe MailHandler::Receiver do
         checker
       end
 
-      it "raise error" do
+      it 'raise error' do
         receiver.max_search_duration = 3
-        receiver.validate_result=true
-        expect { receiver.find_email(default_search_option) }.
-            to raise_error(MailHandler::SearchEmailError,
-                           "Email searched by {:by_subject=>\"test\"} not found for 3 seconds.")
+        receiver.validate_result = true
+        expect { receiver.find_email(default_search_option) }
+          .to raise_error(MailHandler::SearchEmailError,
+                          'Email searched by {:by_subject=>"test"} not found for 3 seconds.')
       end
 
-      it "do not raise error" do
+      it 'do not raise error' do
         receiver.max_search_duration = 3
-        receiver.validate_result=false
+        receiver.validate_result = false
         expect(receiver.find_email(default_search_option)).to be false
       end
     end

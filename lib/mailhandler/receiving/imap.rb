@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'mail'
-require_relative 'base.rb'
+require_relative 'base'
 require_relative '../errors'
 
 module MailHandler

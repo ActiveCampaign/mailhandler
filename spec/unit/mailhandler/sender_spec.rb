@@ -20,7 +20,7 @@ describe MailHandler::Sender do
     Mail.new do
       from 'sheldon@bigbangtheory.com'
       to 'lenard@bigbangtheory.com'
-      subject 'Hello!'
+      subject :Hello!
       body 'Hello Sheldon!'
     end
   end

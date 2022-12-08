@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'mail'
-require_relative 'base.rb'
+require_relative 'base'
 require_relative '../errors'
-require_relative 'filelist/base.rb'
-require_relative 'filelist/filter/base.rb'
-require_relative 'filelist/filter/email.rb'
+require_relative 'filelist/base'
+require_relative 'filelist/filter/base'
+require_relative 'filelist/filter/email'
 
 module MailHandler
   module Receiving

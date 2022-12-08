@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'api.rb'
+require_relative 'api'
 require_relative '../errors'
 
 module MailHandler

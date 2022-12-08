@@ -1,27 +1,18 @@
 # frozen_string_literal: true
 
 require_relative 'base'
-require_relative "../extensions/mail/smtp"
+require_relative '../extensions/mail/smtp'
 
 module MailHandler
   module Sending
     # class which describes methods to send and receive emails
     class SMTPSender < Sender
-      attr_accessor :address,
-                    :port,
-                    :domain,
-                    :username,
-                    :password,
-                    :authentication,
-                    :use_ssl,
-                    :openssl_verify_mode
-
-      attr_accessor :open_timeout,
-                    :read_timeout,
-                    :save_response
+      attr_accessor :address, :port, :domain, :username, :password, :authentication, :use_ssl, :openssl_verify_mode,
+                    :open_timeout, :read_timeout, :save_response
 
       def initialize
-        @type = :smtp
+        super :smtp
+
         @authentication = 'plain'
         @use_ssl = true
         @save_response = true
@@ -40,6 +31,14 @@ module MailHandler
         # use same settings as when sending mail created with Mail gem
         response = Mail::SMTP.new(delivery_options).deliver_raw!(text_email, smtp_from, smtp_to)
         save_response ? response : nil
+      end
+
+      def can_authenticate?
+        method_name = 'start_smtp_session' # Mail::SMTP private method
+        configure_sending(Mail.new).delivery_method.send(method_name)
+        true
+      rescue Net::SMTPAuthenticationError
+        false
       end
 
       def valid_response?(response)

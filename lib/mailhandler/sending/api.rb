@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'postmark'
-require_relative 'base.rb'
+require_relative 'base'
 
 module MailHandler
   module Sending
@@ -14,7 +14,7 @@ module MailHandler
                     :http_read_timeout
 
       def initialize(api_token = nil)
-        @type = :postmark_api
+        super(:postmark_api)
         @host = DEFAULTS[:host]
         @api_token = api_token
         @use_ssl = true
