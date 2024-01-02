@@ -4,19 +4,6 @@ workflows:
   ruby-tests:
     jobs:
       - unit-tests:
-          name: ruby24
-          version: "2.4.6"
-      - unit-tests:
-          name: ruby25
-          version: "2.5.5"
-          requires:
-            - ruby24
-      - unit-tests:
-          name: ruby27
-          version: "2.7.5"
-          requires:
-            - ruby25
-      - unit-tests:
           name: ruby30
           version: "3.0.0"
           requires:
