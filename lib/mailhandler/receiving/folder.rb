@@ -55,7 +55,7 @@ module MailHandler
       }.freeze
 
       def search_pattern
-        @inbox_folder + '/*.*'
+        "#{@inbox_folder}/*.*"
       end
 
       # find files by FILE_SEARCH_CLASSES options

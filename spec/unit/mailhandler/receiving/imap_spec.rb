@@ -6,7 +6,7 @@ describe MailHandler::Receiving::IMAPChecker do
   let(:checker) { described_class.new }
 
   it '.create' do
-    expect(checker).to be_kind_of MailHandler::Receiving::Checker
+    expect(checker).to be_a MailHandler::Receiving::Checker
   end
 
   it 'options' do
@@ -15,8 +15,7 @@ describe MailHandler::Receiving::IMAPChecker do
 
   context 'search options' do
     before do
-      allow(checker).to receive(:init_retriever).and_return(true)
-      allow(checker).to receive(:find_emails).and_return([])
+      allow(checker).to receive_messages(init_retriever: true, find_emails: [])
     end
 
     it 'by multiple search options' do

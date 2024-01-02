@@ -6,7 +6,7 @@ describe MailHandler::Receiving::Checker do
   subject(:receiving_checker) { described_class.new }
 
   it '.create' do
-    expect(receiving_checker).to be_kind_of described_class
+    expect(receiving_checker).to be_a described_class
   end
 
   it 'init details' do

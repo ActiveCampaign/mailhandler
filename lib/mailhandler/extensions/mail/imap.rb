@@ -76,11 +76,8 @@ module Mail
 
     def retrieve_email_content(uid, flag_type = :body)
       case flag_type
-      when :body
-        retrieve_email_content_by_body(uid)
       when :envelope
         retrieve_email_content_by_envelope(uid)
-
       else
         retrieve_email_content_by_body(uid)
       end

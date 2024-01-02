@@ -11,7 +11,7 @@ describe MailHandler::Receiving::Notification::EmailContent do
 
   describe '.email_received' do
     it 'create email' do
-      expect(notification_email_content.retrieve(:received, options, 60, from, to)).to be_kind_of Mail::Message
+      expect(notification_email_content.retrieve(:received, options, 60, from, to)).to be_a Mail::Message
     end
 
     context 'email content' do

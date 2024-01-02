@@ -11,7 +11,7 @@ module MailHandler
                     :open_timeout, :read_timeout, :save_response
 
       def initialize
-        super :smtp
+        super(:smtp)
 
         @authentication = 'plain'
         @use_ssl = true

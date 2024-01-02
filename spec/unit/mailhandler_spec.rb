@@ -12,11 +12,11 @@ describe MailHandler::Handler do
     end
 
     it 'create - folder' do
-      expect(handler.init_receiver(:folder)).to be_kind_of MailHandler::Receiver
+      expect(handler.init_receiver(:folder)).to be_a MailHandler::Receiver
     end
 
     it 'create - imap' do
-      expect(handler.init_receiver(:imap)).to be_kind_of MailHandler::Receiver
+      expect(handler.init_receiver(:imap)).to be_a MailHandler::Receiver
     end
   end
 
@@ -28,16 +28,16 @@ describe MailHandler::Handler do
     end
 
     it 'create - postmark api' do
-      expect(handler.init_sender(:postmark_api)).to be_kind_of MailHandler::Sender
+      expect(handler.init_sender(:postmark_api)).to be_a MailHandler::Sender
     end
 
     it 'create - postmark batch api' do
-      expect(handler.init_sender(:postmark_batch_api)).to be_kind_of MailHandler::Sender
+      expect(handler.init_sender(:postmark_batch_api)).to be_a MailHandler::Sender
     end
 
     context 'smtp' do
       it 'create - smtp' do
-        expect(handler.init_sender(:smtp)).to be_kind_of MailHandler::Sender
+        expect(handler.init_sender(:smtp)).to be_a MailHandler::Sender
       end
 
       context 'set delivery methods' do

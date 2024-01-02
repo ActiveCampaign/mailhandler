@@ -8,20 +8,17 @@ describe MailHandler::Receiver do
 
     let(:default_search_option) { { by_subject: 'test' } }
     let(:receiving_duration) { 5 }
-    let(:found_email) { Mail.new { subject :"test email" } }
+    let(:found_email) { Mail.new({ subject: 'test email' }) }
     let(:checker) do
-      checker = instance_double('Checker')
+      checker = instance_double(MailHandler::Receiving::Checker)
 
       allow(checker).to receive(:find) do
         sleep receiving_duration
         true
       end
 
-      allow(checker).to receive(:search_result).and_return(true)
       allow(checker).to receive(:found_emails) { [found_email] }
-      allow(checker).to receive(:reset_found_emails).and_return([])
-      allow(checker).to receive(:start).and_return(nil)
-      allow(checker).to receive(:stop).and_return(nil)
+      allow(checker).to receive_messages(search_result: true, reset_found_emails: [], start: nil, stop: nil)
       checker
     end
 
@@ -38,7 +35,7 @@ describe MailHandler::Receiver do
     end
 
     it 'create' do
-      expect(receiver).to be_kind_of described_class
+      expect(receiver).to be_a described_class
     end
 
     it '.find_email' do
@@ -61,14 +58,10 @@ describe MailHandler::Receiver do
 
     describe '.search not found' do
       let(:checker) do
-        checker = instance_double('Checker')
+        checker = instance_double(MailHandler::Receiving::Checker)
 
-        allow(checker).to receive(:find).and_return(false)
-        allow(checker).to receive(:search_result).and_return(false)
-        allow(checker).to receive(:found_emails).and_return([])
-        allow(checker).to receive(:reset_found_emails).and_return([])
-        allow(checker).to receive(:start).and_return(nil)
-        allow(checker).to receive(:stop).and_return(nil)
+        allow(checker).to receive_messages(find: false, search_result: false, found_emails: [], reset_found_emails: [],
+                                           start: nil, stop: nil)
         checker
       end
 
@@ -89,17 +82,14 @@ describe MailHandler::Receiver do
 
     describe '.search' do
       let(:checker) do
-        checker = instance_double('Checker')
+        checker = instance_double(MailHandler::Receiving::Checker)
 
         allow(checker).to receive(:find) do
           sleep 1
           false
         end
-        allow(checker).to receive(:search_result).and_return(true)
-        allow(checker).to receive(:found_emails).and_return([])
-        allow(checker).to receive(:reset_found_emails).and_return([])
-        allow(checker).to receive(:start).and_return(nil)
-        allow(checker).to receive(:stop).and_return(nil)
+        allow(checker).to receive_messages(search_result: true, found_emails: [], reset_found_emails: [], start: nil,
+                                           stop: nil)
         checker
       end
 

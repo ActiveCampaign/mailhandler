@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mail
   # wrapper methods to support sending raw email, where recipient and sender can be custom
   class SMTP

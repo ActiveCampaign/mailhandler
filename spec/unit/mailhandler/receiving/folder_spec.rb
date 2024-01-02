@@ -6,7 +6,7 @@ describe MailHandler::Receiving::FolderChecker do
   subject(:folder_checker) { described_class.new }
 
   it '.create' do
-    expect(folder_checker).to be_kind_of MailHandler::Receiving::Checker
+    expect(folder_checker).to be_a MailHandler::Receiving::Checker
   end
 
   context 'search emails' do
@@ -99,12 +99,12 @@ describe MailHandler::Receiving::FolderChecker do
       end
 
       context 'found' do
-        let(:mail1) { Mail.read_from_string(File.read("#{data_folder}/email1.txt")) }
-        let(:mail2) { Mail.read_from_string(File.read("#{data_folder}/email2.txt")) }
+        let(:email_to_find) { Mail.read_from_string(File.read("#{data_folder}/email1.txt")) }
+        let(:other_email_to_find) { Mail.read_from_string(File.read("#{data_folder}/email2.txt")) }
 
         context 'search results' do
           let(:search) do
-            checker.find(by_subject: mail1.subject)
+            checker.find(by_subject: email_to_find.subject)
             checker
           end
 
@@ -119,16 +119,16 @@ describe MailHandler::Receiving::FolderChecker do
         end
 
         it 'result' do
-          expect(checker.find(by_subject: mail1.subject)).to be true
+          expect(checker.find(by_subject: email_to_find.subject)).to be true
         end
 
         it 'by folder_checker - single' do
-          checker.find(by_subject: mail1.subject)
+          checker.find(by_subject: email_to_find.subject)
 
           aggregate_failures 'found mail details' do
             expect(checker.found_emails.size).to be 1
-            expect(checker.found_emails.first).to eq mail1
-            expect(checker.found_emails).not_to include mail2
+            expect(checker.found_emails.first).to eq email_to_find
+            expect(checker.found_emails).not_to include other_email_to_find
           end
         end
 
@@ -142,8 +142,8 @@ describe MailHandler::Receiving::FolderChecker do
 
           aggregate_failures 'found mail details' do
             expect(checker.found_emails.size).to be 2
-            expect(checker.found_emails).to include mail1
-            expect(checker.found_emails).to include mail2
+            expect(checker.found_emails).to include email_to_find
+            expect(checker.found_emails).to include other_email_to_find
           end
         end
 
@@ -185,7 +185,7 @@ describe MailHandler::Receiving::FolderChecker do
 
         context 'archiving emails' do
           before do
-            FileUtils.mkdir "#{data_folder}/checked" unless Dir.exist? "#{data_folder}/checked"
+            FileUtils.mkdir_p "#{data_folder}/checked"
           end
 
           after do
@@ -195,7 +195,7 @@ describe MailHandler::Receiving::FolderChecker do
           let(:mail) do
             mail = Mail.read_from_string(File.read("#{data_folder}/email2.txt"))
             mail.subject = 'test 872878278'
-            File.open("#{data_folder}/email3.txt", 'w') { |file| file.write(mail) }
+            File.write("#{data_folder}/email3.txt", mail)
             mail
           end
 

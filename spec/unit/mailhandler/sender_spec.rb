@@ -7,7 +7,7 @@ describe MailHandler::Sender do
 
   let(:send_duration) { 3 }
   let(:dispatcher) do
-    dispatcher = instance_double('Dispatcher')
+    dispatcher = instance_double(MailHandler::Sending::Sender)
 
     allow(dispatcher).to receive(:send) do
       sleep send_duration
@@ -17,27 +17,29 @@ describe MailHandler::Sender do
     dispatcher
   end
   let(:mail) do
-    Mail.new do
-      from 'sheldon@bigbangtheory.com'
-      to 'lenard@bigbangtheory.com'
-      subject :Hello!
-      body 'Hello Sheldon!'
-    end
+    Mail.new(
+      {
+        from: 'sheldon@bigbangtheory.com',
+        to: 'lenard@bigbangtheory.com',
+        subject: 'Hello',
+        body: 'Hello Sheldon!'
+      }
+    )
   end
 
   let(:sender) { subject.new(dispatcher) }
 
   it 'create' do
-    expect(sender).not_to be nil
+    expect(sender).not_to be_nil
   end
 
   it 'init details' do
     aggregate_failures 'sending details' do
-      expect(sender.sending.started_at).to be nil
-      expect(sender.sending.finished_at).to be nil
-      expect(sender.sending.duration).to be nil
-      expect(sender.sending.response).to be nil
-      expect(sender.sending.email).to be nil
+      expect(sender.sending.started_at).to be_nil
+      expect(sender.sending.finished_at).to be_nil
+      expect(sender.sending.duration).to be_nil
+      expect(sender.sending.response).to be_nil
+      expect(sender.sending.email).to be_nil
     end
   end
 

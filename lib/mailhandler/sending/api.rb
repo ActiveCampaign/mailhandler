@@ -65,7 +65,7 @@ module MailHandler
 
       def format_response(response)
         return response unless response.is_a? Hash
-        return response if response.keys.select { |key| key.is_a? Symbol }.empty?
+        return response if response.keys.none? { |key| key.is_a? Symbol }
 
         response.keys.select { |key| key.is_a? String }.each { |s| response.delete(s) }
         response
