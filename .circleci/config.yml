@@ -6,6 +6,16 @@ workflows:
       - unit-tests:
           name: ruby30
           version: "3.0.0"
+      - unit-tests:
+          name: ruby31
+          version: "3.1.0"
+          requires:
+            - ruby30
+      - unit-tests:
+          name: ruby322
+          version: "3.2.2"
+          requires:
+            - ruby31
 
 jobs:
   unit-tests:
