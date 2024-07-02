@@ -20,5 +20,11 @@ module Mail
 
       settings[:return_response] ? response : self
     end
+
+    private
+
+    def dot_stuff(s)
+      s.sub(/\A\./, '..')
+    end
   end
 end
