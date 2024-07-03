@@ -49,7 +49,7 @@ module Mail
 
     # Start an IMAP session
     def connect(_config = Mail::Configuration.instance) # rubocop:disable all
-      @imap_connection = Net::IMAP.new(settings[:address], settings[:port], settings[:enable_ssl], nil, false)
+      @imap_connection = Net::IMAP.new(settings[:address],  **imap_parameters)
 
       if settings[:authentication].nil?
         imap_connection.login(settings[:user_name], settings[:password])
@@ -65,6 +65,12 @@ module Mail
     end
 
     private
+
+    def imap_parameters
+      ssl_mode = settings[:enable_ssl] ? { verify_mode: OpenSSL::SSL::VERIFY_NONE } : false
+      port = settings[:port]
+      { port: port , ssl: ssl_mode }
+    end
 
     # fetch emails with different flag
     # to make it work with icloud
